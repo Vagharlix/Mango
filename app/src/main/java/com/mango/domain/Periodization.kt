@@ -1,0 +1,372 @@
+package com.mango.domain
+
+import com.mango.data.Benchmark
+import com.mango.data.Equipment
+import com.mango.data.Exercise
+import com.mango.data.ExerciseCategory
+import com.mango.data.Goal
+import com.mango.data.LoadBasis
+import com.mango.data.ProgramMode
+import com.mango.data.UserProfile
+import kotlinx.serialization.Serializable
+import kotlin.math.abs
+import kotlin.math.floor
+import kotlin.math.max
+import kotlin.math.roundToInt
+import kotlin.math.roundToLong
+
+enum class Phase(val label: String, val focus: String) {
+    BASE("Base / Capacity", "Volume, capillarisation and connective-tissue conditioning"),
+    MAX_STRENGTH("Max Strength", "Neuromuscular recruitment at 80-90 % intensity"),
+    POWER_ENDURANCE("Power / Endurance", "Goal-specific power or anaerobic capacity"),
+    PEAK("Taper / Peak", "Volume reduced ~50 %, intensity maintained"),
+}
+
+data class Prescription(
+    val exercise: Exercise,
+    val sets: Int,
+    val reps: Int,
+    val workSec: Int,
+    val repRestSec: Int,
+    val setRestSec: Int,
+    val intensity: Double?,
+    val loadText: String,
+    /** Name of the planned exercise this one replaces because its equipment isn't available. */
+    val substitutedFor: String? = null,
+) {
+    val isTimed: Boolean get() = workSec > 0 || setRestSec > 0
+
+    val summary: String
+        get() = buildString {
+            append(
+                when {
+                    workSec > 0 && reps > 1 -> "$sets × $reps × ${formatDuration(workSec)}"
+                    workSec > 0 -> "$sets × ${formatDuration(workSec)}"
+                    else -> "$sets × $reps reps"
+                },
+            )
+            if (repRestSec > 0) append(" (${formatDuration(repRestSec)} off)")
+            if (setRestSec > 0) append(" · rest ${formatDuration(setRestSec)}")
+        }
+}
+
+data class TrainingDay(
+    val epochDay: Long,
+    val dayNumber: Int,
+    val title: String,
+    val items: List<Prescription>,
+    val isBenchmark: Boolean = false,
+    val isRest: Boolean = false,
+)
+
+data class TrainingWeek(
+    val index: Int,
+    val cycle: Int,
+    val weekInBlock: Int,
+    val phase: Phase,
+    val isDeload: Boolean,
+    val startEpochDay: Long,
+    val days: List<TrainingDay>,
+)
+
+data class StrengthBaseline(val fingerAddedKg: Double, val pullAddedKg: Double, val bodyWeightKg: Double)
+
+@Serializable
+data class TimerInterval(val label: String, val detail: String, val seconds: Int, val isWork: Boolean)
+
+fun formatDuration(sec: Int): String =
+    if (sec < 60) "${sec}s" else "%d:%02d".format(sec / 60, sec % 60)
+
+/**
+ * Deterministic block periodization.
+ *  - Fixed mode: phase lengths from 35/35/20/10 % ratios (largest-remainder rounding, ≥ 1 week each).
+ *  - Evergreen mode: endless 16-week cycle of four 4-week blocks.
+ *  - Every 4th week is a deload: -40 % volume, intensity held (Pritchard et al. 2015 Strength Cond J 37:72;
+ *    tendon collagen remodelling – Magnusson, Langberg & Kjaer 2010 Nat Rev Rheumatol 6:262).
+ *  - Taper volume -50 % with intensity maintained (Bosquet et al. 2007 Med Sci Sports Exerc 39:1358).
+ *  - Week 4 / Day 7 of every block is a benchmark day; new results drive the next block's loads.
+ */
+object Periodization {
+    const val BLOCK_WEEKS = 4
+    const val EVERGREEN_WEEKS = 16
+    private const val DELOAD_VOLUME = 0.6
+    private const val TAPER_VOLUME = 0.5
+    private const val WEEKLY_INTENSITY_STEP = 0.025
+
+    val PHASE_RATIOS: List<Pair<Phase, Double>> = listOf(
+        Phase.BASE to 0.35,
+        Phase.MAX_STRENGTH to 0.35,
+        Phase.POWER_ENDURANCE to 0.20,
+        Phase.PEAK to 0.10,
+    )
+
+    fun allocateWeeks(totalWeeks: Int): Map<Phase, Int> {
+        val n = totalWeeks.coerceAtLeast(PHASE_RATIOS.size)
+        val raw = PHASE_RATIOS.map { (phase, r) -> phase to n * r }
+        val alloc = raw.associate { (phase, v) -> phase to max(1, floor(v).toInt()) }.toMutableMap()
+        var diff = n - alloc.values.sum()
+        // Rounded so floating-point noise can't break ties; stable sort keeps ratio order for equal remainders.
+        val byFraction = raw.sortedByDescending { (_, v) -> ((v - floor(v)) * 1e6).roundToLong() }.map { it.first }
+        var i = 0
+        while (diff > 0) {
+            val phase = byFraction[i++ % byFraction.size]
+            alloc[phase] = alloc.getValue(phase) + 1
+            diff--
+        }
+        while (diff < 0) {
+            val phase = alloc.filter { it.value > 1 }.maxBy { it.value }.key
+            alloc[phase] = alloc.getValue(phase) - 1
+            diff++
+        }
+        return PHASE_RATIOS.associate { (phase, _) -> phase to alloc.getValue(phase) }
+    }
+
+    fun weekIndexOn(profile: UserProfile, epochDay: Long): Int =
+        Math.floorDiv(epochDay - profile.programStartEpochDay, 7L).toInt()
+
+    fun isDeload(weekIndex: Int): Boolean = (weekIndex + 1) % BLOCK_WEEKS == 0
+
+    /** Phase of a program week, or null if the week is outside a fixed-length program. */
+    fun phaseForWeek(profile: UserProfile, weekIndex: Int): Phase? {
+        if (weekIndex < 0) return null
+        return when (profile.programMode) {
+            ProgramMode.EVERGREEN -> PHASE_RATIOS[(weekIndex % EVERGREEN_WEEKS) / BLOCK_WEEKS].first
+            ProgramMode.FIXED -> {
+                var end = 0
+                allocateWeeks(profile.programWeeks).entries.firstOrNull { (_, weeks) ->
+                    end += weeks
+                    weekIndex < end
+                }?.key
+            }
+        }
+    }
+
+    /** Phase used for nutrition on a given date (BASE before/after a fixed program). */
+    fun phaseOn(profile: UserProfile, epochDay: Long): Phase =
+        phaseForWeek(profile, weekIndexOn(profile, epochDay)) ?: Phase.BASE
+
+    fun weeksToShow(profile: UserProfile, today: Long): Int = when (profile.programMode) {
+        ProgramMode.FIXED -> profile.programWeeks.coerceAtLeast(PHASE_RATIOS.size)
+        ProgramMode.EVERGREEN -> {
+            val current = weekIndexOn(profile, today).coerceAtLeast(0)
+            (current / EVERGREEN_WEEKS + 2) * EVERGREEN_WEEKS
+        }
+    }
+
+    /** Most recent benchmark recorded on or before the block start, else the profile's baseline. */
+    fun baselineFor(profile: UserProfile, benchmarks: List<Benchmark>, blockStartDay: Long): StrengthBaseline =
+        benchmarks.filter { it.epochDay <= blockStartDay }.maxByOrNull { it.epochDay }
+            ?.let { StrengthBaseline(it.fingerMaxAddedKg, it.pullUpMaxAddedKg, it.bodyWeightKg) }
+            ?: StrengthBaseline(profile.fingerMaxAddedKg, profile.pullUpMaxAddedKg, profile.weightKg)
+
+    fun build(
+        profile: UserProfile,
+        exercises: Map<String, Exercise>,
+        benchmarks: List<Benchmark>,
+        today: Long,
+    ): List<TrainingWeek> = (0 until weeksToShow(profile, today)).map { w ->
+        val phase = phaseForWeek(profile, w) ?: Phase.PEAK
+        val weekInBlock = w % BLOCK_WEEKS + 1
+        val start = profile.programStartEpochDay + w * 7L
+        val blockStart = profile.programStartEpochDay + (w - w % BLOCK_WEEKS) * 7L
+        val baseline = baselineFor(profile, benchmarks, blockStart)
+        TrainingWeek(
+            index = w,
+            cycle = w / EVERGREEN_WEEKS,
+            weekInBlock = weekInBlock,
+            phase = phase,
+            isDeload = isDeload(w),
+            startEpochDay = start,
+            days = buildDays(phase, profile.goal, weekInBlock, start, baseline, exercises, profile.equipment.toSet()),
+        )
+    }
+
+    fun loadText(
+        ex: Exercise,
+        intensity: Double?,
+        baseline: StrengthBaseline,
+        equipment: Set<Equipment> = Equipment.entries.toSet(),
+    ): String = when (ex.loadBasis) {
+        LoadBasis.FINGER_1RM -> {
+            val pct = intensity ?: 0.0
+            if (Equipment.WEIGHTS !in equipment && targetAddedKg(pct, baseline.bodyWeightKg, baseline.fingerAddedKg) > 0) {
+                // Without added weight, raise intensity by reducing edge depth instead (Lattice Training).
+                "Bodyweight · ${(pct * 100).roundToInt()}% – no weights: use a smaller edge until the last 2-3 s are hard"
+            } else {
+                addedLoadText(pct, baseline.bodyWeightKg, baseline.fingerAddedKg)
+            }
+        }
+        LoadBasis.PULL_1RM -> addedLoadText(intensity ?: 0.0, baseline.bodyWeightKg, baseline.pullAddedKg)
+        LoadBasis.BODYWEIGHT -> "Bodyweight"
+        LoadBasis.RPE -> "RPE 7-8 (2-3 reps in reserve)"
+        LoadBasis.NONE -> ""
+    }
+
+    /** Target added load = %1RM × (bodyweight + 1RM added) − bodyweight, rounded to 0.5 kg. */
+    fun targetAddedKg(intensity: Double, bodyWeightKg: Double, maxAddedKg: Double): Double =
+        ((intensity * (bodyWeightKg + maxAddedKg) - bodyWeightKg) * 2).roundToInt() / 2.0
+
+    private fun addedLoadText(intensity: Double, bw: Double, maxAdded: Double): String {
+        val added = targetAddedKg(intensity, bw, maxAdded)
+        val pct = (intensity * 100).roundToInt()
+        return if (added >= 0) "BW + ${fmtKg(added)} kg · $pct%" else "BW − ${fmtKg(abs(added))} kg assist · $pct%"
+    }
+
+    private fun fmtKg(v: Double) = if (v % 1.0 == 0.0) v.toInt().toString() else v.toString()
+
+    fun intervals(p: Prescription): List<TimerInterval> {
+        val out = mutableListOf(TimerInterval("GET READY", p.exercise.name, 10, false))
+        for (s in 1..p.sets) {
+            if (p.workSec > 0) {
+                for (r in 1..p.reps) {
+                    val rep = if (p.reps > 1) " · rep $r/${p.reps}" else ""
+                    out += TimerInterval("WORK", "Set $s/${p.sets}$rep", p.workSec, true)
+                    if (r < p.reps && p.repRestSec > 0) out += TimerInterval("REST", "Next: rep ${r + 1}", p.repRestSec, false)
+                }
+            } else {
+                out += TimerInterval("WORK", "Set $s/${p.sets} · ${p.reps} reps", max(20, p.reps * 4), true)
+            }
+            if (s < p.sets && p.setRestSec > 0) out += TimerInterval("REST", "Next: set ${s + 1}", p.setRestSec, false)
+        }
+        return out
+    }
+
+    /**
+     * Ordered substitutes used when a planned exercise's equipment is missing. Each replacement trains the
+     * same quality as closely as possible (e.g. max hangs → no-hang edge lifts → limit bouldering).
+     */
+    val SUBSTITUTES: Map<String, List<String>> = mapOf(
+        "fb_max_hangs_10s" to listOf("fb_edge_lift_max", "climb_limit_bouldering"),
+        "fb_repeaters_73" to listOf("fb_edge_lift_repeaters", "climb_arc"),
+        "fb_density_hangs" to listOf("fb_edge_lift_repeaters", "climb_arc"),
+        "climb_arc" to listOf("fb_repeaters_73", "fb_edge_lift_repeaters"),
+        "climb_limit_bouldering" to listOf("fb_max_hangs_10s", "fb_edge_lift_max"),
+        "climb_4x4" to listOf("climb_route_intervals", "fb_repeaters_73", "fb_edge_lift_repeaters"),
+        "climb_route_intervals" to listOf("climb_4x4", "climb_arc", "fb_repeaters_73", "fb_edge_lift_repeaters"),
+        "climb_campus_ladders" to listOf("climb_limit_bouldering", "pull_explosive", "pull_inverted_rows"),
+        "climb_projecting" to listOf("climb_limit_bouldering", "fb_max_hangs_10s", "fb_edge_lift_max"),
+        "pull_weighted_volume" to listOf("pull_bodyweight_tempo", "pull_band_rows", "pull_inverted_rows"),
+        "pull_weighted_strength" to listOf("pull_bodyweight_tempo", "pull_band_rows", "pull_inverted_rows"),
+        "pull_explosive" to listOf("pull_inverted_rows"),
+        "push_ohp" to listOf("push_pike_pushups"),
+        "push_dips" to listOf("push_deficit_pushups"),
+        "core_front_lever_tuck" to listOf("core_hollow_body"),
+        "core_front_lever_adv" to listOf("core_dragonflag", "core_hollow_body"),
+        "core_front_lever_raises" to listOf("core_dragonflag", "core_pike_compression"),
+        "core_dragonflag" to listOf("core_hollow_body"),
+        "core_hanging_leg_raise" to listOf("core_pike_compression"),
+        "mob_jefferson_curl" to listOf("mob_seated_pike"),
+        "mob_band_external_rotation" to listOf("mob_sidelying_er"),
+        "mob_scap_pullups" to listOf("mob_scap_pushups"),
+    )
+
+    /** First exercise in the substitution chain the athlete can do with their equipment, or null. */
+    fun resolve(id: String, exercises: Map<String, Exercise>, equipment: Set<Equipment>): Exercise? =
+        (listOf(id) + SUBSTITUTES[id].orEmpty()).firstNotNullOfOrNull { exercises[it]?.takeIf { e -> e.isAvailable(equipment) } }
+
+    private val SHORT_LABEL = mapOf(
+        ExerciseCategory.FINGERBOARD to "Fingers",
+        ExerciseCategory.CLIMBING to "Climbing",
+        ExerciseCategory.PULL to "Pull",
+        ExerciseCategory.PUSH to "Antagonists",
+        ExerciseCategory.CORE to "Core",
+    )
+
+    /** Session title derived from what is actually in it, so substitutions keep titles honest. */
+    fun titleFor(items: List<Prescription>): String {
+        val labels = items.mapNotNull { SHORT_LABEL[it.exercise.category] }.distinct()
+        val hasMobility = items.any { it.exercise.category.isMobility }
+        return when {
+            labels.isEmpty() -> "Mobility & Flexibility"
+            hasMobility && labels.size == 1 -> "${labels.single()} & Mobility"
+            else -> labels.take(3).joinToString(" + ")
+        }
+    }
+
+    private val ExerciseCategory.isMobility
+        get() = this == ExerciseCategory.MOBILITY_LOWER || this == ExerciseCategory.MOBILITY_UPPER
+
+    private class PhasePlan(
+        val hang: String, val hang2: String, val pull: String, val climbA: String, val climbB: String,
+        val coreA: String, val coreB: String, val pushA: String, val pushB: String,
+    )
+
+    private fun phasePlan(phase: Phase, goal: Goal): PhasePlan = when (phase) {
+        Phase.BASE -> PhasePlan(
+            "fb_repeaters_73", "fb_density_hangs", "pull_weighted_volume", "climb_arc",
+            if (goal == Goal.SPORT_CLIMBING) "climb_route_intervals" else "climb_limit_bouldering",
+            "core_front_lever_tuck", "core_hanging_leg_raise", "push_deficit_pushups", "push_dips",
+        )
+        Phase.MAX_STRENGTH -> PhasePlan(
+            "fb_max_hangs_10s", "fb_max_hangs_10s", "pull_weighted_strength", "climb_limit_bouldering",
+            if (goal == Goal.SPORT_CLIMBING) "climb_route_intervals" else "climb_limit_bouldering",
+            "core_front_lever_adv", "core_dragonflag", "push_ohp", "push_dips",
+        )
+        Phase.POWER_ENDURANCE -> when (goal) {
+            Goal.BOULDERING -> PhasePlan(
+                "fb_max_hangs_10s", "fb_max_hangs_10s", "pull_explosive", "climb_campus_ladders",
+                "climb_limit_bouldering", "core_front_lever_raises", "core_pike_compression", "push_ohp", "push_deficit_pushups",
+            )
+            Goal.SPORT_CLIMBING -> PhasePlan(
+                "fb_repeaters_73", "fb_repeaters_73", "pull_weighted_volume", "climb_4x4",
+                "climb_route_intervals", "core_front_lever_raises", "core_hanging_leg_raise", "push_deficit_pushups", "push_dips",
+            )
+            Goal.GENERAL_STRENGTH -> PhasePlan(
+                "fb_max_hangs_10s", "fb_repeaters_73", "pull_weighted_strength", "climb_4x4",
+                "climb_limit_bouldering", "core_front_lever_raises", "core_dragonflag", "push_ohp", "push_dips",
+            )
+        }
+        Phase.PEAK -> PhasePlan(
+            "fb_max_hangs_10s", "fb_max_hangs_10s", "pull_explosive", "climb_projecting", "climb_projecting",
+            "core_hollow_body", "core_hanging_leg_raise", "push_deficit_pushups", "push_reverse_wrist_curl",
+        )
+    }
+
+    private fun buildDays(
+        phase: Phase,
+        goal: Goal,
+        weekInBlock: Int,
+        weekStart: Long,
+        baseline: StrengthBaseline,
+        exercises: Map<String, Exercise>,
+        equipment: Set<Equipment>,
+    ): List<TrainingDay> {
+        val plan = phasePlan(phase, goal)
+        val deload = weekInBlock == BLOCK_WEEKS
+        var volume = if (deload) DELOAD_VOLUME else 1.0
+        if (phase == Phase.PEAK) volume = minOf(volume, TAPER_VOLUME)
+        // Linear intensity wave across the block; deload holds week-3 intensity.
+        val intensityOffset = (minOf(weekInBlock, 3) - 2) * WEEKLY_INTENSITY_STEP
+
+        fun rx(vararg ids: String): List<Prescription> = ids
+            .mapNotNull { id -> resolve(id, exercises, equipment)?.let { ex -> ex to exercises[id]?.takeIf { it.id != ex.id } } }
+            .distinctBy { it.first.id }
+            .map { (ex, planned) ->
+                val sets = if (ex.category.isMobility || ex.category == ExerciseCategory.BENCHMARK) ex.sets
+                else max(1, (ex.sets * volume).roundToInt())
+                val intensity = ex.intensity?.let { (it + intensityOffset).coerceIn(0.4, 0.95) }
+                Prescription(
+                    ex, sets, ex.reps, ex.workSec, ex.repRestSec, ex.setRestSec, intensity,
+                    loadText(ex, intensity, baseline, equipment), substitutedFor = planned?.name,
+                )
+            }
+
+        fun day(offset: Int, items: List<Prescription>) = TrainingDay(weekStart + offset, offset + 1, titleFor(items), items)
+
+        val benchmarks = if (deload) rx("bench_max_hang_5s", "bench_pullup_1rm") else emptyList()
+        val day7 = if (benchmarks.isNotEmpty()) {
+            TrainingDay(weekStart + 6, 7, "Benchmark Day", benchmarks, isBenchmark = true)
+        } else {
+            TrainingDay(weekStart + 6, 7, "Rest", emptyList(), isRest = true)
+        }
+        return listOf(
+            day(0, rx(plan.hang, plan.pull, plan.coreA, "mob_scap_pullups")),
+            day(1, rx(plan.climbA, plan.pushA, "push_reverse_wrist_curl", "mob_cossack_squat", "mob_90_90")),
+            day(2, rx("mob_jefferson_curl", "mob_frog_stretch", "mob_middle_split", "mob_thoracic_rotation", "mob_band_external_rotation")),
+            day(3, rx(plan.hang2, plan.coreB, "core_hollow_body", "mob_wall_slides", "mob_ytw")),
+            day(4, rx(plan.climbB, plan.pushB, "mob_german_hang", "mob_doorway_pec")),
+            day(5, rx("mob_couch_stretch", "mob_pancake", "core_pike_compression")),
+            day7,
+        )
+    }
+}
