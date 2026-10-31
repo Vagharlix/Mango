@@ -76,7 +76,9 @@ class Repository(private val context: Context, private val db: MangoDatabase) {
     suspend fun seedIfNeeded() = withContext(Dispatchers.IO) {
         try {
             if (foodDao.count() == 0) foodDao.insertAll(readAsset<List<Food>>("foods.json"))
-            if (db.exerciseDao().count() == 0) db.exerciseDao().insertAll(readAsset<List<Exercise>>("exercises.json"))
+            // Exercises are read-only reference data: refresh on every start so asset updates (new protocols,
+            // equipment requirements) reach existing installs.
+            db.exerciseDao().insertAll(readAsset<List<Exercise>>("exercises.json"))
             if (recipeDao.count() == 0) {
                 val byName = foodDao.getAll().associateBy { it.name }
                 recipeDao.insertAll(readAsset<List<Recipe>>("recipes.json").map { NutritionEngine.withNutrients(it, byName) })
@@ -102,6 +104,12 @@ class Repository(private val context: Context, private val db: MangoDatabase) {
         profileDao.upsert(clean)
         planLock.withLock { dropDisallowedLocked(clean) }
         ensureWeekPlan()
+    }
+
+    /** Equipment can change at any time (gym, home, travel); the schedule is derived from it on the fly. */
+    suspend fun updateEquipment(equipment: Collection<Equipment>) {
+        val p = profileDao.get() ?: throw IllegalStateException("Create your profile first")
+        profileDao.upsert(p.copy(equipment = Equipment.entries.filter { it in equipment }))
     }
 
     suspend fun addBenchmark(fingerAddedKg: Double, pullUpAddedKg: Double) {

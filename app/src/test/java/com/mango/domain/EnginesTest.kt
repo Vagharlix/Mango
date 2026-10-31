@@ -2,6 +2,7 @@ package com.mango.domain
 
 import com.mango.data.ActivityLevel
 import com.mango.data.Benchmark
+import com.mango.data.Equipment
 import com.mango.data.Exercise
 import com.mango.data.Food
 import com.mango.data.FoodCategory
@@ -127,6 +128,56 @@ class EnginesTest {
         assertEquals(Phase.BASE, weeks[16].phase)
         assertEquals(Phase.POWER_ENDURANCE, weeks[8].phase)
         assertEquals(Phase.PEAK, weeks[12].phase)
+    }
+
+    // ---------- Equipment ----------
+
+    private fun weeksWith(equipment: List<Equipment>) =
+        Periodization.build(profile.copy(equipment = equipment), exercises, emptyList(), profile.programStartEpochDay)
+
+    @Test fun substitutionChainsReferenceRealExercises() {
+        Periodization.SUBSTITUTES.forEach { (id, subs) ->
+            assertNotNull(id, exercises[id])
+            subs.forEach { assertNotNull("$id -> $it", exercises[it]) }
+        }
+    }
+
+    @Test fun missingHangboardFallsBackToEdgeLiftsThenClimbing() {
+        val noBoard = Equipment.DEFAULT - Equipment.FINGERBOARD
+        val maxStrengthDay1 = weeksWith(noBoard)[5].days[0].items
+        assertTrue(maxStrengthDay1.none { it.exercise.requires.flatten().contains(Equipment.FINGERBOARD) })
+        val sub = maxStrengthDay1.first { it.substitutedFor == "Max Hangs 10 s (20 mm)" }
+        assertEquals("climb_limit_bouldering", sub.exercise.id)
+
+        val withEdge = weeksWith(noBoard + Equipment.LIFTING_EDGE)[5].days[0].items
+        assertEquals("fb_edge_lift_max", withEdge.first { it.substitutedFor != null }.exercise.id)
+        // No hangboard -> the max-hang test is dropped from benchmark day, the pull-up test remains.
+        assertEquals(listOf("bench_pullup_1rm"), weeksWith(noBoard)[3].days[6].items.map { it.exercise.id })
+    }
+
+    @Test fun bodyweightOnlyStillProducesAFullPlan() {
+        val weeks = weeksWith(emptyList())
+        weeks.forEach { w ->
+            w.days.forEach { d ->
+                d.items.forEach { assertTrue(it.exercise.id, it.exercise.isAvailable(emptyList())) }
+                if (d.dayNumber < 7) assertTrue("week ${w.index} day ${d.dayNumber}", d.items.isNotEmpty())
+            }
+            assertTrue(w.days[6].isRest) // no benchmark possible without equipment
+        }
+        assertTrue(weeks[0].days[0].items.any { it.exercise.category.name == "PULL" })
+    }
+
+    @Test fun hangLoadsAdaptWithoutWeights() {
+        val noWeights = Equipment.DEFAULT - Equipment.WEIGHTS
+        val hang = weeksWith(noWeights)[5].days[0].items.first { it.exercise.id == "fb_max_hangs_10s" }
+        assertTrue(hang.loadText, hang.loadText.startsWith("Bodyweight"))
+        assertEquals("pull_bodyweight_tempo", weeksWith(noWeights)[5].days[0].items.first { it.exercise.category.name == "PULL" }.exercise.id)
+    }
+
+    @Test fun dayTitlesReflectActualContent() {
+        assertEquals("Fingers + Pull + Core", weeksWith(Equipment.DEFAULT)[0].days[0].title)
+        assertEquals("Mobility & Flexibility", weeksWith(Equipment.DEFAULT)[0].days[2].title)
+        assertTrue(weeksWith(Equipment.DEFAULT - Equipment.BOULDER_WALL - Equipment.ROPE_WALL)[0].days.none { it.title.contains("Climbing") })
     }
 
     // ---------- Meal planning ----------

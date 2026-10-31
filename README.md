@@ -9,7 +9,7 @@ Everything is computed on the device with deterministic Kotlin. There is no AI, 
 
 ```
 app/src/main/
-├── assets/                foods.json (128 foods, USDA values) · recipes.json (112 recipes) · exercises.json (39 protocols)
+├── assets/                foods.json (128 foods, USDA values) · recipes.json (112 recipes) · exercises.json (48 protocols)
 ├── res/raw/               beep_short.wav · beep_long.wav (SoundPool)
 └── java/com/mango/
     ├── MangoApp.kt        Application: creates the DB and repository, seeds assets
@@ -39,6 +39,21 @@ app/src/main/
 | Taper | −50 % volume, intensity maintained | Bosquet 2007 meta-analysis |
 | Benchmark | Week 4, Day 7 of every block: 5 s max hang and weighted pull-up 1RM; results set the loads for the next block | Lattice Training |
 | Loads | added kg = %1RM × (bodyweight + 1RM added) − bodyweight, rounded to 0.5 kg; negative means pulley assistance | Lattice / Hörst |
+
+### Training equipment
+
+Pick the equipment you can use right now in **Profile**, or tap **Change** on the Training screen. Changes save straight away and the whole schedule is rebuilt from them. Pick different equipment when you train at home or travel.
+
+* Every exercise in `exercises.json` lists the equipment it `requires`, as groups of alternatives. For example, pull-ups need *pull-up bar or rings*, and weighted pull-ups also need *weights*.
+* When something is missing, `Periodization.SUBSTITUTES` swaps in the closest alternative that trains the same thing:
+  * max hangs → no-hang edge lifts → limit bouldering
+  * weighted pull-ups → tempo pull-ups → band rows → inverted rows
+  * overhead press → pike push-ups
+  * front lever → dragon flag → hollow body
+  * …and so on.
+* The app shows which exercise each substitute replaces. Day titles are built from what the session actually contains.
+* Hangs that call for added weight when you have no weights say to use a smaller edge instead.
+* Benchmark day only asks for the tests you can do. With no equipment at all you still get a full bodyweight and mobility plan.
 
 The protocols (7:3 repeaters, 10 s max hangs, weighted pulls, antagonist push, front-lever and compression core work, loaded mobility, shoulder prehab) and their citations are in `exercises.json`.
 

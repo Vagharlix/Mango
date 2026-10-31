@@ -1,6 +1,7 @@
 package com.mango.domain
 
 import com.mango.data.Benchmark
+import com.mango.data.Equipment
 import com.mango.data.Exercise
 import com.mango.data.ExerciseCategory
 import com.mango.data.Goal
@@ -30,6 +31,8 @@ data class Prescription(
     val setRestSec: Int,
     val intensity: Double?,
     val loadText: String,
+    /** Name of the planned exercise this one replaces because its equipment isn't available. */
+    val substitutedFor: String? = null,
 ) {
     val isTimed: Boolean get() = workSec > 0 || setRestSec > 0
 
@@ -174,12 +177,25 @@ object Periodization {
             phase = phase,
             isDeload = isDeload(w),
             startEpochDay = start,
-            days = buildDays(phase, profile.goal, weekInBlock, start, baseline, exercises),
+            days = buildDays(phase, profile.goal, weekInBlock, start, baseline, exercises, profile.equipment.toSet()),
         )
     }
 
-    fun loadText(ex: Exercise, intensity: Double?, baseline: StrengthBaseline): String = when (ex.loadBasis) {
-        LoadBasis.FINGER_1RM -> addedLoadText(intensity ?: 0.0, baseline.bodyWeightKg, baseline.fingerAddedKg)
+    fun loadText(
+        ex: Exercise,
+        intensity: Double?,
+        baseline: StrengthBaseline,
+        equipment: Set<Equipment> = Equipment.entries.toSet(),
+    ): String = when (ex.loadBasis) {
+        LoadBasis.FINGER_1RM -> {
+            val pct = intensity ?: 0.0
+            if (Equipment.WEIGHTS !in equipment && targetAddedKg(pct, baseline.bodyWeightKg, baseline.fingerAddedKg) > 0) {
+                // Without added weight, raise intensity by reducing edge depth instead (Lattice Training).
+                "Bodyweight · ${(pct * 100).roundToInt()}% – no weights: use a smaller edge until the last 2-3 s are hard"
+            } else {
+                addedLoadText(pct, baseline.bodyWeightKg, baseline.fingerAddedKg)
+            }
+        }
         LoadBasis.PULL_1RM -> addedLoadText(intensity ?: 0.0, baseline.bodyWeightKg, baseline.pullAddedKg)
         LoadBasis.BODYWEIGHT -> "Bodyweight"
         LoadBasis.RPE -> "RPE 7-8 (2-3 reps in reserve)"
@@ -214,6 +230,61 @@ object Periodization {
         }
         return out
     }
+
+    /**
+     * Ordered substitutes used when a planned exercise's equipment is missing. Each replacement trains the
+     * same quality as closely as possible (e.g. max hangs → no-hang edge lifts → limit bouldering).
+     */
+    val SUBSTITUTES: Map<String, List<String>> = mapOf(
+        "fb_max_hangs_10s" to listOf("fb_edge_lift_max", "climb_limit_bouldering"),
+        "fb_repeaters_73" to listOf("fb_edge_lift_repeaters", "climb_arc"),
+        "fb_density_hangs" to listOf("fb_edge_lift_repeaters", "climb_arc"),
+        "climb_arc" to listOf("fb_repeaters_73", "fb_edge_lift_repeaters"),
+        "climb_limit_bouldering" to listOf("fb_max_hangs_10s", "fb_edge_lift_max"),
+        "climb_4x4" to listOf("climb_route_intervals", "fb_repeaters_73", "fb_edge_lift_repeaters"),
+        "climb_route_intervals" to listOf("climb_4x4", "climb_arc", "fb_repeaters_73", "fb_edge_lift_repeaters"),
+        "climb_campus_ladders" to listOf("climb_limit_bouldering", "pull_explosive", "pull_inverted_rows"),
+        "climb_projecting" to listOf("climb_limit_bouldering", "fb_max_hangs_10s", "fb_edge_lift_max"),
+        "pull_weighted_volume" to listOf("pull_bodyweight_tempo", "pull_band_rows", "pull_inverted_rows"),
+        "pull_weighted_strength" to listOf("pull_bodyweight_tempo", "pull_band_rows", "pull_inverted_rows"),
+        "pull_explosive" to listOf("pull_inverted_rows"),
+        "push_ohp" to listOf("push_pike_pushups"),
+        "push_dips" to listOf("push_deficit_pushups"),
+        "core_front_lever_tuck" to listOf("core_hollow_body"),
+        "core_front_lever_adv" to listOf("core_dragonflag", "core_hollow_body"),
+        "core_front_lever_raises" to listOf("core_dragonflag", "core_pike_compression"),
+        "core_dragonflag" to listOf("core_hollow_body"),
+        "core_hanging_leg_raise" to listOf("core_pike_compression"),
+        "mob_jefferson_curl" to listOf("mob_seated_pike"),
+        "mob_band_external_rotation" to listOf("mob_sidelying_er"),
+        "mob_scap_pullups" to listOf("mob_scap_pushups"),
+    )
+
+    /** First exercise in the substitution chain the athlete can do with their equipment, or null. */
+    fun resolve(id: String, exercises: Map<String, Exercise>, equipment: Set<Equipment>): Exercise? =
+        (listOf(id) + SUBSTITUTES[id].orEmpty()).firstNotNullOfOrNull { exercises[it]?.takeIf { e -> e.isAvailable(equipment) } }
+
+    private val SHORT_LABEL = mapOf(
+        ExerciseCategory.FINGERBOARD to "Fingers",
+        ExerciseCategory.CLIMBING to "Climbing",
+        ExerciseCategory.PULL to "Pull",
+        ExerciseCategory.PUSH to "Antagonists",
+        ExerciseCategory.CORE to "Core",
+    )
+
+    /** Session title derived from what is actually in it, so substitutions keep titles honest. */
+    fun titleFor(items: List<Prescription>): String {
+        val labels = items.mapNotNull { SHORT_LABEL[it.exercise.category] }.distinct()
+        val hasMobility = items.any { it.exercise.category.isMobility }
+        return when {
+            labels.isEmpty() -> "Mobility & Flexibility"
+            hasMobility && labels.size == 1 -> "${labels.single()} & Mobility"
+            else -> labels.take(3).joinToString(" + ")
+        }
+    }
+
+    private val ExerciseCategory.isMobility
+        get() = this == ExerciseCategory.MOBILITY_LOWER || this == ExerciseCategory.MOBILITY_UPPER
 
     private class PhasePlan(
         val hang: String, val hang2: String, val pull: String, val climbA: String, val climbB: String,
@@ -258,6 +329,7 @@ object Periodization {
         weekStart: Long,
         baseline: StrengthBaseline,
         exercises: Map<String, Exercise>,
+        equipment: Set<Equipment>,
     ): List<TrainingDay> {
         val plan = phasePlan(phase, goal)
         val deload = weekInBlock == BLOCK_WEEKS
@@ -266,26 +338,34 @@ object Periodization {
         // Linear intensity wave across the block; deload holds week-3 intensity.
         val intensityOffset = (minOf(weekInBlock, 3) - 2) * WEEKLY_INTENSITY_STEP
 
-        fun rx(vararg ids: String): List<Prescription> = ids.distinct().mapNotNull { exercises[it] }.map { ex ->
-            val isMobility = ex.category == ExerciseCategory.MOBILITY_LOWER || ex.category == ExerciseCategory.MOBILITY_UPPER
-            val sets = if (isMobility || ex.category == ExerciseCategory.BENCHMARK) ex.sets
-            else max(1, (ex.sets * volume).roundToInt())
-            val intensity = ex.intensity?.let { (it + intensityOffset).coerceIn(0.4, 0.95) }
-            Prescription(ex, sets, ex.reps, ex.workSec, ex.repRestSec, ex.setRestSec, intensity, loadText(ex, intensity, baseline))
-        }
+        fun rx(vararg ids: String): List<Prescription> = ids
+            .mapNotNull { id -> resolve(id, exercises, equipment)?.let { ex -> ex to exercises[id]?.takeIf { it.id != ex.id } } }
+            .distinctBy { it.first.id }
+            .map { (ex, planned) ->
+                val sets = if (ex.category.isMobility || ex.category == ExerciseCategory.BENCHMARK) ex.sets
+                else max(1, (ex.sets * volume).roundToInt())
+                val intensity = ex.intensity?.let { (it + intensityOffset).coerceIn(0.4, 0.95) }
+                Prescription(
+                    ex, sets, ex.reps, ex.workSec, ex.repRestSec, ex.setRestSec, intensity,
+                    loadText(ex, intensity, baseline, equipment), substitutedFor = planned?.name,
+                )
+            }
 
-        val day7 = if (deload) {
-            TrainingDay(weekStart + 6, 7, "Benchmark Day", rx("bench_max_hang_5s", "bench_pullup_1rm"), isBenchmark = true)
+        fun day(offset: Int, items: List<Prescription>) = TrainingDay(weekStart + offset, offset + 1, titleFor(items), items)
+
+        val benchmarks = if (deload) rx("bench_max_hang_5s", "bench_pullup_1rm") else emptyList()
+        val day7 = if (benchmarks.isNotEmpty()) {
+            TrainingDay(weekStart + 6, 7, "Benchmark Day", benchmarks, isBenchmark = true)
         } else {
             TrainingDay(weekStart + 6, 7, "Rest", emptyList(), isRest = true)
         }
         return listOf(
-            TrainingDay(weekStart, 1, "Fingerboard + Pull", rx(plan.hang, plan.pull, plan.coreA, "mob_scap_pullups")),
-            TrainingDay(weekStart + 1, 2, "Climbing + Antagonists", rx(plan.climbA, plan.pushA, "push_reverse_wrist_curl", "mob_cossack_squat", "mob_90_90")),
-            TrainingDay(weekStart + 2, 3, "Active Recovery & Flexibility", rx("mob_jefferson_curl", "mob_frog_stretch", "mob_middle_split", "mob_thoracic_rotation", "mob_band_external_rotation")),
-            TrainingDay(weekStart + 3, 4, "Fingerboard + Core", rx(plan.hang2, plan.coreB, "core_hollow_body", "mob_wall_slides", "mob_ytw")),
-            TrainingDay(weekStart + 4, 5, "Climbing + Antagonists", rx(plan.climbB, plan.pushB, "mob_german_hang", "mob_doorway_pec")),
-            TrainingDay(weekStart + 5, 6, "Mobility & Compression", rx("mob_couch_stretch", "mob_pancake", "core_pike_compression")),
+            day(0, rx(plan.hang, plan.pull, plan.coreA, "mob_scap_pullups")),
+            day(1, rx(plan.climbA, plan.pushA, "push_reverse_wrist_curl", "mob_cossack_squat", "mob_90_90")),
+            day(2, rx("mob_jefferson_curl", "mob_frog_stretch", "mob_middle_split", "mob_thoracic_rotation", "mob_band_external_rotation")),
+            day(3, rx(plan.hang2, plan.coreB, "core_hollow_body", "mob_wall_slides", "mob_ytw")),
+            day(4, rx(plan.climbB, plan.pushB, "mob_german_hang", "mob_doorway_pec")),
+            day(5, rx("mob_couch_stretch", "mob_pancake", "core_pike_compression")),
             day7,
         )
     }

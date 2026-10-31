@@ -15,6 +15,11 @@
   "repRestSec": 3,
   "setRestSec": 180,
   "loadBasis": "FINGER_1RM",
+  "requires": [
+   [
+    "FINGERBOARD"
+   ]
+  ],
   "source": "Lattice Training fingerboard methodology; López-Rivera & González-Badillo (2012) Sports Technology 5:100-110; Medernach et al. (2015) J Strength Cond Res 29:3093-3102",
   "intensity": 0.65
  },
@@ -34,6 +39,11 @@
   "repRestSec": 0,
   "setRestSec": 180,
   "loadBasis": "FINGER_1RM",
+  "requires": [
+   [
+    "FINGERBOARD"
+   ]
+  ],
   "source": "Lattice Training fingerboard methodology; López-Rivera & González-Badillo (2012) Sports Technology 5:100-110; Hörst (2016)",
   "intensity": 0.85
  },
@@ -53,6 +63,11 @@
   "repRestSec": 0,
   "setRestSec": 120,
   "loadBasis": "FINGER_1RM",
+  "requires": [
+   [
+    "FINGERBOARD"
+   ]
+  ],
   "source": "Lattice Training density hangs; Baar K. (2017) Sports Med 47(Suppl 1):5-11 (tendon loading)",
   "intensity": 0.55
  },
@@ -72,6 +87,12 @@
   "repRestSec": 0,
   "setRestSec": 300,
   "loadBasis": "NONE",
+  "requires": [
+   [
+    "BOULDER_WALL",
+    "ROPE_WALL"
+   ]
+  ],
   "source": "Hörst E. Training for Climbing, 3rd ed. (2016)"
  },
  {
@@ -90,6 +111,11 @@
   "repRestSec": 0,
   "setRestSec": 180,
   "loadBasis": "NONE",
+  "requires": [
+   [
+    "BOULDER_WALL"
+   ]
+  ],
   "source": "Hörst E. Training for Climbing, 3rd ed. (2016); Lattice Training"
  },
  {
@@ -108,6 +134,11 @@
   "repRestSec": 10,
   "setRestSec": 240,
   "loadBasis": "NONE",
+  "requires": [
+   [
+    "BOULDER_WALL"
+   ]
+  ],
   "source": "Hörst E. Training for Climbing, 3rd ed. (2016)"
  },
  {
@@ -126,6 +157,11 @@
   "repRestSec": 0,
   "setRestSec": 180,
   "loadBasis": "NONE",
+  "requires": [
+   [
+    "ROPE_WALL"
+   ]
+  ],
   "source": "Hörst E. Training for Climbing, 3rd ed. (2016)"
  },
  {
@@ -144,6 +180,11 @@
   "repRestSec": 0,
   "setRestSec": 180,
   "loadBasis": "NONE",
+  "requires": [
+   [
+    "CAMPUS_BOARD"
+   ]
+  ],
   "source": "Hörst E. Training for Climbing, 3rd ed. (2016); Lattice Training"
  },
  {
@@ -162,6 +203,12 @@
   "repRestSec": 0,
   "setRestSec": 300,
   "loadBasis": "NONE",
+  "requires": [
+   [
+    "BOULDER_WALL",
+    "ROPE_WALL"
+   ]
+  ],
   "source": "Hörst E. Training for Climbing, 3rd ed. (2016)"
  },
  {
@@ -180,6 +227,15 @@
   "repRestSec": 0,
   "setRestSec": 150,
   "loadBasis": "PULL_1RM",
+  "requires": [
+   [
+    "PULL_UP_BAR",
+    "RINGS"
+   ],
+   [
+    "WEIGHTS"
+   ]
+  ],
   "source": "ACSM Position Stand: Progression Models in Resistance Training (Med Sci Sports Exerc 2009;41:687-708)",
   "intensity": 0.75
  },
@@ -199,6 +255,15 @@
   "repRestSec": 0,
   "setRestSec": 180,
   "loadBasis": "PULL_1RM",
+  "requires": [
+   [
+    "PULL_UP_BAR",
+    "RINGS"
+   ],
+   [
+    "WEIGHTS"
+   ]
+  ],
   "source": "ACSM Position Stand: Progression Models in Resistance Training (Med Sci Sports Exerc 2009;41:687-708)",
   "intensity": 0.875
  },
@@ -218,6 +283,12 @@
   "repRestSec": 0,
   "setRestSec": 150,
   "loadBasis": "BODYWEIGHT",
+  "requires": [
+   [
+    "PULL_UP_BAR",
+    "RINGS"
+   ]
+  ],
   "source": "ACSM Position Stand: Progression Models in Resistance Training (Med Sci Sports Exerc 2009;41:687-708); Hörst (2016)"
  },
  {
@@ -236,6 +307,11 @@
   "repRestSec": 0,
   "setRestSec": 150,
   "loadBasis": "RPE",
+  "requires": [
+   [
+    "WEIGHTS"
+   ]
+  ],
   "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor; ACSM Position Stand: Progression Models in Resistance Training (Med Sci Sports Exerc 2009;41:687-708)"
  },
  {
@@ -254,6 +330,12 @@
   "repRestSec": 0,
   "setRestSec": 150,
   "loadBasis": "RPE",
+  "requires": [
+   [
+    "DIP_BARS",
+    "RINGS"
+   ]
+  ],
   "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor"
  },
  {
@@ -272,6 +354,7 @@
   "repRestSec": 0,
   "setRestSec": 90,
   "loadBasis": "BODYWEIGHT",
+  "requires": [],
   "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor"
  },
  {
@@ -290,6 +373,12 @@
   "repRestSec": 0,
   "setRestSec": 60,
   "loadBasis": "RPE",
+  "requires": [
+   [
+    "WEIGHTS",
+    "RESISTANCE_BAND"
+   ]
+  ],
   "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor"
  },
  {
@@ -308,6 +397,12 @@
   "repRestSec": 0,
   "setRestSec": 120,
   "loadBasis": "BODYWEIGHT",
+  "requires": [
+   [
+    "PULL_UP_BAR",
+    "RINGS"
+   ]
+  ],
   "source": "Hörst (2016); progressive calisthenics"
  },
  {
@@ -326,6 +421,12 @@
   "repRestSec": 0,
   "setRestSec": 150,
   "loadBasis": "BODYWEIGHT",
+  "requires": [
+   [
+    "PULL_UP_BAR",
+    "RINGS"
+   ]
+  ],
   "source": "Hörst (2016)"
  },
  {
@@ -344,6 +445,12 @@
   "repRestSec": 0,
   "setRestSec": 120,
   "loadBasis": "BODYWEIGHT",
+  "requires": [
+   [
+    "PULL_UP_BAR",
+    "RINGS"
+   ]
+  ],
   "source": "Hörst (2016)"
  },
  {
@@ -362,6 +469,11 @@
   "repRestSec": 0,
   "setRestSec": 120,
   "loadBasis": "BODYWEIGHT",
+  "requires": [
+   [
+    "BENCH"
+   ]
+  ],
   "source": "Progressive calisthenics; Hörst (2016)"
  },
  {
@@ -380,6 +492,12 @@
   "repRestSec": 0,
   "setRestSec": 90,
   "loadBasis": "BODYWEIGHT",
+  "requires": [
+   [
+    "PULL_UP_BAR",
+    "RINGS"
+   ]
+  ],
   "source": "Hörst (2016)"
  },
  {
@@ -398,6 +516,7 @@
   "repRestSec": 0,
   "setRestSec": 60,
   "loadBasis": "BODYWEIGHT",
+  "requires": [],
   "source": "Gymnastics conditioning literature"
  },
  {
@@ -416,6 +535,7 @@
   "repRestSec": 0,
   "setRestSec": 60,
   "loadBasis": "BODYWEIGHT",
+  "requires": [],
   "source": "Kurz T. Stretching Scientifically, 4th ed. (2003)"
  },
  {
@@ -434,6 +554,11 @@
   "repRestSec": 0,
   "setRestSec": 60,
   "loadBasis": "BODYWEIGHT",
+  "requires": [
+   [
+    "WEIGHTS"
+   ]
+  ],
   "source": "Kurz T. Stretching Scientifically, 4th ed. (2003); Afonso et al. (2021) Sports Med 51:1305 (strength training vs stretching for ROM)"
  },
  {
@@ -452,6 +577,7 @@
   "repRestSec": 0,
   "setRestSec": 60,
   "loadBasis": "BODYWEIGHT",
+  "requires": [],
   "source": "Kurz T. Stretching Scientifically, 4th ed. (2003)"
  },
  {
@@ -470,6 +596,7 @@
   "repRestSec": 0,
   "setRestSec": 30,
   "loadBasis": "NONE",
+  "requires": [],
   "source": "Kurz T. Stretching Scientifically, 4th ed. (2003); ACSM Guidelines (2021): 30-60 s static holds"
  },
  {
@@ -488,6 +615,7 @@
   "repRestSec": 0,
   "setRestSec": 30,
   "loadBasis": "NONE",
+  "requires": [],
   "source": "Kurz T. Stretching Scientifically, 4th ed. (2003)"
  },
  {
@@ -506,6 +634,7 @@
   "repRestSec": 10,
   "setRestSec": 30,
   "loadBasis": "NONE",
+  "requires": [],
   "source": "Kurz T. Stretching Scientifically, 4th ed. (2003)"
  },
  {
@@ -524,6 +653,7 @@
   "repRestSec": 10,
   "setRestSec": 30,
   "loadBasis": "NONE",
+  "requires": [],
   "source": "Kurz T. Stretching Scientifically, 4th ed. (2003)"
  },
  {
@@ -542,6 +672,7 @@
   "repRestSec": 0,
   "setRestSec": 30,
   "loadBasis": "NONE",
+  "requires": [],
   "source": "Kurz T. Stretching Scientifically, 4th ed. (2003)"
  },
  {
@@ -560,6 +691,7 @@
   "repRestSec": 0,
   "setRestSec": 45,
   "loadBasis": "NONE",
+  "requires": [],
   "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor"
  },
  {
@@ -578,6 +710,7 @@
   "repRestSec": 0,
   "setRestSec": 45,
   "loadBasis": "NONE",
+  "requires": [],
   "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor"
  },
  {
@@ -596,6 +729,12 @@
   "repRestSec": 0,
   "setRestSec": 60,
   "loadBasis": "NONE",
+  "requires": [
+   [
+    "PULL_UP_BAR",
+    "RINGS"
+   ]
+  ],
   "source": "Gymnastics conditioning; Vagy J. Climb Injury-Free (2016), The Climbing Doctor"
  },
  {
@@ -614,6 +753,7 @@
   "repRestSec": 0,
   "setRestSec": 30,
   "loadBasis": "NONE",
+  "requires": [],
   "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor"
  },
  {
@@ -632,6 +772,11 @@
   "repRestSec": 0,
   "setRestSec": 45,
   "loadBasis": "NONE",
+  "requires": [
+   [
+    "RESISTANCE_BAND"
+   ]
+  ],
   "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor"
  },
  {
@@ -650,6 +795,12 @@
   "repRestSec": 0,
   "setRestSec": 45,
   "loadBasis": "BODYWEIGHT",
+  "requires": [
+   [
+    "PULL_UP_BAR",
+    "RINGS"
+   ]
+  ],
   "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor"
  },
  {
@@ -668,6 +819,7 @@
   "repRestSec": 10,
   "setRestSec": 30,
   "loadBasis": "NONE",
+  "requires": [],
   "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor"
  },
  {
@@ -686,6 +838,11 @@
   "repRestSec": 0,
   "setRestSec": 180,
   "loadBasis": "NONE",
+  "requires": [
+   [
+    "FINGERBOARD"
+   ]
+  ],
   "source": "Lattice Training fingerboard methodology; López-Rivera & González-Badillo (2012) Sports Technology 5:100-110"
  },
  {
@@ -704,6 +861,209 @@
   "repRestSec": 0,
   "setRestSec": 240,
   "loadBasis": "NONE",
+  "requires": [
+   [
+    "PULL_UP_BAR",
+    "RINGS"
+   ],
+   [
+    "WEIGHTS"
+   ]
+  ],
   "source": "ACSM Position Stand: Progression Models in Resistance Training (Med Sci Sports Exerc 2009;41:687-708)"
+ },
+ {
+  "id": "fb_edge_lift_max",
+  "name": "No-Hang Max Edge Lifts (20 mm)",
+  "category": "FINGERBOARD",
+  "description": "One-arm lifts of a loaded 20 mm lifting edge from the floor, held 10 s. Trains the same maximal finger-flexor recruitment as max hangs without a hangboard, and allows fine load increments.",
+  "cues": [
+   "Half-crimp, arm straight, shoulder packed",
+   "Lift smoothly to just off the floor",
+   "Load so the last 2-3 s are hard; 3 min rest"
+  ],
+  "sets": 5,
+  "reps": 2,
+  "workSec": 10,
+  "repRestSec": 60,
+  "setRestSec": 180,
+  "loadBasis": "RPE",
+  "requires": [
+   [
+    "LIFTING_EDGE"
+   ],
+   [
+    "WEIGHTS"
+   ]
+  ],
+  "source": "Lattice Training no-hang protocols; Nelson T. (Camp4 Human Performance) edge-lifting method"
+ },
+ {
+  "id": "fb_edge_lift_repeaters",
+  "name": "No-Hang Edge Lift Repeaters (20 mm)",
+  "category": "FINGERBOARD",
+  "description": "Alternating-arm 7 s on / 3 s off edge lifts at a moderate load: the no-hang equivalent of 7:3 repeaters for forearm capillarisation.",
+  "cues": [
+   "Moderate load (~6/10 effort)",
+   "Alternate arms each rep",
+   "Keep grip position consistent"
+  ],
+  "sets": 4,
+  "reps": 6,
+  "workSec": 7,
+  "repRestSec": 3,
+  "setRestSec": 180,
+  "loadBasis": "RPE",
+  "requires": [
+   [
+    "LIFTING_EDGE"
+   ],
+   [
+    "WEIGHTS"
+   ]
+  ],
+  "source": "Lattice Training fingerboard methodology; López-Rivera & González-Badillo (2012) Sports Technology 5:100-110"
+ },
+ {
+  "id": "pull_bodyweight_tempo",
+  "name": "Tempo Pull-ups (Bodyweight)",
+  "category": "PULL",
+  "description": "Strict bodyweight pull-ups with a 3-4 s lowering phase. Without added load, the slow eccentric raises time under tension so the set still reaches a near-failure stimulus.",
+  "cues": [
+   "3-4 s lowering, 1 s pause at the bottom",
+   "Stop 1-2 reps before failure",
+   "Use a band for assistance if needed"
+  ],
+  "sets": 4,
+  "reps": 6,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 150,
+  "loadBasis": "BODYWEIGHT",
+  "requires": [
+   [
+    "PULL_UP_BAR",
+    "RINGS"
+   ]
+  ],
+  "source": "ACSM Position Stand: Progression Models in Resistance Training (Med Sci Sports Exerc 2009;41:687-708); Schoenfeld et al. (2015) Sports Med 45:577 (tempo)"
+ },
+ {
+  "id": "pull_band_rows",
+  "name": "Resistance Band Rows",
+  "category": "PULL",
+  "description": "Seated or standing rows against a heavy band anchored at chest height. Maintains pulling strength when no bar is available.",
+  "cues": [
+   "Squeeze shoulder blades together",
+   "Elbows close to ribs",
+   "2 s pause at full contraction"
+  ],
+  "sets": 4,
+  "reps": 12,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 90,
+  "loadBasis": "RPE",
+  "requires": [
+   [
+    "RESISTANCE_BAND"
+   ]
+  ],
+  "source": "ACSM Position Stand: Progression Models in Resistance Training (Med Sci Sports Exerc 2009;41:687-708)"
+ },
+ {
+  "id": "pull_inverted_rows",
+  "name": "Inverted Rows (Table / Low Bar)",
+  "category": "PULL",
+  "description": "Lying under a sturdy table or low bar, pull the chest to the edge with a rigid body. Raise the feet to make it harder.",
+  "cues": [
+   "Check the table is stable before loading it",
+   "Body straight like a plank",
+   "Chest to the edge"
+  ],
+  "sets": 4,
+  "reps": 10,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 90,
+  "loadBasis": "BODYWEIGHT",
+  "requires": [],
+  "source": "ACSM Position Stand: Progression Models in Resistance Training (Med Sci Sports Exerc 2009;41:687-708)"
+ },
+ {
+  "id": "push_pike_pushups",
+  "name": "Pike Push-ups",
+  "category": "PUSH",
+  "description": "Push-ups with hips high so the body forms an inverted V, loading the shoulders overhead. Equipment-free substitute for the overhead press; elevate the feet to progress.",
+  "cues": [
+   "Head travels in front of the hands",
+   "Elbows ~45 degrees",
+   "Full lockout overhead"
+  ],
+  "sets": 4,
+  "reps": 8,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 120,
+  "loadBasis": "BODYWEIGHT",
+  "requires": [],
+  "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor; ACSM Position Stand: Progression Models in Resistance Training (Med Sci Sports Exerc 2009;41:687-708)"
+ },
+ {
+  "id": "mob_seated_pike",
+  "name": "Seated Pike Fold (Timed)",
+  "category": "MOBILITY_LOWER",
+  "description": "Seated forward fold over straight legs with active quad contraction. Unloaded alternative to the Jefferson curl for hamstring length.",
+  "cues": [
+   "Hinge from the hips",
+   "Pull toes back, lock knees",
+   "Contract 5 s, relax and sink (PNF)"
+  ],
+  "sets": 3,
+  "reps": 1,
+  "workSec": 45,
+  "repRestSec": 0,
+  "setRestSec": 30,
+  "loadBasis": "NONE",
+  "requires": [],
+  "source": "Kurz T. Stretching Scientifically, 4th ed. (2003)"
+ },
+ {
+  "id": "mob_sidelying_er",
+  "name": "Side-Lying External Rotations",
+  "category": "MOBILITY_UPPER",
+  "description": "Lying on your side, elbow at 90 degrees against the ribs, rotate the forearm upward with a light weight or water bottle. Rotator-cuff prehab without a band.",
+  "cues": [
+   "Towel between elbow and ribs",
+   "Slow 3 s lowering",
+   "Very light load"
+  ],
+  "sets": 3,
+  "reps": 15,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 45,
+  "loadBasis": "NONE",
+  "requires": [],
+  "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor"
+ },
+ {
+  "id": "mob_scap_pushups",
+  "name": "Scapular Push-ups",
+  "category": "MOBILITY_UPPER",
+  "description": "In a plank, let the chest sink between the shoulder blades then push the floor away fully. Trains serratus anterior for shoulder stability.",
+  "cues": [
+   "Arms locked throughout",
+   "Full protraction at the top",
+   "Slow and controlled"
+  ],
+  "sets": 3,
+  "reps": 12,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 45,
+  "loadBasis": "BODYWEIGHT",
+  "requires": [],
+  "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor"
  }
 ]

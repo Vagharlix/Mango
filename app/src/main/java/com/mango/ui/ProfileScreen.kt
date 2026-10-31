@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.mango.data.ActivityLevel
+import com.mango.data.Equipment
 import com.mango.data.Goal
 import com.mango.data.ProgramMode
 import com.mango.data.Repository
@@ -52,6 +53,7 @@ import com.mango.domain.Periodization
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.format.TextStyle
@@ -69,7 +71,17 @@ class ProfileViewModel(repo: Repository) : MangoViewModel(repo) {
                 _draft.value = it
                 _isNew.value = false
             }
+            // Equipment is edited live from several screens; keep the draft in sync with what is stored.
+            repo.profile.collect { stored -> if (stored != null) _draft.update { it.copy(equipment = stored.equipment) } }
         }
+    }
+
+    /** Equipment changes apply immediately (no need to press Save) once a profile exists. */
+    fun toggleEquipment(e: Equipment) {
+        val current = _draft.value.equipment
+        val next = if (e in current) current - e else current + e
+        update { it.copy(equipment = next) }
+        if (!_isNew.value) launchSafe { repo.updateEquipment(next) }
     }
 
     fun update(transform: (UserProfile) -> UserProfile) {
@@ -190,6 +202,15 @@ fun ProfileScreen() {
             }
 
             SectionCard {
+                Text("Training equipment", style = MaterialTheme.typography.titleMedium)
+                Text(
+                    "Select what you can use right now – change it any time (gym, home, travelling). Missing equipment is swapped for the closest evidence-based alternative.",
+                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                EquipmentPicker(p.equipment, vm::toggleEquipment)
+            }
+
+            SectionCard {
                 Text("Grocery day", style = MaterialTheme.typography.titleMedium)
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     DayOfWeek.entries.forEach { d ->
@@ -256,6 +277,16 @@ fun ProfileScreen() {
             Spacer(Modifier.height(24.dp))
         }
         SnackbarHost(snackbar, Modifier.align(Alignment.BottomCenter))
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun EquipmentPicker(selected: List<Equipment>, onToggle: (Equipment) -> Unit) {
+    FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+        Equipment.entries.forEach { e ->
+            FilterChip(selected = e in selected, onClick = { onToggle(e) }, label = { Text(e.label) })
+        }
     }
 }
 

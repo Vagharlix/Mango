@@ -47,6 +47,26 @@ enum class ExerciseCategory(val label: String) {
     BENCHMARK("Benchmark"),
 }
 
+enum class Equipment(val label: String) {
+    FINGERBOARD("Hangboard / fingerboard"),
+    LIFTING_EDGE("No-hang lifting edge / block"),
+    BOULDER_WALL("Bouldering wall / board"),
+    ROPE_WALL("Rope / lead wall"),
+    CAMPUS_BOARD("Campus board"),
+    PULL_UP_BAR("Pull-up bar / hangboard jugs"),
+    RINGS("Gymnastic rings"),
+    DIP_BARS("Dip bars / parallettes"),
+    WEIGHTS("Free weights / weight belt"),
+    BENCH("Flat bench"),
+    RESISTANCE_BAND("Resistance bands"),
+    ;
+
+    companion object {
+        /** A typical climbing gym: everything except the niche no-hang edge. */
+        val DEFAULT: List<Equipment> = entries - LIFTING_EDGE
+    }
+}
+
 /** How a prescription's load is derived. 1RM bases are percentages of total system load (bodyweight + added). */
 enum class LoadBasis { FINGER_1RM, PULL_1RM, BODYWEIGHT, RPE, NONE }
 
@@ -70,6 +90,8 @@ data class UserProfile(
     val programWeeks: Int = 12,
     val programStartEpochDay: Long = 0,
     val southernHemisphere: Boolean = false,
+    /** Training equipment the athlete can access right now; the schedule adapts whenever it changes. */
+    val equipment: List<Equipment> = Equipment.DEFAULT,
 )
 
 /** Nutrients per 100 g. Values from USDA FoodData Central. */
@@ -180,8 +202,12 @@ data class Exercise(
     /** Fraction of total-system 1RM (bodyweight + added load). */
     val intensity: Double? = null,
     val loadBasis: LoadBasis = LoadBasis.NONE,
+    /** Equipment needed: every group must be satisfied by at least one item (e.g. [[BOULDER_WALL, ROPE_WALL]]). */
+    val requires: List<List<Equipment>> = emptyList(),
     val source: String = "",
-)
+) {
+    fun isAvailable(equipment: Collection<Equipment>): Boolean = requires.all { group -> group.any { it in equipment } }
+}
 
 @Entity(tableName = "benchmarks")
 data class Benchmark(

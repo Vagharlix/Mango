@@ -13,6 +13,8 @@ import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import androidx.room.Update
 import androidx.room.Upsert
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -133,9 +135,6 @@ interface ExerciseDao {
     @Query("SELECT * FROM exercises")
     fun observeAll(): Flow<List<Exercise>>
 
-    @Query("SELECT COUNT(*) FROM exercises")
-    suspend fun count(): Int
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(exercises: List<Exercise>)
 }
@@ -156,6 +155,10 @@ class Converters {
     @TypeConverter fun toStrings(v: String): List<String> = json.decodeFromString(v)
     @TypeConverter fun fromInts(v: List<Int>): String = json.encodeToString(v)
     @TypeConverter fun toInts(v: String): List<Int> = json.decodeFromString(v)
+    @TypeConverter fun fromEquipment(v: List<Equipment>): String = json.encodeToString(v)
+    @TypeConverter fun toEquipment(v: String): List<Equipment> = json.decodeFromString(v)
+    @TypeConverter fun fromRequirements(v: List<List<Equipment>>): String = json.encodeToString(v)
+    @TypeConverter fun toRequirements(v: String): List<List<Equipment>> = json.decodeFromString(v)
     @TypeConverter fun fromIngredients(v: List<RecipeIngredient>): String = json.encodeToString(v)
     @TypeConverter fun toIngredients(v: String): List<RecipeIngredient> = json.decodeFromString(v)
 }
@@ -165,7 +168,7 @@ class Converters {
         UserProfile::class, Food::class, BarcodeProduct::class, PantryItem::class,
         Recipe::class, MealSlot::class, Exercise::class, Benchmark::class,
     ],
-    version = 1,
+    version = 2,
     exportSchema = false,
 )
 @TypeConverters(Converters::class)
@@ -180,8 +183,18 @@ abstract class MangoDatabase : RoomDatabase() {
     abstract fun benchmarkDao(): BenchmarkDao
 
     companion object {
+        /** v2 adds training equipment; existing users keep the full default set so their schedule is unchanged. */
+        private val MIGRATION_1_2 = object : Migration(1, 2) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                val defaults = Json.encodeToString(Equipment.DEFAULT).replace("'", "''")
+                db.execSQL("ALTER TABLE user_profile ADD COLUMN equipment TEXT NOT NULL DEFAULT '$defaults'")
+                db.execSQL("ALTER TABLE exercises ADD COLUMN requires TEXT NOT NULL DEFAULT '[]'")
+            }
+        }
+
         fun create(context: Context): MangoDatabase =
             Room.databaseBuilder(context, MangoDatabase::class.java, "mango.db")
+                .addMigrations(MIGRATION_1_2)
                 .fallbackToDestructiveMigration()
                 .build()
     }

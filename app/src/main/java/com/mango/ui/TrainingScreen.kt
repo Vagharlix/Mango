@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -43,6 +44,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
+import com.mango.data.Equipment
 import com.mango.data.ProgramMode
 import com.mango.data.Repository
 import com.mango.data.UserProfile
@@ -86,6 +88,11 @@ class TrainingViewModel(repo: Repository) : MangoViewModel(repo) {
         }
     }.flowOn(Dispatchers.Default).stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), TrainingState())
 
+    fun toggleEquipment(e: Equipment) = launchSafe {
+        val current = state.value.profile?.equipment ?: return@launchSafe
+        repo.updateEquipment(if (e in current) current - e else current + e)
+    }
+
     fun saveBenchmark(fingerAddedKg: Double, pullUpAddedKg: Double) = launchSafe {
         repo.addBenchmark(fingerAddedKg, pullUpAddedKg)
         toast("Benchmark saved – loads for the next block recalculated")
@@ -116,13 +123,14 @@ fun TrainingScreen(onOpenTimer: () -> Unit, onSetupProfile: () -> Unit) {
         else -> Box(Modifier.fillMaxSize()) {
             val expanded = remember { mutableStateMapOf(s.currentWeek to true) }
             var benchmarkDay by remember { mutableStateOf<TrainingDay?>(null) }
+            var editEquipment by remember { mutableStateOf(false) }
             val listState = rememberLazyListState(initialFirstVisibleItemIndex = (s.currentWeek + 1).coerceIn(0, s.weeks.size))
             LazyColumn(
                 state = listState,
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-                item { TrainingHeader(s) }
+                item { TrainingHeader(s, onEquipment = { editEquipment = true }) }
                 items(s.weeks, key = { it.index }) { week ->
                     WeekCard(
                         week = week,
@@ -139,8 +147,25 @@ fun TrainingScreen(onOpenTimer: () -> Unit, onSetupProfile: () -> Unit) {
                 }
             }
             SnackbarHost(snackbar, Modifier.align(Alignment.BottomCenter))
-            benchmarkDay?.let {
+            if (editEquipment) {
+                AlertDialog(
+                    onDismissRequest = { editEquipment = false },
+                    title = { Text("Available equipment") },
+                    text = {
+                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Text(
+                                "The whole schedule adapts instantly: missing equipment is replaced by the closest evidence-based alternative.",
+                                style = MaterialTheme.typography.bodySmall,
+                            )
+                            EquipmentPicker(s.profile?.equipment.orEmpty(), vm::toggleEquipment)
+                        }
+                    },
+                    confirmButton = { TextButton(onClick = { editEquipment = false }) { Text("Done") } },
+                )
+            }
+            benchmarkDay?.let { day ->
                 BenchmarkDialog(
+                    tests = day.items.map { it.exercise.id }.toSet(),
                     initial = s.baseline,
                     onDismiss = { benchmarkDay = null },
                     onSave = { finger, pull ->
@@ -171,7 +196,7 @@ fun EmptyProfile(onSetupProfile: () -> Unit) {
 }
 
 @Composable
-private fun TrainingHeader(s: TrainingState) {
+private fun TrainingHeader(s: TrainingState, onEquipment: () -> Unit) {
     val p = s.profile ?: return
     val week = s.weeks.getOrNull(s.currentWeek)
     SectionCard {
@@ -200,6 +225,17 @@ private fun TrainingHeader(s: TrainingState) {
                 "Current baseline: 20 mm edge ${signed(it.fingerAddedKg)} kg · Pull-up ${signed(it.pullAddedKg)} kg @ ${it.bodyWeightKg.fmt(1)} kg BW",
                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                "Equipment: " + p.equipment.size.let { if (it == 0) "none (bodyweight only)" else "$it item(s)" },
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.weight(1f),
+            )
+            TextButton(onClick = onEquipment) {
+                Icon(Icons.Filled.FitnessCenter, contentDescription = null)
+                Text("  Change")
+            }
         }
     }
 }
@@ -271,6 +307,7 @@ private fun ExerciseRow(p: Prescription, onTimer: (Prescription) -> Unit) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) {
                 Text(p.exercise.name, style = MaterialTheme.typography.bodyLarge)
+                p.substitutedFor?.let { Text("Replaces $it (equipment)", style = MaterialTheme.typography.labelSmall, color = Sky) }
                 Text(p.summary, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 if (p.loadText.isNotEmpty()) Text(p.loadText, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
             }
@@ -282,6 +319,12 @@ private fun ExerciseRow(p: Prescription, onTimer: (Prescription) -> Unit) {
             Column(Modifier.padding(top = 6.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(p.exercise.description, style = MaterialTheme.typography.bodySmall)
                 p.exercise.cues.forEach { Text("• $it", style = MaterialTheme.typography.bodySmall, color = Leaf) }
+                if (p.exercise.requires.isNotEmpty()) {
+                    Text(
+                        "Needs: " + p.exercise.requires.joinToString(" + ") { group -> group.joinToString(" or ") { it.label } },
+                        style = MaterialTheme.typography.labelSmall,
+                    )
+                }
                 Text("Source: ${p.exercise.source}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
@@ -289,7 +332,7 @@ private fun ExerciseRow(p: Prescription, onTimer: (Prescription) -> Unit) {
 }
 
 @Composable
-private fun BenchmarkDialog(initial: StrengthBaseline?, onDismiss: () -> Unit, onSave: (Double, Double) -> Unit) {
+private fun BenchmarkDialog(tests: Set<String>, initial: StrengthBaseline?, onDismiss: () -> Unit, onSave: (Double, Double) -> Unit) {
     var finger by remember { mutableStateOf(initial?.fingerAddedKg ?: 0.0) }
     var pull by remember { mutableStateOf(initial?.pullAddedKg ?: 0.0) }
     AlertDialog(
@@ -298,8 +341,9 @@ private fun BenchmarkDialog(initial: StrengthBaseline?, onDismiss: () -> Unit, o
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text("Added load (negative = assisted). Next block's targets are recalculated from these.", style = MaterialTheme.typography.bodySmall)
-                NumberField("5 s max hang, 20 mm", finger, { finger = it }, allowNegative = true, suffix = "kg")
-                NumberField("Weighted pull-up 1RM", pull, { pull = it }, allowNegative = true, suffix = "kg")
+                // Only tests possible with the current equipment are asked; the other value keeps its baseline.
+                if ("bench_max_hang_5s" in tests) NumberField("5 s max hang, 20 mm", finger, { finger = it }, allowNegative = true, suffix = "kg")
+                if ("bench_pullup_1rm" in tests) NumberField("Weighted pull-up 1RM", pull, { pull = it }, allowNegative = true, suffix = "kg")
             }
         },
         confirmButton = { TextButton(onClick = { onSave(finger, pull) }) { Text("Save") } },
