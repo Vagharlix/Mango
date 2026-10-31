@@ -1,0 +1,5137 @@
+[
+ {
+  "name": "Overnight Oats with Blueberries & Walnuts",
+  "mealType": "BREAKFAST",
+  "cuisine": "Nordic",
+  "servings": 1,
+  "prepMinutes": 5,
+  "ingredients": [
+   {
+    "food": "rolled oats",
+    "grams": 70.0
+   },
+   {
+    "food": "milk",
+    "grams": 200.0
+   },
+   {
+    "food": "greek yogurt",
+    "grams": 100.0
+   },
+   {
+    "food": "chia seeds",
+    "grams": 10.0
+   },
+   {
+    "food": "blueberries",
+    "grams": 100.0
+   },
+   {
+    "food": "walnuts",
+    "grams": 15.0
+   },
+   {
+    "food": "honey",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Stir oats, milk, yogurt and chia together in a jar",
+   "Refrigerate overnight (at least 6 hours)",
+   "Top with blueberries, chopped walnuts and honey before eating"
+  ]
+ },
+ {
+  "name": "Spinach & Feta Scramble on Toast",
+  "mealType": "BREAKFAST",
+  "cuisine": "Mediterranean",
+  "servings": 1,
+  "prepMinutes": 12,
+  "ingredients": [
+   {
+    "food": "eggs",
+    "grams": 150.0
+   },
+   {
+    "food": "spinach",
+    "grams": 60.0
+   },
+   {
+    "food": "feta",
+    "grams": 30.0
+   },
+   {
+    "food": "whole wheat bread",
+    "grams": 70.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 5.0
+   },
+   {
+    "food": "tomato",
+    "grams": 100.0
+   }
+  ],
+  "steps": [
+   "Warm olive oil in a non-stick pan and wilt the spinach",
+   "Add beaten eggs and stir gently over low heat until just set",
+   "Fold in crumbled feta",
+   "Serve on toasted bread with sliced tomato"
+  ]
+ },
+ {
+  "name": "Greek Yogurt Power Bowl",
+  "mealType": "BREAKFAST",
+  "cuisine": "Mediterranean",
+  "servings": 1,
+  "prepMinutes": 5,
+  "ingredients": [
+   {
+    "food": "greek yogurt",
+    "grams": 250.0
+   },
+   {
+    "food": "strawberries",
+    "grams": 120.0
+   },
+   {
+    "food": "almonds",
+    "grams": 20.0
+   },
+   {
+    "food": "ground flaxseed",
+    "grams": 10.0
+   },
+   {
+    "food": "honey",
+    "grams": 10.0
+   },
+   {
+    "food": "rolled oats",
+    "grams": 30.0
+   }
+  ],
+  "steps": [
+   "Spoon yogurt into a bowl",
+   "Top with sliced strawberries, oats, chopped almonds and flaxseed",
+   "Drizzle with honey"
+  ]
+ },
+ {
+  "name": "Savory Oats with Egg & Kale",
+  "mealType": "BREAKFAST",
+  "cuisine": "Fusion",
+  "servings": 1,
+  "prepMinutes": 15,
+  "ingredients": [
+   {
+    "food": "rolled oats",
+    "grams": 60.0
+   },
+   {
+    "food": "eggs",
+    "grams": 100.0
+   },
+   {
+    "food": "kale",
+    "grams": 50.0
+   },
+   {
+    "food": "parmesan",
+    "grams": 10.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 5.0
+   },
+   {
+    "food": "vegetable broth",
+    "grams": 250.0
+   }
+  ],
+  "steps": [
+   "Simmer oats in broth for 5 minutes, stirring",
+   "Stir in finely chopped kale for the last 2 minutes",
+   "Fry the eggs in olive oil",
+   "Serve oats topped with eggs and grated parmesan"
+  ]
+ },
+ {
+  "name": "Turmeric Tofu Veggie Scramble",
+  "mealType": "BREAKFAST",
+  "cuisine": "Vegan",
+  "servings": 1,
+  "prepMinutes": 15,
+  "ingredients": [
+   {
+    "food": "firm tofu",
+    "grams": 200.0
+   },
+   {
+    "food": "bell pepper",
+    "grams": 80.0
+   },
+   {
+    "food": "spinach",
+    "grams": 50.0
+   },
+   {
+    "food": "onion",
+    "grams": 40.0
+   },
+   {
+    "food": "turmeric",
+    "grams": 2.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 8.0
+   },
+   {
+    "food": "whole wheat bread",
+    "grams": 60.0
+   }
+  ],
+  "steps": [
+   "Saute diced onion and pepper in olive oil for 4 minutes",
+   "Crumble in the tofu with turmeric and cook 5 minutes",
+   "Fold in spinach until wilted",
+   "Serve with toast"
+  ]
+ },
+ {
+  "name": "Banana Peanut Butter Oatmeal",
+  "mealType": "BREAKFAST",
+  "cuisine": "American",
+  "servings": 1,
+  "prepMinutes": 10,
+  "ingredients": [
+   {
+    "food": "rolled oats",
+    "grams": 70.0
+   },
+   {
+    "food": "milk",
+    "grams": 250.0
+   },
+   {
+    "food": "banana",
+    "grams": 100.0
+   },
+   {
+    "food": "peanut butter",
+    "grams": 20.0
+   },
+   {
+    "food": "cinnamon",
+    "grams": 2.0
+   }
+  ],
+  "steps": [
+   "Simmer oats in milk for 5 minutes",
+   "Stir in cinnamon and half the mashed banana",
+   "Top with remaining sliced banana and peanut butter"
+  ]
+ },
+ {
+  "name": "Cottage Cheese Oat Pancakes",
+  "mealType": "BREAKFAST",
+  "cuisine": "American",
+  "servings": 1,
+  "prepMinutes": 20,
+  "ingredients": [
+   {
+    "food": "cottage cheese",
+    "grams": 150.0
+   },
+   {
+    "food": "eggs",
+    "grams": 100.0
+   },
+   {
+    "food": "rolled oats",
+    "grams": 50.0
+   },
+   {
+    "food": "raspberries",
+    "grams": 100.0
+   },
+   {
+    "food": "maple syrup",
+    "grams": 10.0
+   },
+   {
+    "food": "butter",
+    "grams": 5.0
+   }
+  ],
+  "steps": [
+   "Blend cottage cheese, eggs and oats into a smooth batter",
+   "Cook small pancakes in a lightly buttered pan, 2 minutes per side",
+   "Serve with raspberries and maple syrup"
+  ]
+ },
+ {
+  "name": "Shakshuka",
+  "mealType": "BREAKFAST",
+  "cuisine": "Middle Eastern",
+  "servings": 1,
+  "prepMinutes": 25,
+  "ingredients": [
+   {
+    "food": "eggs",
+    "grams": 150.0
+   },
+   {
+    "food": "canned tomatoes",
+    "grams": 200.0
+   },
+   {
+    "food": "bell pepper",
+    "grams": 80.0
+   },
+   {
+    "food": "onion",
+    "grams": 50.0
+   },
+   {
+    "food": "garlic",
+    "grams": 5.0
+   },
+   {
+    "food": "ground cumin",
+    "grams": 2.0
+   },
+   {
+    "food": "smoked paprika",
+    "grams": 2.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 8.0
+   },
+   {
+    "food": "whole wheat bread",
+    "grams": 60.0
+   },
+   {
+    "food": "parsley",
+    "grams": 5.0
+   }
+  ],
+  "steps": [
+   "Soften onion, pepper and garlic in olive oil for 6 minutes",
+   "Add spices and tomatoes and simmer 10 minutes",
+   "Make wells and crack in the eggs",
+   "Cover and cook until whites are set",
+   "Garnish with parsley and serve with bread"
+  ]
+ },
+ {
+  "name": "Pan-Seared Salmon Avocado Toast",
+  "mealType": "BREAKFAST",
+  "cuisine": "Nordic",
+  "servings": 1,
+  "prepMinutes": 15,
+  "ingredients": [
+   {
+    "food": "salmon fillet",
+    "grams": 100.0
+   },
+   {
+    "food": "avocado",
+    "grams": 60.0
+   },
+   {
+    "food": "whole wheat bread",
+    "grams": 70.0
+   },
+   {
+    "food": "lemon",
+    "grams": 10.0
+   },
+   {
+    "food": "arugula",
+    "grams": 20.0
+   }
+  ],
+  "steps": [
+   "Sear salmon skin-side down 4 minutes, flip and cook 2 more",
+   "Mash avocado with lemon juice",
+   "Spread on toast and top with flaked salmon and arugula"
+  ]
+ },
+ {
+  "name": "Berry Chia Pudding",
+  "mealType": "BREAKFAST",
+  "cuisine": "Fusion",
+  "servings": 1,
+  "prepMinutes": 5,
+  "ingredients": [
+   {
+    "food": "chia seeds",
+    "grams": 35.0
+   },
+   {
+    "food": "milk",
+    "grams": 250.0
+   },
+   {
+    "food": "frozen mixed berries",
+    "grams": 150.0
+   },
+   {
+    "food": "greek yogurt",
+    "grams": 100.0
+   },
+   {
+    "food": "maple syrup",
+    "grams": 10.0
+   },
+   {
+    "food": "pumpkin seeds",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Whisk chia seeds into milk and maple syrup",
+   "Refrigerate at least 4 hours, stirring once",
+   "Layer with yogurt and thawed berries",
+   "Top with pumpkin seeds"
+  ]
+ },
+ {
+  "name": "Egg & Black Bean Breakfast Burrito",
+  "mealType": "BREAKFAST",
+  "cuisine": "Mexican",
+  "servings": 1,
+  "prepMinutes": 15,
+  "ingredients": [
+   {
+    "food": "whole wheat tortilla",
+    "grams": 70.0
+   },
+   {
+    "food": "eggs",
+    "grams": 100.0
+   },
+   {
+    "food": "egg whites",
+    "grams": 100.0
+   },
+   {
+    "food": "black beans",
+    "grams": 80.0
+   },
+   {
+    "food": "bell pepper",
+    "grams": 50.0
+   },
+   {
+    "food": "cheddar",
+    "grams": 20.0
+   },
+   {
+    "food": "avocado",
+    "grams": 40.0
+   },
+   {
+    "food": "tomato",
+    "grams": 60.0
+   }
+  ],
+  "steps": [
+   "Saute diced pepper 3 minutes",
+   "Add eggs and whites and scramble until set",
+   "Warm beans",
+   "Fill the tortilla with eggs, beans, cheese, avocado and diced tomato and roll"
+  ]
+ },
+ {
+  "name": "Buckwheat Apple Cinnamon Porridge",
+  "mealType": "BREAKFAST",
+  "cuisine": "Eastern European",
+  "servings": 1,
+  "prepMinutes": 20,
+  "ingredients": [
+   {
+    "food": "buckwheat groats",
+    "grams": 70.0
+   },
+   {
+    "food": "milk",
+    "grams": 250.0
+   },
+   {
+    "food": "apple",
+    "grams": 150.0
+   },
+   {
+    "food": "walnuts",
+    "grams": 15.0
+   },
+   {
+    "food": "cinnamon",
+    "grams": 2.0
+   },
+   {
+    "food": "greek yogurt",
+    "grams": 100.0
+   }
+  ],
+  "steps": [
+   "Rinse buckwheat and simmer in milk for 15 minutes until tender",
+   "Stir in grated apple and cinnamon",
+   "Serve topped with yogurt and walnuts"
+  ]
+ },
+ {
+  "name": "Mango Quinoa Breakfast Bowl",
+  "mealType": "BREAKFAST",
+  "cuisine": "Fusion",
+  "servings": 1,
+  "prepMinutes": 20,
+  "ingredients": [
+   {
+    "food": "quinoa",
+    "grams": 60.0
+   },
+   {
+    "food": "milk",
+    "grams": 200.0
+   },
+   {
+    "food": "mango",
+    "grams": 100.0
+   },
+   {
+    "food": "hemp seeds",
+    "grams": 15.0
+   },
+   {
+    "food": "greek yogurt",
+    "grams": 100.0
+   }
+  ],
+  "steps": [
+   "Rinse quinoa and simmer in milk for 15 minutes",
+   "Let stand 2 minutes",
+   "Top with yogurt, diced mango and hemp seeds"
+  ]
+ },
+ {
+  "name": "Ricotta Pear & Walnut Toast",
+  "mealType": "BREAKFAST",
+  "cuisine": "Italian",
+  "servings": 1,
+  "prepMinutes": 8,
+  "ingredients": [
+   {
+    "food": "ricotta",
+    "grams": 100.0
+   },
+   {
+    "food": "whole wheat bread",
+    "grams": 70.0
+   },
+   {
+    "food": "pear",
+    "grams": 120.0
+   },
+   {
+    "food": "honey",
+    "grams": 10.0
+   },
+   {
+    "food": "walnuts",
+    "grams": 15.0
+   }
+  ],
+  "steps": [
+   "Toast the bread",
+   "Spread with ricotta",
+   "Top with thinly sliced pear and walnuts",
+   "Drizzle with honey"
+  ]
+ },
+ {
+  "name": "Huevos Rancheros",
+  "mealType": "BREAKFAST",
+  "cuisine": "Mexican",
+  "servings": 1,
+  "prepMinutes": 20,
+  "ingredients": [
+   {
+    "food": "eggs",
+    "grams": 100.0
+   },
+   {
+    "food": "black beans",
+    "grams": 100.0
+   },
+   {
+    "food": "canned tomatoes",
+    "grams": 150.0
+   },
+   {
+    "food": "whole wheat tortilla",
+    "grams": 60.0
+   },
+   {
+    "food": "avocado",
+    "grams": 50.0
+   },
+   {
+    "food": "onion",
+    "grams": 30.0
+   },
+   {
+    "food": "ground cumin",
+    "grams": 2.0
+   },
+   {
+    "food": "cilantro",
+    "grams": 5.0
+   },
+   {
+    "food": "lime",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Simmer tomatoes, onion and cumin into a quick salsa",
+   "Warm the beans and fry the eggs",
+   "Layer tortilla, beans and eggs",
+   "Spoon over salsa and top with avocado, cilantro and lime"
+  ]
+ },
+ {
+  "name": "Tamago Rice Bowl with Edamame",
+  "mealType": "BREAKFAST",
+  "cuisine": "Japanese",
+  "servings": 1,
+  "prepMinutes": 20,
+  "ingredients": [
+   {
+    "food": "eggs",
+    "grams": 150.0
+   },
+   {
+    "food": "white rice",
+    "grams": 70.0
+   },
+   {
+    "food": "spinach",
+    "grams": 60.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 10.0
+   },
+   {
+    "food": "sesame oil",
+    "grams": 5.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 15.0
+   },
+   {
+    "food": "edamame",
+    "grams": 60.0
+   }
+  ],
+  "steps": [
+   "Cook the rice",
+   "Whisk eggs with half the soy sauce and cook as a thin rolled omelette",
+   "Blanch spinach and edamame",
+   "Serve over rice with spring onion, sesame oil and remaining soy sauce"
+  ]
+ },
+ {
+  "name": "Mediterranean Egg Muffins",
+  "mealType": "BREAKFAST",
+  "cuisine": "Mediterranean",
+  "servings": 1,
+  "prepMinutes": 25,
+  "ingredients": [
+   {
+    "food": "eggs",
+    "grams": 150.0
+   },
+   {
+    "food": "egg whites",
+    "grams": 60.0
+   },
+   {
+    "food": "zucchini",
+    "grams": 80.0
+   },
+   {
+    "food": "bell pepper",
+    "grams": 60.0
+   },
+   {
+    "food": "feta",
+    "grams": 25.0
+   },
+   {
+    "food": "spinach",
+    "grams": 30.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 5.0
+   },
+   {
+    "food": "whole wheat bread",
+    "grams": 50.0
+   }
+  ],
+  "steps": [
+   "Heat oven to 180 C and oil a muffin tin",
+   "Dice vegetables and divide between cups",
+   "Whisk eggs, whites and feta and pour over",
+   "Bake 18-20 minutes",
+   "Serve with toast"
+  ]
+ },
+ {
+  "name": "Kiwi Citrus Yogurt Bowl",
+  "mealType": "BREAKFAST",
+  "cuisine": "Fusion",
+  "servings": 1,
+  "prepMinutes": 5,
+  "ingredients": [
+   {
+    "food": "greek yogurt",
+    "grams": 250.0
+   },
+   {
+    "food": "kiwi",
+    "grams": 150.0
+   },
+   {
+    "food": "orange",
+    "grams": 100.0
+   },
+   {
+    "food": "rolled oats",
+    "grams": 30.0
+   },
+   {
+    "food": "almonds",
+    "grams": 15.0
+   },
+   {
+    "food": "honey",
+    "grams": 5.0
+   }
+  ],
+  "steps": [
+   "Peel and slice kiwi and orange",
+   "Spoon yogurt into a bowl and add fruit",
+   "Top with oats, almonds and honey"
+  ]
+ },
+ {
+  "name": "Sweet Potato Hash with Eggs",
+  "mealType": "BREAKFAST",
+  "cuisine": "American",
+  "servings": 1,
+  "prepMinutes": 25,
+  "ingredients": [
+   {
+    "food": "sweet potato",
+    "grams": 200.0
+   },
+   {
+    "food": "eggs",
+    "grams": 100.0
+   },
+   {
+    "food": "onion",
+    "grams": 50.0
+   },
+   {
+    "food": "bell pepper",
+    "grams": 60.0
+   },
+   {
+    "food": "smoked paprika",
+    "grams": 2.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 10.0
+   },
+   {
+    "food": "kale",
+    "grams": 30.0
+   }
+  ],
+  "steps": [
+   "Dice sweet potato and cook in olive oil, covered, 10 minutes",
+   "Add onion, pepper and paprika and cook 5 minutes",
+   "Stir in kale",
+   "Make two wells, crack in eggs and cover until set"
+  ]
+ },
+ {
+  "name": "Turkish Menemen",
+  "mealType": "BREAKFAST",
+  "cuisine": "Turkish",
+  "servings": 1,
+  "prepMinutes": 15,
+  "ingredients": [
+   {
+    "food": "eggs",
+    "grams": 150.0
+   },
+   {
+    "food": "tomato",
+    "grams": 200.0
+   },
+   {
+    "food": "bell pepper",
+    "grams": 80.0
+   },
+   {
+    "food": "onion",
+    "grams": 40.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 10.0
+   },
+   {
+    "food": "chili flakes",
+    "grams": 1.0
+   },
+   {
+    "food": "whole wheat bread",
+    "grams": 60.0
+   }
+  ],
+  "steps": [
+   "Saute onion and pepper in olive oil 5 minutes",
+   "Add grated tomato and chili flakes and cook until jammy",
+   "Stir in beaten eggs until softly set",
+   "Serve with bread"
+  ]
+ },
+ {
+  "name": "Blueberry Banana Protein Pancakes",
+  "mealType": "BREAKFAST",
+  "cuisine": "American",
+  "servings": 1,
+  "prepMinutes": 20,
+  "ingredients": [
+   {
+    "food": "rolled oats",
+    "grams": 60.0
+   },
+   {
+    "food": "eggs",
+    "grams": 100.0
+   },
+   {
+    "food": "egg whites",
+    "grams": 100.0
+   },
+   {
+    "food": "banana",
+    "grams": 80.0
+   },
+   {
+    "food": "blueberries",
+    "grams": 80.0
+   },
+   {
+    "food": "greek yogurt",
+    "grams": 80.0
+   },
+   {
+    "food": "maple syrup",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Blend oats, eggs, whites and banana",
+   "Fold in half the blueberries",
+   "Cook pancakes in a non-stick pan 2 minutes per side",
+   "Top with yogurt, remaining berries and maple syrup"
+  ]
+ },
+ {
+  "name": "Apple Cinnamon Baked Oats",
+  "mealType": "BREAKFAST",
+  "cuisine": "American",
+  "servings": 1,
+  "prepMinutes": 30,
+  "ingredients": [
+   {
+    "food": "rolled oats",
+    "grams": 70.0
+   },
+   {
+    "food": "milk",
+    "grams": 150.0
+   },
+   {
+    "food": "eggs",
+    "grams": 50.0
+   },
+   {
+    "food": "apple",
+    "grams": 120.0
+   },
+   {
+    "food": "cinnamon",
+    "grams": 2.0
+   },
+   {
+    "food": "walnuts",
+    "grams": 15.0
+   },
+   {
+    "food": "greek yogurt",
+    "grams": 100.0
+   }
+  ],
+  "steps": [
+   "Heat oven to 180 C",
+   "Mix oats, milk, egg, cinnamon and diced apple in a small dish",
+   "Top with walnuts and bake 25 minutes",
+   "Serve with yogurt"
+  ]
+ },
+ {
+  "name": "Cottage Cheese Pomegranate Kiwi Bowl",
+  "mealType": "BREAKFAST",
+  "cuisine": "Fusion",
+  "servings": 1,
+  "prepMinutes": 5,
+  "ingredients": [
+   {
+    "food": "cottage cheese",
+    "grams": 250.0
+   },
+   {
+    "food": "pomegranate",
+    "grams": 80.0
+   },
+   {
+    "food": "kiwi",
+    "grams": 80.0
+   },
+   {
+    "food": "pumpkin seeds",
+    "grams": 15.0
+   },
+   {
+    "food": "honey",
+    "grams": 5.0
+   },
+   {
+    "food": "rolled oats",
+    "grams": 30.0
+   }
+  ],
+  "steps": [
+   "Spoon cottage cheese into a bowl",
+   "Top with pomegranate seeds, sliced kiwi and oats",
+   "Finish with pumpkin seeds and honey"
+  ]
+ },
+ {
+  "name": "Smoky Black Bean Toast with Egg",
+  "mealType": "BREAKFAST",
+  "cuisine": "Mexican",
+  "servings": 1,
+  "prepMinutes": 12,
+  "ingredients": [
+   {
+    "food": "whole wheat bread",
+    "grams": 80.0
+   },
+   {
+    "food": "black beans",
+    "grams": 120.0
+   },
+   {
+    "food": "avocado",
+    "grams": 50.0
+   },
+   {
+    "food": "eggs",
+    "grams": 50.0
+   },
+   {
+    "food": "tomato",
+    "grams": 80.0
+   },
+   {
+    "food": "smoked paprika",
+    "grams": 1.0
+   },
+   {
+    "food": "lime",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Mash beans with paprika and lime and warm through",
+   "Fry or poach the egg",
+   "Spread beans on toast, add sliced avocado and tomato and top with the egg"
+  ]
+ },
+ {
+  "name": "Peanut Butter Banana Toast & Yogurt",
+  "mealType": "BREAKFAST",
+  "cuisine": "American",
+  "servings": 1,
+  "prepMinutes": 5,
+  "ingredients": [
+   {
+    "food": "whole wheat bread",
+    "grams": 70.0
+   },
+   {
+    "food": "peanut butter",
+    "grams": 25.0
+   },
+   {
+    "food": "banana",
+    "grams": 100.0
+   },
+   {
+    "food": "greek yogurt",
+    "grams": 170.0
+   },
+   {
+    "food": "cinnamon",
+    "grams": 1.0
+   }
+  ],
+  "steps": [
+   "Toast bread and spread with peanut butter",
+   "Top with sliced banana and cinnamon",
+   "Serve with yogurt on the side"
+  ]
+ },
+ {
+  "name": "Miso Breakfast Soup with Tofu & Egg",
+  "mealType": "BREAKFAST",
+  "cuisine": "Japanese",
+  "servings": 1,
+  "prepMinutes": 15,
+  "ingredients": [
+   {
+    "food": "miso paste",
+    "grams": 20.0
+   },
+   {
+    "food": "firm tofu",
+    "grams": 120.0
+   },
+   {
+    "food": "eggs",
+    "grams": 50.0
+   },
+   {
+    "food": "spinach",
+    "grams": 50.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 10.0
+   },
+   {
+    "food": "white rice",
+    "grams": 50.0
+   },
+   {
+    "food": "vegetable broth",
+    "grams": 300.0
+   }
+  ],
+  "steps": [
+   "Cook the rice",
+   "Heat broth to a simmer, add cubed tofu and spinach",
+   "Swirl in the beaten egg",
+   "Off the heat whisk in miso",
+   "Serve with rice and spring onion"
+  ]
+ },
+ {
+  "name": "Chocolate Cherry Overnight Oats",
+  "mealType": "BREAKFAST",
+  "cuisine": "Fusion",
+  "servings": 1,
+  "prepMinutes": 5,
+  "ingredients": [
+   {
+    "food": "rolled oats",
+    "grams": 70.0
+   },
+   {
+    "food": "milk",
+    "grams": 200.0
+   },
+   {
+    "food": "cocoa powder",
+    "grams": 10.0
+   },
+   {
+    "food": "cherries",
+    "grams": 100.0
+   },
+   {
+    "food": "greek yogurt",
+    "grams": 100.0
+   },
+   {
+    "food": "almonds",
+    "grams": 15.0
+   },
+   {
+    "food": "maple syrup",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Mix oats, milk, cocoa, yogurt and maple syrup",
+   "Refrigerate overnight",
+   "Top with pitted cherries and almonds"
+  ]
+ },
+ {
+  "name": "Mediterranean Quinoa Chickpea Salad",
+  "mealType": "LUNCH",
+  "cuisine": "Mediterranean",
+  "servings": 2,
+  "prepMinutes": 25,
+  "ingredients": [
+   {
+    "food": "quinoa",
+    "grams": 140.0
+   },
+   {
+    "food": "chickpeas",
+    "grams": 240.0
+   },
+   {
+    "food": "cucumber",
+    "grams": 200.0
+   },
+   {
+    "food": "tomato",
+    "grams": 200.0
+   },
+   {
+    "food": "feta",
+    "grams": 80.0
+   },
+   {
+    "food": "olives",
+    "grams": 40.0
+   },
+   {
+    "food": "onion",
+    "grams": 40.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 20.0
+   },
+   {
+    "food": "lemon",
+    "grams": 30.0
+   },
+   {
+    "food": "parsley",
+    "grams": 15.0
+   }
+  ],
+  "steps": [
+   "Simmer quinoa 15 minutes and cool",
+   "Dice cucumber, tomato and onion",
+   "Toss everything with lemon juice and olive oil",
+   "Top with crumbled feta, olives and parsley"
+  ]
+ },
+ {
+  "name": "Chicken Burrito Bowl",
+  "mealType": "LUNCH",
+  "cuisine": "Mexican",
+  "servings": 2,
+  "prepMinutes": 35,
+  "ingredients": [
+   {
+    "food": "chicken breast",
+    "grams": 300.0
+   },
+   {
+    "food": "brown rice",
+    "grams": 150.0
+   },
+   {
+    "food": "black beans",
+    "grams": 200.0
+   },
+   {
+    "food": "corn kernels",
+    "grams": 120.0
+   },
+   {
+    "food": "bell pepper",
+    "grams": 150.0
+   },
+   {
+    "food": "avocado",
+    "grams": 100.0
+   },
+   {
+    "food": "lime",
+    "grams": 20.0
+   },
+   {
+    "food": "ground cumin",
+    "grams": 4.0
+   },
+   {
+    "food": "cilantro",
+    "grams": 10.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Cook rice",
+   "Season chicken with cumin and sear in olive oil 6 minutes per side, then slice",
+   "Saute pepper and corn",
+   "Warm beans",
+   "Assemble bowls and top with avocado, cilantro and lime"
+  ]
+ },
+ {
+  "name": "Roasted Squash & Lentil Salad",
+  "mealType": "LUNCH",
+  "cuisine": "Mediterranean",
+  "servings": 2,
+  "prepMinutes": 40,
+  "ingredients": [
+   {
+    "food": "lentils",
+    "grams": 140.0
+   },
+   {
+    "food": "butternut squash",
+    "grams": 300.0
+   },
+   {
+    "food": "arugula",
+    "grams": 60.0
+   },
+   {
+    "food": "feta",
+    "grams": 60.0
+   },
+   {
+    "food": "walnuts",
+    "grams": 30.0
+   },
+   {
+    "food": "balsamic vinegar",
+    "grams": 20.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 15.0
+   }
+  ],
+  "steps": [
+   "Roast cubed squash with half the oil at 200 C for 25 minutes",
+   "Simmer lentils 20 minutes and drain",
+   "Toss lentils, squash and arugula with balsamic and remaining oil",
+   "Top with feta and walnuts"
+  ]
+ },
+ {
+  "name": "Tuna Nicoise Salad",
+  "mealType": "LUNCH",
+  "cuisine": "French",
+  "servings": 2,
+  "prepMinutes": 25,
+  "ingredients": [
+   {
+    "food": "canned tuna in water",
+    "grams": 240.0
+   },
+   {
+    "food": "potato",
+    "grams": 300.0
+   },
+   {
+    "food": "green beans",
+    "grams": 200.0
+   },
+   {
+    "food": "eggs",
+    "grams": 100.0
+   },
+   {
+    "food": "tomato",
+    "grams": 200.0
+   },
+   {
+    "food": "olives",
+    "grams": 40.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 20.0
+   },
+   {
+    "food": "dijon mustard",
+    "grams": 10.0
+   },
+   {
+    "food": "lemon",
+    "grams": 20.0
+   },
+   {
+    "food": "romaine lettuce",
+    "grams": 100.0
+   }
+  ],
+  "steps": [
+   "Boil potatoes 15 minutes, adding green beans for the last 4",
+   "Boil eggs 8 minutes and halve",
+   "Whisk oil, mustard and lemon",
+   "Arrange lettuce, potatoes, beans, tomato, tuna, eggs and olives and dress"
+  ]
+ },
+ {
+  "name": "Seared Salmon Poke Bowl",
+  "mealType": "LUNCH",
+  "cuisine": "Hawaiian",
+  "servings": 2,
+  "prepMinutes": 30,
+  "ingredients": [
+   {
+    "food": "salmon fillet",
+    "grams": 260.0
+   },
+   {
+    "food": "white rice",
+    "grams": 150.0
+   },
+   {
+    "food": "edamame",
+    "grams": 150.0
+   },
+   {
+    "food": "cucumber",
+    "grams": 150.0
+   },
+   {
+    "food": "avocado",
+    "grams": 100.0
+   },
+   {
+    "food": "carrot",
+    "grams": 100.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 20.0
+   },
+   {
+    "food": "sesame oil",
+    "grams": 8.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 15.0
+   }
+  ],
+  "steps": [
+   "Cook rice",
+   "Sear salmon 3 minutes per side and flake",
+   "Blanch edamame",
+   "Julienne carrot and cucumber",
+   "Assemble bowls and dress with soy sauce and sesame oil"
+  ]
+ },
+ {
+  "name": "Turkey Hummus Wraps",
+  "mealType": "LUNCH",
+  "cuisine": "Mediterranean",
+  "servings": 2,
+  "prepMinutes": 20,
+  "ingredients": [
+   {
+    "food": "whole wheat tortilla",
+    "grams": 140.0
+   },
+   {
+    "food": "turkey mince",
+    "grams": 300.0
+   },
+   {
+    "food": "hummus",
+    "grams": 100.0
+   },
+   {
+    "food": "spinach",
+    "grams": 80.0
+   },
+   {
+    "food": "bell pepper",
+    "grams": 150.0
+   },
+   {
+    "food": "cucumber",
+    "grams": 100.0
+   },
+   {
+    "food": "smoked paprika",
+    "grams": 3.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 8.0
+   }
+  ],
+  "steps": [
+   "Brown turkey with paprika in olive oil 8 minutes",
+   "Spread tortillas with hummus",
+   "Fill with turkey, spinach, sliced pepper and cucumber",
+   "Roll tightly and halve"
+  ]
+ },
+ {
+  "name": "Greek Chicken Pita Bowl",
+  "mealType": "LUNCH",
+  "cuisine": "Greek",
+  "servings": 2,
+  "prepMinutes": 30,
+  "ingredients": [
+   {
+    "food": "chicken breast",
+    "grams": 300.0
+   },
+   {
+    "food": "whole wheat bread",
+    "grams": 120.0
+   },
+   {
+    "food": "greek yogurt",
+    "grams": 150.0
+   },
+   {
+    "food": "cucumber",
+    "grams": 150.0
+   },
+   {
+    "food": "tomato",
+    "grams": 200.0
+   },
+   {
+    "food": "onion",
+    "grams": 40.0
+   },
+   {
+    "food": "garlic",
+    "grams": 6.0
+   },
+   {
+    "food": "lemon",
+    "grams": 20.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 15.0
+   },
+   {
+    "food": "dried oregano",
+    "grams": 2.0
+   }
+  ],
+  "steps": [
+   "Marinate chicken in lemon, oregano, garlic and oil",
+   "Grill 6 minutes per side and slice",
+   "Grate half the cucumber into yogurt for tzatziki",
+   "Serve chicken with chopped salad, tzatziki and warm bread"
+  ]
+ },
+ {
+  "name": "Black Bean & Sweet Potato Quesadillas",
+  "mealType": "LUNCH",
+  "cuisine": "Mexican",
+  "servings": 2,
+  "prepMinutes": 30,
+  "ingredients": [
+   {
+    "food": "whole wheat tortilla",
+    "grams": 160.0
+   },
+   {
+    "food": "black beans",
+    "grams": 240.0
+   },
+   {
+    "food": "sweet potato",
+    "grams": 300.0
+   },
+   {
+    "food": "cheddar",
+    "grams": 60.0
+   },
+   {
+    "food": "spinach",
+    "grams": 60.0
+   },
+   {
+    "food": "ground cumin",
+    "grams": 4.0
+   },
+   {
+    "food": "tomato",
+    "grams": 150.0
+   }
+  ],
+  "steps": [
+   "Steam or microwave diced sweet potato until soft and mash with cumin",
+   "Spread on tortillas with beans, spinach and cheese",
+   "Fold and toast in a dry pan 3 minutes per side",
+   "Serve with chopped tomato"
+  ]
+ },
+ {
+  "name": "Peanut Tofu Noodle Salad",
+  "mealType": "LUNCH",
+  "cuisine": "Thai",
+  "servings": 2,
+  "prepMinutes": 25,
+  "ingredients": [
+   {
+    "food": "rice noodles",
+    "grams": 140.0
+   },
+   {
+    "food": "firm tofu",
+    "grams": 300.0
+   },
+   {
+    "food": "red cabbage",
+    "grams": 200.0
+   },
+   {
+    "food": "carrot",
+    "grams": 150.0
+   },
+   {
+    "food": "edamame",
+    "grams": 100.0
+   },
+   {
+    "food": "peanut butter",
+    "grams": 40.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 25.0
+   },
+   {
+    "food": "lime",
+    "grams": 20.0
+   },
+   {
+    "food": "ginger",
+    "grams": 10.0
+   },
+   {
+    "food": "cilantro",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Soak noodles per packet and rinse cold",
+   "Pan-fry cubed tofu until golden",
+   "Whisk peanut butter, soy sauce, lime, grated ginger and a splash of water",
+   "Toss noodles, shredded cabbage, carrot, edamame and tofu with the dressing",
+   "Top with cilantro"
+  ]
+ },
+ {
+  "name": "Egg & Avocado Grain Bowl",
+  "mealType": "LUNCH",
+  "cuisine": "Fusion",
+  "servings": 2,
+  "prepMinutes": 30,
+  "ingredients": [
+   {
+    "food": "brown rice",
+    "grams": 140.0
+   },
+   {
+    "food": "eggs",
+    "grams": 200.0
+   },
+   {
+    "food": "avocado",
+    "grams": 100.0
+   },
+   {
+    "food": "kale",
+    "grams": 120.0
+   },
+   {
+    "food": "tomato",
+    "grams": 150.0
+   },
+   {
+    "food": "pumpkin seeds",
+    "grams": 20.0
+   },
+   {
+    "food": "lemon",
+    "grams": 20.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 10.0
+   },
+   {
+    "food": "chickpeas",
+    "grams": 120.0
+   }
+  ],
+  "steps": [
+   "Cook rice",
+   "Soft-boil eggs 7 minutes",
+   "Massage kale with lemon and oil",
+   "Assemble rice, kale, chickpeas, tomato and avocado",
+   "Top with halved eggs and pumpkin seeds"
+  ]
+ },
+ {
+  "name": "Hearty Lentil & Spinach Soup",
+  "mealType": "LUNCH",
+  "cuisine": "Mediterranean",
+  "servings": 2,
+  "prepMinutes": 40,
+  "ingredients": [
+   {
+    "food": "lentils",
+    "grams": 160.0
+   },
+   {
+    "food": "carrot",
+    "grams": 150.0
+   },
+   {
+    "food": "celery",
+    "grams": 100.0
+   },
+   {
+    "food": "onion",
+    "grams": 100.0
+   },
+   {
+    "food": "garlic",
+    "grams": 10.0
+   },
+   {
+    "food": "canned tomatoes",
+    "grams": 400.0
+   },
+   {
+    "food": "spinach",
+    "grams": 100.0
+   },
+   {
+    "food": "vegetable broth",
+    "grams": 800.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 15.0
+   },
+   {
+    "food": "ground cumin",
+    "grams": 4.0
+   },
+   {
+    "food": "whole wheat bread",
+    "grams": 100.0
+   }
+  ],
+  "steps": [
+   "Soften onion, carrot, celery and garlic in olive oil 8 minutes",
+   "Add cumin, lentils, tomatoes and broth",
+   "Simmer 25 minutes",
+   "Stir in spinach until wilted",
+   "Serve with bread"
+  ]
+ },
+ {
+  "name": "Chicken Kale Caesar (Yogurt Dressing)",
+  "mealType": "LUNCH",
+  "cuisine": "American",
+  "servings": 2,
+  "prepMinutes": 25,
+  "ingredients": [
+   {
+    "food": "chicken breast",
+    "grams": 300.0
+   },
+   {
+    "food": "kale",
+    "grams": 200.0
+   },
+   {
+    "food": "parmesan",
+    "grams": 30.0
+   },
+   {
+    "food": "greek yogurt",
+    "grams": 100.0
+   },
+   {
+    "food": "lemon",
+    "grams": 20.0
+   },
+   {
+    "food": "dijon mustard",
+    "grams": 10.0
+   },
+   {
+    "food": "garlic",
+    "grams": 4.0
+   },
+   {
+    "food": "whole wheat bread",
+    "grams": 100.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Grill chicken and slice",
+   "Cube bread, toss with oil and toast into croutons",
+   "Whisk yogurt, lemon, mustard, garlic and half the parmesan",
+   "Massage kale with dressing",
+   "Top with chicken, croutons and remaining parmesan"
+  ]
+ },
+ {
+  "name": "Shrimp & Mango Rice Salad",
+  "mealType": "LUNCH",
+  "cuisine": "Caribbean",
+  "servings": 2,
+  "prepMinutes": 25,
+  "ingredients": [
+   {
+    "food": "shrimp",
+    "grams": 300.0
+   },
+   {
+    "food": "white rice",
+    "grams": 140.0
+   },
+   {
+    "food": "mango",
+    "grams": 200.0
+   },
+   {
+    "food": "bell pepper",
+    "grams": 150.0
+   },
+   {
+    "food": "cucumber",
+    "grams": 150.0
+   },
+   {
+    "food": "lime",
+    "grams": 30.0
+   },
+   {
+    "food": "cilantro",
+    "grams": 10.0
+   },
+   {
+    "food": "chili pepper",
+    "grams": 5.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 15.0
+   },
+   {
+    "food": "cashews",
+    "grams": 30.0
+   }
+  ],
+  "steps": [
+   "Cook rice and cool",
+   "Saute shrimp in olive oil 2 minutes per side",
+   "Dice mango, pepper and cucumber",
+   "Toss all with lime juice, chili and cilantro",
+   "Top with cashews"
+  ]
+ },
+ {
+  "name": "Beef & Broccoli Rice Bowl",
+  "mealType": "LUNCH",
+  "cuisine": "Chinese",
+  "servings": 2,
+  "prepMinutes": 25,
+  "ingredients": [
+   {
+    "food": "beef sirloin",
+    "grams": 300.0
+   },
+   {
+    "food": "broccoli",
+    "grams": 300.0
+   },
+   {
+    "food": "brown rice",
+    "grams": 150.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 25.0
+   },
+   {
+    "food": "ginger",
+    "grams": 10.0
+   },
+   {
+    "food": "garlic",
+    "grams": 8.0
+   },
+   {
+    "food": "sesame oil",
+    "grams": 8.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 15.0
+   },
+   {
+    "food": "honey",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Cook rice",
+   "Slice beef thinly and sear in sesame oil 2 minutes",
+   "Add broccoli, garlic and ginger and stir-fry 4 minutes",
+   "Add soy sauce and honey and toss",
+   "Serve over rice with spring onion"
+  ]
+ },
+ {
+  "name": "Baked Falafel-Style Chickpea Bowl",
+  "mealType": "LUNCH",
+  "cuisine": "Middle Eastern",
+  "servings": 2,
+  "prepMinutes": 35,
+  "ingredients": [
+   {
+    "food": "chickpeas",
+    "grams": 300.0
+   },
+   {
+    "food": "quinoa",
+    "grams": 120.0
+   },
+   {
+    "food": "tahini",
+    "grams": 30.0
+   },
+   {
+    "food": "cucumber",
+    "grams": 150.0
+   },
+   {
+    "food": "tomato",
+    "grams": 150.0
+   },
+   {
+    "food": "parsley",
+    "grams": 20.0
+   },
+   {
+    "food": "lemon",
+    "grams": 30.0
+   },
+   {
+    "food": "red cabbage",
+    "grams": 100.0
+   },
+   {
+    "food": "ground cumin",
+    "grams": 4.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 15.0
+   },
+   {
+    "food": "greek yogurt",
+    "grams": 100.0
+   }
+  ],
+  "steps": [
+   "Pulse chickpeas with parsley, cumin and oil and form patties",
+   "Bake at 200 C for 20 minutes",
+   "Cook quinoa",
+   "Whisk tahini, lemon and yogurt",
+   "Serve with chopped cucumber, tomato and cabbage"
+  ]
+ },
+ {
+  "name": "Sardine & White Bean Salad",
+  "mealType": "LUNCH",
+  "cuisine": "Portuguese",
+  "servings": 2,
+  "prepMinutes": 15,
+  "ingredients": [
+   {
+    "food": "sardines canned in oil",
+    "grams": 200.0
+   },
+   {
+    "food": "white beans",
+    "grams": 300.0
+   },
+   {
+    "food": "arugula",
+    "grams": 80.0
+   },
+   {
+    "food": "tomato",
+    "grams": 200.0
+   },
+   {
+    "food": "onion",
+    "grams": 40.0
+   },
+   {
+    "food": "lemon",
+    "grams": 30.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 10.0
+   },
+   {
+    "food": "parsley",
+    "grams": 10.0
+   },
+   {
+    "food": "whole wheat bread",
+    "grams": 100.0
+   }
+  ],
+  "steps": [
+   "Rinse beans",
+   "Thinly slice onion and soak in lemon juice",
+   "Toss beans, arugula, tomato, onion and parsley with oil",
+   "Top with sardines and serve with bread"
+  ]
+ },
+ {
+  "name": "White Bean Minestrone",
+  "mealType": "LUNCH",
+  "cuisine": "Italian",
+  "servings": 2,
+  "prepMinutes": 45,
+  "ingredients": [
+   {
+    "food": "white beans",
+    "grams": 300.0
+   },
+   {
+    "food": "whole wheat pasta",
+    "grams": 100.0
+   },
+   {
+    "food": "zucchini",
+    "grams": 200.0
+   },
+   {
+    "food": "carrot",
+    "grams": 150.0
+   },
+   {
+    "food": "celery",
+    "grams": 100.0
+   },
+   {
+    "food": "onion",
+    "grams": 100.0
+   },
+   {
+    "food": "canned tomatoes",
+    "grams": 400.0
+   },
+   {
+    "food": "kale",
+    "grams": 100.0
+   },
+   {
+    "food": "vegetable broth",
+    "grams": 800.0
+   },
+   {
+    "food": "parmesan",
+    "grams": 30.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 15.0
+   },
+   {
+    "food": "garlic",
+    "grams": 8.0
+   }
+  ],
+  "steps": [
+   "Soften onion, carrot, celery and garlic in oil",
+   "Add tomatoes and broth and simmer 15 minutes",
+   "Add pasta, zucchini and beans and cook 10 minutes",
+   "Stir in kale",
+   "Serve with parmesan"
+  ]
+ },
+ {
+  "name": "Chicken, Leek & Barley Soup",
+  "mealType": "LUNCH",
+  "cuisine": "British",
+  "servings": 2,
+  "prepMinutes": 50,
+  "ingredients": [
+   {
+    "food": "chicken thigh",
+    "grams": 300.0
+   },
+   {
+    "food": "barley",
+    "grams": 120.0
+   },
+   {
+    "food": "carrot",
+    "grams": 150.0
+   },
+   {
+    "food": "celery",
+    "grams": 100.0
+   },
+   {
+    "food": "onion",
+    "grams": 100.0
+   },
+   {
+    "food": "leek",
+    "grams": 150.0
+   },
+   {
+    "food": "chicken broth",
+    "grams": 1000.0
+   },
+   {
+    "food": "parsley",
+    "grams": 10.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Brown chicken in oil and set aside",
+   "Soften onion, leek, carrot and celery",
+   "Add barley, broth and chicken and simmer 35 minutes",
+   "Shred chicken back in and finish with parsley"
+  ]
+ },
+ {
+  "name": "Tofu Banh Mi Bowl",
+  "mealType": "LUNCH",
+  "cuisine": "Vietnamese",
+  "servings": 2,
+  "prepMinutes": 30,
+  "ingredients": [
+   {
+    "food": "firm tofu",
+    "grams": 300.0
+   },
+   {
+    "food": "white rice",
+    "grams": 140.0
+   },
+   {
+    "food": "carrot",
+    "grams": 150.0
+   },
+   {
+    "food": "cucumber",
+    "grams": 150.0
+   },
+   {
+    "food": "cilantro",
+    "grams": 15.0
+   },
+   {
+    "food": "chili pepper",
+    "grams": 5.0
+   },
+   {
+    "food": "lime",
+    "grams": 20.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 20.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 15.0
+   },
+   {
+    "food": "red cabbage",
+    "grams": 100.0
+   }
+  ],
+  "steps": [
+   "Cook rice",
+   "Press and slice tofu and pan-fry with soy sauce until crisp",
+   "Quick-pickle carrot and cabbage in lime juice",
+   "Assemble with cucumber, chili, spring onion and cilantro"
+  ]
+ },
+ {
+  "name": "Loaded Sweet Potatoes with Cottage Cheese",
+  "mealType": "LUNCH",
+  "cuisine": "American",
+  "servings": 2,
+  "prepMinutes": 45,
+  "ingredients": [
+   {
+    "food": "sweet potato",
+    "grams": 500.0
+   },
+   {
+    "food": "cottage cheese",
+    "grams": 300.0
+   },
+   {
+    "food": "black beans",
+    "grams": 150.0
+   },
+   {
+    "food": "spinach",
+    "grams": 80.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 20.0
+   },
+   {
+    "food": "smoked paprika",
+    "grams": 2.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Bake sweet potatoes at 200 C for 40 minutes",
+   "Warm beans with spinach, oil and paprika",
+   "Split potatoes and fill with beans and cottage cheese",
+   "Top with spring onion"
+  ]
+ },
+ {
+  "name": "Tuna & White Bean Pasta Salad",
+  "mealType": "LUNCH",
+  "cuisine": "Italian",
+  "servings": 2,
+  "prepMinutes": 20,
+  "ingredients": [
+   {
+    "food": "whole wheat pasta",
+    "grams": 160.0
+   },
+   {
+    "food": "canned tuna in water",
+    "grams": 240.0
+   },
+   {
+    "food": "white beans",
+    "grams": 150.0
+   },
+   {
+    "food": "tomato",
+    "grams": 200.0
+   },
+   {
+    "food": "arugula",
+    "grams": 60.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 20.0
+   },
+   {
+    "food": "lemon",
+    "grams": 20.0
+   },
+   {
+    "food": "olives",
+    "grams": 40.0
+   },
+   {
+    "food": "basil",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Cook pasta and rinse cold",
+   "Toss with tuna, beans, tomato, olives and arugula",
+   "Dress with oil and lemon and finish with basil"
+  ]
+ },
+ {
+  "name": "Moroccan Chickpea Carrot Salad",
+  "mealType": "LUNCH",
+  "cuisine": "Moroccan",
+  "servings": 2,
+  "prepMinutes": 25,
+  "ingredients": [
+   {
+    "food": "chickpeas",
+    "grams": 300.0
+   },
+   {
+    "food": "carrot",
+    "grams": 250.0
+   },
+   {
+    "food": "raisins",
+    "grams": 30.0
+   },
+   {
+    "food": "almonds",
+    "grams": 30.0
+   },
+   {
+    "food": "parsley",
+    "grams": 20.0
+   },
+   {
+    "food": "lemon",
+    "grams": 30.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 20.0
+   },
+   {
+    "food": "ground cumin",
+    "grams": 4.0
+   },
+   {
+    "food": "cinnamon",
+    "grams": 1.0
+   },
+   {
+    "food": "quinoa",
+    "grams": 100.0
+   },
+   {
+    "food": "greek yogurt",
+    "grams": 200.0
+   }
+  ],
+  "steps": [
+   "Cook quinoa and cool",
+   "Grate carrots",
+   "Whisk lemon, oil, cumin and cinnamon",
+   "Toss quinoa, chickpeas, carrot, raisins and parsley with the dressing",
+   "Top with toasted almonds and serve with yogurt"
+  ]
+ },
+ {
+  "name": "Egg Fried Brown Rice with Peas",
+  "mealType": "LUNCH",
+  "cuisine": "Chinese",
+  "servings": 2,
+  "prepMinutes": 25,
+  "ingredients": [
+   {
+    "food": "brown rice",
+    "grams": 160.0
+   },
+   {
+    "food": "eggs",
+    "grams": 200.0
+   },
+   {
+    "food": "peas",
+    "grams": 200.0
+   },
+   {
+    "food": "carrot",
+    "grams": 100.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 20.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 20.0
+   },
+   {
+    "food": "sesame oil",
+    "grams": 8.0
+   },
+   {
+    "food": "garlic",
+    "grams": 6.0
+   },
+   {
+    "food": "ginger",
+    "grams": 6.0
+   },
+   {
+    "food": "edamame",
+    "grams": 100.0
+   }
+  ],
+  "steps": [
+   "Cook rice and spread to cool",
+   "Scramble eggs in half the sesame oil and set aside",
+   "Stir-fry garlic, ginger, carrot, peas and edamame 4 minutes",
+   "Add rice, eggs and soy sauce and toss until hot",
+   "Finish with spring onion"
+  ]
+ },
+ {
+  "name": "Spicy Red Lentil Dal",
+  "mealType": "LUNCH",
+  "cuisine": "Indian",
+  "servings": 2,
+  "prepMinutes": 35,
+  "ingredients": [
+   {
+    "food": "red lentils",
+    "grams": 180.0
+   },
+   {
+    "food": "onion",
+    "grams": 100.0
+   },
+   {
+    "food": "garlic",
+    "grams": 10.0
+   },
+   {
+    "food": "ginger",
+    "grams": 10.0
+   },
+   {
+    "food": "canned tomatoes",
+    "grams": 200.0
+   },
+   {
+    "food": "turmeric",
+    "grams": 3.0
+   },
+   {
+    "food": "ground cumin",
+    "grams": 4.0
+   },
+   {
+    "food": "curry powder",
+    "grams": 4.0
+   },
+   {
+    "food": "spinach",
+    "grams": 120.0
+   },
+   {
+    "food": "coconut milk",
+    "grams": 100.0
+   },
+   {
+    "food": "brown rice",
+    "grams": 120.0
+   },
+   {
+    "food": "lime",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Cook rice",
+   "Soften onion, garlic and ginger",
+   "Add spices and toast 1 minute",
+   "Add lentils, tomatoes and 600 ml water and simmer 20 minutes",
+   "Stir in coconut milk and spinach",
+   "Finish with lime"
+  ]
+ },
+ {
+  "name": "Chicken Shawarma Salad",
+  "mealType": "LUNCH",
+  "cuisine": "Middle Eastern",
+  "servings": 2,
+  "prepMinutes": 35,
+  "ingredients": [
+   {
+    "food": "chicken thigh",
+    "grams": 350.0
+   },
+   {
+    "food": "romaine lettuce",
+    "grams": 150.0
+   },
+   {
+    "food": "tomato",
+    "grams": 200.0
+   },
+   {
+    "food": "cucumber",
+    "grams": 150.0
+   },
+   {
+    "food": "onion",
+    "grams": 40.0
+   },
+   {
+    "food": "tahini",
+    "grams": 25.0
+   },
+   {
+    "food": "lemon",
+    "grams": 20.0
+   },
+   {
+    "food": "ground cumin",
+    "grams": 3.0
+   },
+   {
+    "food": "smoked paprika",
+    "grams": 3.0
+   },
+   {
+    "food": "turmeric",
+    "grams": 2.0
+   },
+   {
+    "food": "whole wheat bread",
+    "grams": 100.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Rub chicken with spices and oil and roast at 210 C for 25 minutes",
+   "Slice",
+   "Whisk tahini with lemon and water",
+   "Toss lettuce, tomato, cucumber and onion",
+   "Top with chicken and tahini and serve with bread"
+  ]
+ },
+ {
+  "name": "Pumpkin & Feta Barley Risotto",
+  "mealType": "LUNCH",
+  "cuisine": "Italian",
+  "servings": 2,
+  "prepMinutes": 45,
+  "ingredients": [
+   {
+    "food": "barley",
+    "grams": 160.0
+   },
+   {
+    "food": "butternut squash",
+    "grams": 400.0
+   },
+   {
+    "food": "feta",
+    "grams": 80.0
+   },
+   {
+    "food": "onion",
+    "grams": 80.0
+   },
+   {
+    "food": "garlic",
+    "grams": 6.0
+   },
+   {
+    "food": "vegetable broth",
+    "grams": 900.0
+   },
+   {
+    "food": "spinach",
+    "grams": 80.0
+   },
+   {
+    "food": "pumpkin seeds",
+    "grams": 20.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 10.0
+   },
+   {
+    "food": "white beans",
+    "grams": 240.0
+   }
+  ],
+  "steps": [
+   "Soften onion and garlic in oil",
+   "Add barley and diced squash",
+   "Add broth gradually and simmer 35 minutes, stirring",
+   "Fold in spinach and white beans",
+   "Top with feta and pumpkin seeds"
+  ]
+ },
+ {
+  "name": "Mackerel, Beetroot & Potato Salad",
+  "mealType": "LUNCH",
+  "cuisine": "Nordic",
+  "servings": 2,
+  "prepMinutes": 35,
+  "ingredients": [
+   {
+    "food": "mackerel fillet",
+    "grams": 240.0
+   },
+   {
+    "food": "beetroot",
+    "grams": 300.0
+   },
+   {
+    "food": "potato",
+    "grams": 300.0
+   },
+   {
+    "food": "arugula",
+    "grams": 60.0
+   },
+   {
+    "food": "greek yogurt",
+    "grams": 100.0
+   },
+   {
+    "food": "dijon mustard",
+    "grams": 10.0
+   },
+   {
+    "food": "lemon",
+    "grams": 20.0
+   },
+   {
+    "food": "parsley",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Boil potatoes and beetroot until tender and slice",
+   "Grill mackerel 3 minutes per side",
+   "Whisk yogurt, mustard and lemon",
+   "Arrange arugula, potatoes and beetroot, flake over mackerel and dress"
+  ]
+ },
+ {
+  "name": "Spring Asparagus, Pea & Egg Salad",
+  "mealType": "LUNCH",
+  "cuisine": "British",
+  "servings": 2,
+  "prepMinutes": 25,
+  "ingredients": [
+   {
+    "food": "asparagus",
+    "grams": 250.0
+   },
+   {
+    "food": "peas",
+    "grams": 150.0
+   },
+   {
+    "food": "eggs",
+    "grams": 200.0
+   },
+   {
+    "food": "potato",
+    "grams": 300.0
+   },
+   {
+    "food": "arugula",
+    "grams": 60.0
+   },
+   {
+    "food": "parmesan",
+    "grams": 25.0
+   },
+   {
+    "food": "lemon",
+    "grams": 20.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 15.0
+   },
+   {
+    "food": "whole wheat bread",
+    "grams": 80.0
+   }
+  ],
+  "steps": [
+   "Boil potatoes 15 minutes",
+   "Blanch asparagus and peas 3 minutes",
+   "Boil eggs 8 minutes",
+   "Toss vegetables with arugula, lemon and oil",
+   "Top with eggs and shaved parmesan"
+  ]
+ },
+ {
+  "name": "Gazpacho with Chickpeas & Eggs",
+  "mealType": "LUNCH",
+  "cuisine": "Spanish",
+  "servings": 2,
+  "prepMinutes": 20,
+  "ingredients": [
+   {
+    "food": "tomato",
+    "grams": 600.0
+   },
+   {
+    "food": "cucumber",
+    "grams": 200.0
+   },
+   {
+    "food": "bell pepper",
+    "grams": 150.0
+   },
+   {
+    "food": "onion",
+    "grams": 40.0
+   },
+   {
+    "food": "garlic",
+    "grams": 4.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 20.0
+   },
+   {
+    "food": "chickpeas",
+    "grams": 240.0
+   },
+   {
+    "food": "eggs",
+    "grams": 150.0
+   },
+   {
+    "food": "whole wheat bread",
+    "grams": 100.0
+   }
+  ],
+  "steps": [
+   "Blend tomato, most of the cucumber, pepper, onion, garlic and oil until smooth",
+   "Chill at least 1 hour",
+   "Boil eggs 9 minutes",
+   "Serve topped with chickpeas, chopped egg and diced cucumber with bread"
+  ]
+ },
+ {
+  "name": "Pork & Apple Rice Lettuce Cups",
+  "mealType": "LUNCH",
+  "cuisine": "Asian",
+  "servings": 2,
+  "prepMinutes": 30,
+  "ingredients": [
+   {
+    "food": "pork tenderloin",
+    "grams": 300.0
+   },
+   {
+    "food": "apple",
+    "grams": 150.0
+   },
+   {
+    "food": "romaine lettuce",
+    "grams": 150.0
+   },
+   {
+    "food": "brown rice",
+    "grams": 140.0
+   },
+   {
+    "food": "carrot",
+    "grams": 100.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 15.0
+   },
+   {
+    "food": "ginger",
+    "grams": 8.0
+   },
+   {
+    "food": "lime",
+    "grams": 15.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 15.0
+   }
+  ],
+  "steps": [
+   "Cook rice",
+   "Dice pork and stir-fry with ginger 6 minutes",
+   "Add diced apple, carrot and soy sauce for 2 minutes",
+   "Spoon rice and pork into lettuce leaves",
+   "Finish with lime and spring onion"
+  ]
+ },
+ {
+  "name": "Baked Salmon with Sweet Potato & Broccoli",
+  "mealType": "DINNER",
+  "cuisine": "Nordic",
+  "servings": 2,
+  "prepMinutes": 35,
+  "ingredients": [
+   {
+    "food": "salmon fillet",
+    "grams": 300.0
+   },
+   {
+    "food": "sweet potato",
+    "grams": 400.0
+   },
+   {
+    "food": "broccoli",
+    "grams": 300.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 10.0
+   },
+   {
+    "food": "lemon",
+    "grams": 20.0
+   },
+   {
+    "food": "garlic",
+    "grams": 6.0
+   }
+  ],
+  "steps": [
+   "Roast cubed sweet potato with half the oil at 200 C for 15 minutes",
+   "Add broccoli and salmon brushed with garlic, lemon and remaining oil",
+   "Roast 12-15 minutes more until salmon flakes"
+  ]
+ },
+ {
+  "name": "Turkey Bean Chili",
+  "mealType": "DINNER",
+  "cuisine": "Tex-Mex",
+  "servings": 2,
+  "prepMinutes": 45,
+  "ingredients": [
+   {
+    "food": "turkey mince",
+    "grams": 400.0
+   },
+   {
+    "food": "kidney beans",
+    "grams": 240.0
+   },
+   {
+    "food": "black beans",
+    "grams": 200.0
+   },
+   {
+    "food": "canned tomatoes",
+    "grams": 400.0
+   },
+   {
+    "food": "onion",
+    "grams": 120.0
+   },
+   {
+    "food": "bell pepper",
+    "grams": 150.0
+   },
+   {
+    "food": "garlic",
+    "grams": 8.0
+   },
+   {
+    "food": "ground cumin",
+    "grams": 5.0
+   },
+   {
+    "food": "smoked paprika",
+    "grams": 4.0
+   },
+   {
+    "food": "chili flakes",
+    "grams": 1.0
+   },
+   {
+    "food": "brown rice",
+    "grams": 120.0
+   },
+   {
+    "food": "greek yogurt",
+    "grams": 100.0
+   }
+  ],
+  "steps": [
+   "Brown turkey with onion, pepper and garlic",
+   "Add spices and toast 1 minute",
+   "Add tomatoes and beans and simmer 25 minutes",
+   "Serve over rice with a spoon of yogurt"
+  ]
+ },
+ {
+  "name": "Chicken Stir-Fry with Brown Rice",
+  "mealType": "DINNER",
+  "cuisine": "Chinese",
+  "servings": 2,
+  "prepMinutes": 30,
+  "ingredients": [
+   {
+    "food": "chicken breast",
+    "grams": 350.0
+   },
+   {
+    "food": "broccoli",
+    "grams": 200.0
+   },
+   {
+    "food": "bell pepper",
+    "grams": 150.0
+   },
+   {
+    "food": "carrot",
+    "grams": 100.0
+   },
+   {
+    "food": "green beans",
+    "grams": 100.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 25.0
+   },
+   {
+    "food": "ginger",
+    "grams": 10.0
+   },
+   {
+    "food": "garlic",
+    "grams": 8.0
+   },
+   {
+    "food": "sesame oil",
+    "grams": 10.0
+   },
+   {
+    "food": "brown rice",
+    "grams": 160.0
+   }
+  ],
+  "steps": [
+   "Cook rice",
+   "Slice chicken and stir-fry in sesame oil 5 minutes",
+   "Add vegetables, garlic and ginger and cook 4 minutes",
+   "Add soy sauce and toss",
+   "Serve over rice"
+  ]
+ },
+ {
+  "name": "Lean Beef Bolognese",
+  "mealType": "DINNER",
+  "cuisine": "Italian",
+  "servings": 2,
+  "prepMinutes": 45,
+  "ingredients": [
+   {
+    "food": "lean beef mince",
+    "grams": 350.0
+   },
+   {
+    "food": "whole wheat pasta",
+    "grams": 180.0
+   },
+   {
+    "food": "canned tomatoes",
+    "grams": 400.0
+   },
+   {
+    "food": "onion",
+    "grams": 100.0
+   },
+   {
+    "food": "carrot",
+    "grams": 100.0
+   },
+   {
+    "food": "celery",
+    "grams": 80.0
+   },
+   {
+    "food": "garlic",
+    "grams": 8.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 10.0
+   },
+   {
+    "food": "parmesan",
+    "grams": 30.0
+   },
+   {
+    "food": "basil",
+    "grams": 10.0
+   },
+   {
+    "food": "tomato paste",
+    "grams": 30.0
+   }
+  ],
+  "steps": [
+   "Soften finely diced onion, carrot and celery in oil",
+   "Brown the beef with garlic",
+   "Add tomato paste and tomatoes and simmer 30 minutes",
+   "Cook pasta",
+   "Toss and serve with parmesan and basil"
+  ]
+ },
+ {
+  "name": "Coconut Chicken Curry",
+  "mealType": "DINNER",
+  "cuisine": "Thai",
+  "servings": 2,
+  "prepMinutes": 35,
+  "ingredients": [
+   {
+    "food": "chicken thigh",
+    "grams": 400.0
+   },
+   {
+    "food": "coconut milk",
+    "grams": 200.0
+   },
+   {
+    "food": "zucchini",
+    "grams": 200.0
+   },
+   {
+    "food": "bell pepper",
+    "grams": 150.0
+   },
+   {
+    "food": "green beans",
+    "grams": 150.0
+   },
+   {
+    "food": "ginger",
+    "grams": 10.0
+   },
+   {
+    "food": "garlic",
+    "grams": 8.0
+   },
+   {
+    "food": "chili pepper",
+    "grams": 5.0
+   },
+   {
+    "food": "lime",
+    "grams": 20.0
+   },
+   {
+    "food": "cilantro",
+    "grams": 10.0
+   },
+   {
+    "food": "white rice",
+    "grams": 150.0
+   },
+   {
+    "food": "curry powder",
+    "grams": 6.0
+   }
+  ],
+  "steps": [
+   "Cook rice",
+   "Fry garlic, ginger, chili and curry powder 1 minute",
+   "Add diced chicken and brown",
+   "Add coconut milk and vegetables and simmer 15 minutes",
+   "Finish with lime and cilantro"
+  ]
+ },
+ {
+  "name": "Lemon Herb Cod with Quinoa & Asparagus",
+  "mealType": "DINNER",
+  "cuisine": "Mediterranean",
+  "servings": 2,
+  "prepMinutes": 30,
+  "ingredients": [
+   {
+    "food": "cod fillet",
+    "grams": 400.0
+   },
+   {
+    "food": "quinoa",
+    "grams": 150.0
+   },
+   {
+    "food": "asparagus",
+    "grams": 250.0
+   },
+   {
+    "food": "lemon",
+    "grams": 30.0
+   },
+   {
+    "food": "parsley",
+    "grams": 15.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 15.0
+   },
+   {
+    "food": "garlic",
+    "grams": 6.0
+   },
+   {
+    "food": "tomato",
+    "grams": 150.0
+   }
+  ],
+  "steps": [
+   "Cook quinoa",
+   "Roast asparagus and tomato with half the oil at 200 C for 10 minutes",
+   "Add cod brushed with garlic, lemon and oil and roast 10 minutes",
+   "Stir parsley and lemon zest through the quinoa and serve"
+  ]
+ },
+ {
+  "name": "Chickpea Spinach Curry",
+  "mealType": "DINNER",
+  "cuisine": "Indian",
+  "servings": 2,
+  "prepMinutes": 35,
+  "ingredients": [
+   {
+    "food": "chickpeas",
+    "grams": 400.0
+   },
+   {
+    "food": "spinach",
+    "grams": 200.0
+   },
+   {
+    "food": "canned tomatoes",
+    "grams": 400.0
+   },
+   {
+    "food": "onion",
+    "grams": 100.0
+   },
+   {
+    "food": "garlic",
+    "grams": 8.0
+   },
+   {
+    "food": "ginger",
+    "grams": 10.0
+   },
+   {
+    "food": "curry powder",
+    "grams": 8.0
+   },
+   {
+    "food": "coconut milk",
+    "grams": 100.0
+   },
+   {
+    "food": "brown rice",
+    "grams": 150.0
+   },
+   {
+    "food": "greek yogurt",
+    "grams": 100.0
+   }
+  ],
+  "steps": [
+   "Cook rice",
+   "Soften onion, garlic and ginger",
+   "Add curry powder, tomatoes and chickpeas and simmer 15 minutes",
+   "Stir in coconut milk and spinach",
+   "Serve with rice and yogurt"
+  ]
+ },
+ {
+  "name": "Pork Tenderloin with Apples & Brussels Sprouts",
+  "mealType": "DINNER",
+  "cuisine": "European",
+  "servings": 2,
+  "prepMinutes": 40,
+  "ingredients": [
+   {
+    "food": "pork tenderloin",
+    "grams": 400.0
+   },
+   {
+    "food": "brussels sprouts",
+    "grams": 300.0
+   },
+   {
+    "food": "apple",
+    "grams": 200.0
+   },
+   {
+    "food": "potato",
+    "grams": 400.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 15.0
+   },
+   {
+    "food": "dijon mustard",
+    "grams": 15.0
+   }
+  ],
+  "steps": [
+   "Roast halved potatoes with oil at 200 C for 15 minutes",
+   "Add sprouts and apple wedges",
+   "Brush pork with mustard, sear and add to the tray",
+   "Roast 20 minutes until pork reaches 63 C and rest 5 minutes"
+  ]
+ },
+ {
+  "name": "Shrimp & Zucchini Whole Wheat Linguine",
+  "mealType": "DINNER",
+  "cuisine": "Italian",
+  "servings": 2,
+  "prepMinutes": 25,
+  "ingredients": [
+   {
+    "food": "shrimp",
+    "grams": 350.0
+   },
+   {
+    "food": "whole wheat pasta",
+    "grams": 180.0
+   },
+   {
+    "food": "zucchini",
+    "grams": 200.0
+   },
+   {
+    "food": "tomato",
+    "grams": 250.0
+   },
+   {
+    "food": "garlic",
+    "grams": 10.0
+   },
+   {
+    "food": "chili flakes",
+    "grams": 1.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 15.0
+   },
+   {
+    "food": "lemon",
+    "grams": 20.0
+   },
+   {
+    "food": "parsley",
+    "grams": 15.0
+   },
+   {
+    "food": "spinach",
+    "grams": 80.0
+   }
+  ],
+  "steps": [
+   "Cook pasta",
+   "Saute garlic and chili in oil",
+   "Add zucchini and tomato for 4 minutes",
+   "Add shrimp and cook 3 minutes",
+   "Toss with pasta, spinach, lemon and parsley"
+  ]
+ },
+ {
+  "name": "Peanut Tofu Vegetable Stir-Fry",
+  "mealType": "DINNER",
+  "cuisine": "Thai",
+  "servings": 2,
+  "prepMinutes": 30,
+  "ingredients": [
+   {
+    "food": "firm tofu",
+    "grams": 400.0
+   },
+   {
+    "food": "broccoli",
+    "grams": 200.0
+   },
+   {
+    "food": "red cabbage",
+    "grams": 150.0
+   },
+   {
+    "food": "carrot",
+    "grams": 150.0
+   },
+   {
+    "food": "peanut butter",
+    "grams": 40.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 25.0
+   },
+   {
+    "food": "lime",
+    "grams": 20.0
+   },
+   {
+    "food": "ginger",
+    "grams": 10.0
+   },
+   {
+    "food": "garlic",
+    "grams": 8.0
+   },
+   {
+    "food": "rice noodles",
+    "grams": 160.0
+   },
+   {
+    "food": "sesame oil",
+    "grams": 5.0
+   }
+  ],
+  "steps": [
+   "Soak noodles",
+   "Crisp cubed tofu in sesame oil",
+   "Stir-fry vegetables with garlic and ginger 5 minutes",
+   "Whisk peanut butter, soy, lime and water",
+   "Toss noodles, tofu and sauce together"
+  ]
+ },
+ {
+  "name": "Turkey & Quinoa Stuffed Peppers",
+  "mealType": "DINNER",
+  "cuisine": "Mediterranean",
+  "servings": 2,
+  "prepMinutes": 50,
+  "ingredients": [
+   {
+    "food": "bell pepper",
+    "grams": 400.0
+   },
+   {
+    "food": "turkey mince",
+    "grams": 350.0
+   },
+   {
+    "food": "quinoa",
+    "grams": 120.0
+   },
+   {
+    "food": "canned tomatoes",
+    "grams": 200.0
+   },
+   {
+    "food": "onion",
+    "grams": 80.0
+   },
+   {
+    "food": "garlic",
+    "grams": 6.0
+   },
+   {
+    "food": "mozzarella",
+    "grams": 60.0
+   },
+   {
+    "food": "ground cumin",
+    "grams": 3.0
+   },
+   {
+    "food": "spinach",
+    "grams": 80.0
+   }
+  ],
+  "steps": [
+   "Cook quinoa",
+   "Brown turkey with onion, garlic and cumin",
+   "Stir in tomatoes, spinach and quinoa",
+   "Fill halved peppers and top with mozzarella",
+   "Bake at 190 C for 25 minutes"
+  ]
+ },
+ {
+  "name": "Moroccan Chicken & Chickpea Tagine",
+  "mealType": "DINNER",
+  "cuisine": "Moroccan",
+  "servings": 2,
+  "prepMinutes": 50,
+  "ingredients": [
+   {
+    "food": "chicken thigh",
+    "grams": 400.0
+   },
+   {
+    "food": "chickpeas",
+    "grams": 240.0
+   },
+   {
+    "food": "carrot",
+    "grams": 200.0
+   },
+   {
+    "food": "onion",
+    "grams": 100.0
+   },
+   {
+    "food": "canned tomatoes",
+    "grams": 300.0
+   },
+   {
+    "food": "raisins",
+    "grams": 30.0
+   },
+   {
+    "food": "ground cumin",
+    "grams": 4.0
+   },
+   {
+    "food": "cinnamon",
+    "grams": 2.0
+   },
+   {
+    "food": "turmeric",
+    "grams": 2.0
+   },
+   {
+    "food": "ginger",
+    "grams": 8.0
+   },
+   {
+    "food": "quinoa",
+    "grams": 140.0
+   },
+   {
+    "food": "parsley",
+    "grams": 15.0
+   },
+   {
+    "food": "vegetable broth",
+    "grams": 200.0
+   }
+  ],
+  "steps": [
+   "Brown chicken",
+   "Soften onion and ginger with the spices",
+   "Add carrots, tomatoes, chickpeas, raisins, broth and chicken",
+   "Simmer covered 30 minutes",
+   "Serve over quinoa with parsley"
+  ]
+ },
+ {
+  "name": "Beef & Barley Stew",
+  "mealType": "DINNER",
+  "cuisine": "Irish",
+  "servings": 2,
+  "prepMinutes": 90,
+  "ingredients": [
+   {
+    "food": "beef sirloin",
+    "grams": 400.0
+   },
+   {
+    "food": "barley",
+    "grams": 140.0
+   },
+   {
+    "food": "carrot",
+    "grams": 200.0
+   },
+   {
+    "food": "potato",
+    "grams": 300.0
+   },
+   {
+    "food": "onion",
+    "grams": 120.0
+   },
+   {
+    "food": "celery",
+    "grams": 100.0
+   },
+   {
+    "food": "tomato paste",
+    "grams": 30.0
+   },
+   {
+    "food": "vegetable broth",
+    "grams": 900.0
+   },
+   {
+    "food": "garlic",
+    "grams": 8.0
+   },
+   {
+    "food": "parsley",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Brown cubed beef in batches",
+   "Soften onion, celery and garlic",
+   "Add tomato paste, barley, broth, carrot, potato and beef",
+   "Simmer covered 70 minutes until tender",
+   "Finish with parsley"
+  ]
+ },
+ {
+  "name": "Miso-Glazed Salmon with Greens",
+  "mealType": "DINNER",
+  "cuisine": "Japanese",
+  "servings": 2,
+  "prepMinutes": 30,
+  "ingredients": [
+   {
+    "food": "salmon fillet",
+    "grams": 300.0
+   },
+   {
+    "food": "miso paste",
+    "grams": 25.0
+   },
+   {
+    "food": "honey",
+    "grams": 10.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 10.0
+   },
+   {
+    "food": "brown rice",
+    "grams": 150.0
+   },
+   {
+    "food": "spinach",
+    "grams": 200.0
+   },
+   {
+    "food": "edamame",
+    "grams": 120.0
+   },
+   {
+    "food": "ginger",
+    "grams": 8.0
+   },
+   {
+    "food": "sesame oil",
+    "grams": 5.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 15.0
+   }
+  ],
+  "steps": [
+   "Cook rice",
+   "Mix miso, honey and soy and brush on salmon",
+   "Broil 8-10 minutes",
+   "Saute spinach and edamame with ginger in sesame oil",
+   "Serve with rice and spring onion"
+  ]
+ },
+ {
+  "name": "Lentil & Mushroom Bolognese",
+  "mealType": "DINNER",
+  "cuisine": "Italian",
+  "servings": 2,
+  "prepMinutes": 45,
+  "ingredients": [
+   {
+    "food": "lentils",
+    "grams": 160.0
+   },
+   {
+    "food": "whole wheat pasta",
+    "grams": 180.0
+   },
+   {
+    "food": "canned tomatoes",
+    "grams": 400.0
+   },
+   {
+    "food": "onion",
+    "grams": 100.0
+   },
+   {
+    "food": "carrot",
+    "grams": 120.0
+   },
+   {
+    "food": "celery",
+    "grams": 80.0
+   },
+   {
+    "food": "garlic",
+    "grams": 8.0
+   },
+   {
+    "food": "mushrooms",
+    "grams": 200.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 15.0
+   },
+   {
+    "food": "parmesan",
+    "grams": 30.0
+   },
+   {
+    "food": "tomato paste",
+    "grams": 30.0
+   }
+  ],
+  "steps": [
+   "Soften onion, carrot, celery and garlic",
+   "Add chopped mushrooms and cook until browned",
+   "Add lentils, tomato paste, tomatoes and 400 ml water and simmer 30 minutes",
+   "Cook pasta and serve with parmesan"
+  ]
+ },
+ {
+  "name": "Sheet-Pan Chicken Fajitas",
+  "mealType": "DINNER",
+  "cuisine": "Tex-Mex",
+  "servings": 2,
+  "prepMinutes": 35,
+  "ingredients": [
+   {
+    "food": "chicken breast",
+    "grams": 400.0
+   },
+   {
+    "food": "bell pepper",
+    "grams": 300.0
+   },
+   {
+    "food": "onion",
+    "grams": 150.0
+   },
+   {
+    "food": "whole wheat tortilla",
+    "grams": 200.0
+   },
+   {
+    "food": "avocado",
+    "grams": 100.0
+   },
+   {
+    "food": "greek yogurt",
+    "grams": 100.0
+   },
+   {
+    "food": "lime",
+    "grams": 20.0
+   },
+   {
+    "food": "smoked paprika",
+    "grams": 4.0
+   },
+   {
+    "food": "ground cumin",
+    "grams": 4.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 15.0
+   },
+   {
+    "food": "cilantro",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Toss sliced chicken, peppers and onion with spices and oil",
+   "Roast at 220 C for 20 minutes",
+   "Warm tortillas",
+   "Fill with chicken and vegetables, avocado, yogurt, lime and cilantro"
+  ]
+ },
+ {
+  "name": "Mushroom & White Bean Risotto",
+  "mealType": "DINNER",
+  "cuisine": "Italian",
+  "servings": 2,
+  "prepMinutes": 40,
+  "ingredients": [
+   {
+    "food": "white rice",
+    "grams": 180.0
+   },
+   {
+    "food": "mushrooms",
+    "grams": 300.0
+   },
+   {
+    "food": "spinach",
+    "grams": 150.0
+   },
+   {
+    "food": "onion",
+    "grams": 80.0
+   },
+   {
+    "food": "garlic",
+    "grams": 8.0
+   },
+   {
+    "food": "vegetable broth",
+    "grams": 900.0
+   },
+   {
+    "food": "parmesan",
+    "grams": 40.0
+   },
+   {
+    "food": "white beans",
+    "grams": 200.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 15.0
+   },
+   {
+    "food": "butter",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Brown mushrooms in oil",
+   "Soften onion and garlic",
+   "Toast rice 1 minute",
+   "Add hot broth a ladle at a time for 18 minutes, stirring",
+   "Fold in beans, spinach, mushrooms, butter and parmesan"
+  ]
+ },
+ {
+  "name": "Baked Cod with Tomatoes & Olives",
+  "mealType": "DINNER",
+  "cuisine": "Mediterranean",
+  "servings": 2,
+  "prepMinutes": 40,
+  "ingredients": [
+   {
+    "food": "cod fillet",
+    "grams": 400.0
+   },
+   {
+    "food": "tomato",
+    "grams": 400.0
+   },
+   {
+    "food": "olives",
+    "grams": 50.0
+   },
+   {
+    "food": "onion",
+    "grams": 80.0
+   },
+   {
+    "food": "garlic",
+    "grams": 8.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 15.0
+   },
+   {
+    "food": "potato",
+    "grams": 500.0
+   },
+   {
+    "food": "parsley",
+    "grams": 15.0
+   },
+   {
+    "food": "lemon",
+    "grams": 20.0
+   }
+  ],
+  "steps": [
+   "Roast sliced potatoes with half the oil at 200 C for 20 minutes",
+   "Add tomato, onion, garlic and olives",
+   "Nestle in cod and roast 12 minutes",
+   "Finish with lemon and parsley"
+  ]
+ },
+ {
+  "name": "Black Bean Tacos with Mango Salsa",
+  "mealType": "DINNER",
+  "cuisine": "Mexican",
+  "servings": 2,
+  "prepMinutes": 25,
+  "ingredients": [
+   {
+    "food": "black beans",
+    "grams": 400.0
+   },
+   {
+    "food": "whole wheat tortilla",
+    "grams": 200.0
+   },
+   {
+    "food": "mango",
+    "grams": 200.0
+   },
+   {
+    "food": "red cabbage",
+    "grams": 150.0
+   },
+   {
+    "food": "avocado",
+    "grams": 100.0
+   },
+   {
+    "food": "lime",
+    "grams": 20.0
+   },
+   {
+    "food": "cilantro",
+    "grams": 10.0
+   },
+   {
+    "food": "feta",
+    "grams": 60.0
+   },
+   {
+    "food": "ground cumin",
+    "grams": 4.0
+   },
+   {
+    "food": "onion",
+    "grams": 50.0
+   }
+  ],
+  "steps": [
+   "Warm beans with cumin and lightly mash",
+   "Dice mango, onion and cilantro with lime for salsa",
+   "Shred cabbage",
+   "Fill warm tortillas with beans, cabbage, salsa, avocado and feta"
+  ]
+ },
+ {
+  "name": "Herbed Chicken Ratatouille",
+  "mealType": "DINNER",
+  "cuisine": "French",
+  "servings": 2,
+  "prepMinutes": 50,
+  "ingredients": [
+   {
+    "food": "chicken breast",
+    "grams": 350.0
+   },
+   {
+    "food": "eggplant",
+    "grams": 250.0
+   },
+   {
+    "food": "zucchini",
+    "grams": 250.0
+   },
+   {
+    "food": "bell pepper",
+    "grams": 200.0
+   },
+   {
+    "food": "tomato",
+    "grams": 300.0
+   },
+   {
+    "food": "onion",
+    "grams": 100.0
+   },
+   {
+    "food": "garlic",
+    "grams": 8.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 20.0
+   },
+   {
+    "food": "basil",
+    "grams": 10.0
+   },
+   {
+    "food": "quinoa",
+    "grams": 140.0
+   }
+  ],
+  "steps": [
+   "Saute onion and garlic",
+   "Add diced eggplant, pepper and zucchini and cook 10 minutes",
+   "Add tomato and simmer 20 minutes",
+   "Grill chicken and slice",
+   "Cook quinoa",
+   "Serve topped with basil"
+  ]
+ },
+ {
+  "name": "Butternut Squash & Red Lentil Curry",
+  "mealType": "DINNER",
+  "cuisine": "Indian",
+  "servings": 2,
+  "prepMinutes": 40,
+  "ingredients": [
+   {
+    "food": "red lentils",
+    "grams": 160.0
+   },
+   {
+    "food": "butternut squash",
+    "grams": 400.0
+   },
+   {
+    "food": "coconut milk",
+    "grams": 150.0
+   },
+   {
+    "food": "onion",
+    "grams": 100.0
+   },
+   {
+    "food": "garlic",
+    "grams": 8.0
+   },
+   {
+    "food": "ginger",
+    "grams": 10.0
+   },
+   {
+    "food": "curry powder",
+    "grams": 8.0
+   },
+   {
+    "food": "spinach",
+    "grams": 120.0
+   },
+   {
+    "food": "white rice",
+    "grams": 140.0
+   },
+   {
+    "food": "cilantro",
+    "grams": 10.0
+   },
+   {
+    "food": "greek yogurt",
+    "grams": 150.0
+   }
+  ],
+  "steps": [
+   "Cook rice",
+   "Soften onion, garlic and ginger",
+   "Add curry powder, squash, lentils and 600 ml water",
+   "Simmer 20 minutes",
+   "Stir in coconut milk and spinach",
+   "Garnish with cilantro and serve with yogurt"
+  ]
+ },
+ {
+  "name": "Mustard Herb Pork with Root Vegetables",
+  "mealType": "DINNER",
+  "cuisine": "European",
+  "servings": 2,
+  "prepMinutes": 50,
+  "ingredients": [
+   {
+    "food": "pork tenderloin",
+    "grams": 400.0
+   },
+   {
+    "food": "carrot",
+    "grams": 250.0
+   },
+   {
+    "food": "beetroot",
+    "grams": 250.0
+   },
+   {
+    "food": "sweet potato",
+    "grams": 300.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 15.0
+   },
+   {
+    "food": "dijon mustard",
+    "grams": 10.0
+   },
+   {
+    "food": "parsley",
+    "grams": 15.0
+   },
+   {
+    "food": "garlic",
+    "grams": 6.0
+   }
+  ],
+  "steps": [
+   "Roast chopped carrot, beetroot and sweet potato with oil at 200 C for 20 minutes",
+   "Coat pork in mustard, garlic and parsley",
+   "Add to the tray and roast 20 minutes",
+   "Rest and slice"
+  ]
+ },
+ {
+  "name": "Salmon & Kale Pesto Pasta",
+  "mealType": "DINNER",
+  "cuisine": "Italian",
+  "servings": 2,
+  "prepMinutes": 30,
+  "ingredients": [
+   {
+    "food": "salmon fillet",
+    "grams": 260.0
+   },
+   {
+    "food": "whole wheat pasta",
+    "grams": 180.0
+   },
+   {
+    "food": "kale",
+    "grams": 150.0
+   },
+   {
+    "food": "basil",
+    "grams": 20.0
+   },
+   {
+    "food": "walnuts",
+    "grams": 30.0
+   },
+   {
+    "food": "parmesan",
+    "grams": 30.0
+   },
+   {
+    "food": "garlic",
+    "grams": 6.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 20.0
+   },
+   {
+    "food": "lemon",
+    "grams": 20.0
+   }
+  ],
+  "steps": [
+   "Cook pasta",
+   "Blanch kale 2 minutes",
+   "Blend kale, basil, walnuts, parmesan, garlic, oil and lemon into pesto",
+   "Pan-sear salmon and flake",
+   "Toss pasta with pesto and salmon"
+  ]
+ },
+ {
+  "name": "Korean-Style Beef Rice Bowls",
+  "mealType": "DINNER",
+  "cuisine": "Korean",
+  "servings": 2,
+  "prepMinutes": 30,
+  "ingredients": [
+   {
+    "food": "lean beef mince",
+    "grams": 350.0
+   },
+   {
+    "food": "brown rice",
+    "grams": 160.0
+   },
+   {
+    "food": "romaine lettuce",
+    "grams": 150.0
+   },
+   {
+    "food": "carrot",
+    "grams": 150.0
+   },
+   {
+    "food": "cucumber",
+    "grams": 150.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 25.0
+   },
+   {
+    "food": "garlic",
+    "grams": 8.0
+   },
+   {
+    "food": "ginger",
+    "grams": 8.0
+   },
+   {
+    "food": "honey",
+    "grams": 10.0
+   },
+   {
+    "food": "sesame oil",
+    "grams": 8.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 20.0
+   },
+   {
+    "food": "chili flakes",
+    "grams": 2.0
+   }
+  ],
+  "steps": [
+   "Cook rice",
+   "Brown beef with garlic and ginger",
+   "Add soy sauce, honey and chili flakes and reduce",
+   "Julienne carrot and cucumber",
+   "Serve beef over rice with vegetables, lettuce, sesame oil and spring onion"
+  ]
+ },
+ {
+  "name": "Cauliflower & Chickpea Tikka",
+  "mealType": "DINNER",
+  "cuisine": "Indian",
+  "servings": 2,
+  "prepMinutes": 45,
+  "ingredients": [
+   {
+    "food": "cauliflower",
+    "grams": 500.0
+   },
+   {
+    "food": "chickpeas",
+    "grams": 300.0
+   },
+   {
+    "food": "greek yogurt",
+    "grams": 200.0
+   },
+   {
+    "food": "canned tomatoes",
+    "grams": 300.0
+   },
+   {
+    "food": "onion",
+    "grams": 100.0
+   },
+   {
+    "food": "garlic",
+    "grams": 8.0
+   },
+   {
+    "food": "ginger",
+    "grams": 10.0
+   },
+   {
+    "food": "curry powder",
+    "grams": 8.0
+   },
+   {
+    "food": "white rice",
+    "grams": 150.0
+   },
+   {
+    "food": "cilantro",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Toss cauliflower in half the yogurt and curry powder and roast at 220 C for 25 minutes",
+   "Simmer onion, garlic, ginger, remaining spice, tomatoes and chickpeas 15 minutes",
+   "Stir in cauliflower and remaining yogurt off the heat",
+   "Serve with rice and cilantro"
+  ]
+ },
+ {
+  "name": "Chicken Cacciatore",
+  "mealType": "DINNER",
+  "cuisine": "Italian",
+  "servings": 2,
+  "prepMinutes": 50,
+  "ingredients": [
+   {
+    "food": "chicken thigh",
+    "grams": 450.0
+   },
+   {
+    "food": "canned tomatoes",
+    "grams": 400.0
+   },
+   {
+    "food": "bell pepper",
+    "grams": 200.0
+   },
+   {
+    "food": "onion",
+    "grams": 100.0
+   },
+   {
+    "food": "mushrooms",
+    "grams": 150.0
+   },
+   {
+    "food": "olives",
+    "grams": 40.0
+   },
+   {
+    "food": "garlic",
+    "grams": 8.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 10.0
+   },
+   {
+    "food": "whole wheat pasta",
+    "grams": 160.0
+   },
+   {
+    "food": "basil",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Brown chicken in oil",
+   "Saute onion, pepper, mushrooms and garlic",
+   "Add tomatoes, olives and chicken and simmer 30 minutes",
+   "Serve over pasta with basil"
+  ]
+ },
+ {
+  "name": "Grilled Mackerel with Lentils & Leeks",
+  "mealType": "DINNER",
+  "cuisine": "French",
+  "servings": 2,
+  "prepMinutes": 35,
+  "ingredients": [
+   {
+    "food": "mackerel fillet",
+    "grams": 300.0
+   },
+   {
+    "food": "lentils",
+    "grams": 140.0
+   },
+   {
+    "food": "leek",
+    "grams": 250.0
+   },
+   {
+    "food": "carrot",
+    "grams": 150.0
+   },
+   {
+    "food": "kale",
+    "grams": 100.0
+   },
+   {
+    "food": "dijon mustard",
+    "grams": 10.0
+   },
+   {
+    "food": "lemon",
+    "grams": 20.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 10.0
+   },
+   {
+    "food": "parsley",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Simmer lentils 20 minutes",
+   "Soften sliced leek and carrot in oil, add kale",
+   "Stir in lentils, mustard and lemon",
+   "Grill mackerel 3 minutes per side and serve on top with parsley"
+  ]
+ },
+ {
+  "name": "Eggplant Parmigiana with Lentils",
+  "mealType": "DINNER",
+  "cuisine": "Italian",
+  "servings": 2,
+  "prepMinutes": 60,
+  "ingredients": [
+   {
+    "food": "eggplant",
+    "grams": 600.0
+   },
+   {
+    "food": "canned tomatoes",
+    "grams": 500.0
+   },
+   {
+    "food": "mozzarella",
+    "grams": 120.0
+   },
+   {
+    "food": "parmesan",
+    "grams": 30.0
+   },
+   {
+    "food": "lentils",
+    "grams": 120.0
+   },
+   {
+    "food": "basil",
+    "grams": 15.0
+   },
+   {
+    "food": "garlic",
+    "grams": 6.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 15.0
+   },
+   {
+    "food": "onion",
+    "grams": 80.0
+   }
+  ],
+  "steps": [
+   "Slice and roast eggplant with oil at 200 C for 20 minutes",
+   "Simmer onion, garlic, tomatoes and lentils with 300 ml water for 20 minutes",
+   "Layer eggplant, sauce and mozzarella",
+   "Top with parmesan and bake 25 minutes",
+   "Finish with basil"
+  ]
+ },
+ {
+  "name": "Turkey Meatballs with Zucchini & Rice",
+  "mealType": "DINNER",
+  "cuisine": "Italian",
+  "servings": 2,
+  "prepMinutes": 45,
+  "ingredients": [
+   {
+    "food": "turkey mince",
+    "grams": 400.0
+   },
+   {
+    "food": "eggs",
+    "grams": 50.0
+   },
+   {
+    "food": "rolled oats",
+    "grams": 30.0
+   },
+   {
+    "food": "canned tomatoes",
+    "grams": 400.0
+   },
+   {
+    "food": "zucchini",
+    "grams": 300.0
+   },
+   {
+    "food": "garlic",
+    "grams": 8.0
+   },
+   {
+    "food": "onion",
+    "grams": 80.0
+   },
+   {
+    "food": "brown rice",
+    "grams": 150.0
+   },
+   {
+    "food": "parmesan",
+    "grams": 20.0
+   },
+   {
+    "food": "basil",
+    "grams": 10.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Cook rice",
+   "Mix turkey, egg, oats, half the garlic and parmesan and roll meatballs",
+   "Brown in oil",
+   "Add onion, remaining garlic, tomatoes and diced zucchini and simmer 20 minutes",
+   "Serve over rice with basil"
+  ]
+ },
+ {
+  "name": "Shrimp & Sweetcorn Summer Skillet",
+  "mealType": "DINNER",
+  "cuisine": "American",
+  "servings": 2,
+  "prepMinutes": 30,
+  "ingredients": [
+   {
+    "food": "shrimp",
+    "grams": 350.0
+   },
+   {
+    "food": "corn kernels",
+    "grams": 250.0
+   },
+   {
+    "food": "zucchini",
+    "grams": 200.0
+   },
+   {
+    "food": "tomato",
+    "grams": 250.0
+   },
+   {
+    "food": "bell pepper",
+    "grams": 150.0
+   },
+   {
+    "food": "lime",
+    "grams": 20.0
+   },
+   {
+    "food": "smoked paprika",
+    "grams": 3.0
+   },
+   {
+    "food": "garlic",
+    "grams": 6.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 15.0
+   },
+   {
+    "food": "quinoa",
+    "grams": 140.0
+   },
+   {
+    "food": "cilantro",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Cook quinoa",
+   "Saute corn, pepper and zucchini 5 minutes",
+   "Add garlic, paprika, shrimp and tomato and cook 4 minutes",
+   "Finish with lime and cilantro and serve over quinoa"
+  ]
+ },
+ {
+  "name": "Roast Chicken Thighs with Sprouts & Potatoes",
+  "mealType": "DINNER",
+  "cuisine": "British",
+  "servings": 2,
+  "prepMinutes": 45,
+  "ingredients": [
+   {
+    "food": "chicken thigh",
+    "grams": 450.0
+   },
+   {
+    "food": "brussels sprouts",
+    "grams": 300.0
+   },
+   {
+    "food": "potato",
+    "grams": 500.0
+   },
+   {
+    "food": "lemon",
+    "grams": 20.0
+   },
+   {
+    "food": "garlic",
+    "grams": 8.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 15.0
+   },
+   {
+    "food": "parsley",
+    "grams": 10.0
+   },
+   {
+    "food": "dijon mustard",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Toss halved potatoes and sprouts with oil and garlic",
+   "Rub chicken with mustard and lemon",
+   "Roast everything at 210 C for 35 minutes",
+   "Finish with parsley"
+  ]
+ },
+ {
+  "name": "Japanese Tofu Curry",
+  "mealType": "DINNER",
+  "cuisine": "Japanese",
+  "servings": 2,
+  "prepMinutes": 45,
+  "ingredients": [
+   {
+    "food": "firm tofu",
+    "grams": 400.0
+   },
+   {
+    "food": "potato",
+    "grams": 300.0
+   },
+   {
+    "food": "carrot",
+    "grams": 200.0
+   },
+   {
+    "food": "onion",
+    "grams": 150.0
+   },
+   {
+    "food": "curry powder",
+    "grams": 10.0
+   },
+   {
+    "food": "white rice",
+    "grams": 160.0
+   },
+   {
+    "food": "peas",
+    "grams": 150.0
+   },
+   {
+    "food": "vegetable broth",
+    "grams": 600.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 10.0
+   },
+   {
+    "food": "apple",
+    "grams": 100.0
+   }
+  ],
+  "steps": [
+   "Cook rice",
+   "Soften onion",
+   "Add curry powder, potato, carrot, grated apple and broth and simmer 20 minutes",
+   "Add cubed tofu, peas and soy sauce for 5 minutes",
+   "Serve with rice"
+  ]
+ },
+ {
+  "name": "Greek Yogurt with Walnuts & Honey",
+  "mealType": "SNACK",
+  "cuisine": "Greek",
+  "servings": 1,
+  "prepMinutes": 2,
+  "ingredients": [
+   {
+    "food": "greek yogurt",
+    "grams": 200.0
+   },
+   {
+    "food": "walnuts",
+    "grams": 15.0
+   },
+   {
+    "food": "honey",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Spoon yogurt into a bowl",
+   "Top with walnuts and honey"
+  ]
+ },
+ {
+  "name": "Apple with Almond Butter",
+  "mealType": "SNACK",
+  "cuisine": "American",
+  "servings": 1,
+  "prepMinutes": 2,
+  "ingredients": [
+   {
+    "food": "apple",
+    "grams": 180.0
+   },
+   {
+    "food": "almond butter",
+    "grams": 25.0
+   }
+  ],
+  "steps": [
+   "Slice the apple",
+   "Serve with almond butter for dipping"
+  ]
+ },
+ {
+  "name": "Hummus & Veggie Sticks",
+  "mealType": "SNACK",
+  "cuisine": "Middle Eastern",
+  "servings": 1,
+  "prepMinutes": 5,
+  "ingredients": [
+   {
+    "food": "hummus",
+    "grams": 80.0
+   },
+   {
+    "food": "carrot",
+    "grams": 100.0
+   },
+   {
+    "food": "cucumber",
+    "grams": 100.0
+   },
+   {
+    "food": "bell pepper",
+    "grams": 80.0
+   }
+  ],
+  "steps": [
+   "Cut vegetables into sticks",
+   "Serve with hummus"
+  ]
+ },
+ {
+  "name": "Boiled Eggs with Tomatoes",
+  "mealType": "SNACK",
+  "cuisine": "Fusion",
+  "servings": 1,
+  "prepMinutes": 10,
+  "ingredients": [
+   {
+    "food": "eggs",
+    "grams": 100.0
+   },
+   {
+    "food": "tomato",
+    "grams": 150.0
+   },
+   {
+    "food": "whole wheat bread",
+    "grams": 30.0
+   }
+  ],
+  "steps": [
+   "Boil eggs 9 minutes and cool",
+   "Serve with sliced tomato and bread"
+  ]
+ },
+ {
+  "name": "Cottage Cheese with Strawberries",
+  "mealType": "SNACK",
+  "cuisine": "American",
+  "servings": 1,
+  "prepMinutes": 3,
+  "ingredients": [
+   {
+    "food": "cottage cheese",
+    "grams": 200.0
+   },
+   {
+    "food": "strawberries",
+    "grams": 150.0
+   },
+   {
+    "food": "pumpkin seeds",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Top cottage cheese with sliced strawberries and pumpkin seeds"
+  ]
+ },
+ {
+  "name": "Climber's Trail Mix",
+  "mealType": "SNACK",
+  "cuisine": "American",
+  "servings": 1,
+  "prepMinutes": 2,
+  "ingredients": [
+   {
+    "food": "almonds",
+    "grams": 20.0
+   },
+   {
+    "food": "walnuts",
+    "grams": 15.0
+   },
+   {
+    "food": "raisins",
+    "grams": 20.0
+   },
+   {
+    "food": "pumpkin seeds",
+    "grams": 10.0
+   },
+   {
+    "food": "dark chocolate",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Combine nuts, seeds, raisins and chopped chocolate",
+   "Portion into a small container"
+  ]
+ },
+ {
+  "name": "Banana, Peanut Butter & Milk",
+  "mealType": "SNACK",
+  "cuisine": "American",
+  "servings": 1,
+  "prepMinutes": 2,
+  "ingredients": [
+   {
+    "food": "banana",
+    "grams": 120.0
+   },
+   {
+    "food": "peanut butter",
+    "grams": 20.0
+   },
+   {
+    "food": "milk",
+    "grams": 200.0
+   }
+  ],
+  "steps": [
+   "Slice banana and top with peanut butter",
+   "Serve with a glass of milk"
+  ]
+ },
+ {
+  "name": "Chili Lime Edamame",
+  "mealType": "SNACK",
+  "cuisine": "Japanese",
+  "servings": 1,
+  "prepMinutes": 8,
+  "ingredients": [
+   {
+    "food": "edamame",
+    "grams": 200.0
+   },
+   {
+    "food": "chili flakes",
+    "grams": 0.5
+   },
+   {
+    "food": "lime",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Boil edamame 4 minutes and drain",
+   "Toss with lime juice and chili flakes"
+  ]
+ },
+ {
+  "name": "Tuna Cucumber Bites",
+  "mealType": "SNACK",
+  "cuisine": "Fusion",
+  "servings": 1,
+  "prepMinutes": 5,
+  "ingredients": [
+   {
+    "food": "canned tuna in water",
+    "grams": 100.0
+   },
+   {
+    "food": "cucumber",
+    "grams": 150.0
+   },
+   {
+    "food": "greek yogurt",
+    "grams": 40.0
+   },
+   {
+    "food": "lemon",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Mix tuna with yogurt and lemon",
+   "Slice cucumber into thick rounds",
+   "Spoon tuna on top"
+  ]
+ },
+ {
+  "name": "Chocolate Raspberry Chia Pudding",
+  "mealType": "SNACK",
+  "cuisine": "Fusion",
+  "servings": 1,
+  "prepMinutes": 5,
+  "ingredients": [
+   {
+    "food": "chia seeds",
+    "grams": 25.0
+   },
+   {
+    "food": "milk",
+    "grams": 200.0
+   },
+   {
+    "food": "cocoa powder",
+    "grams": 8.0
+   },
+   {
+    "food": "maple syrup",
+    "grams": 8.0
+   },
+   {
+    "food": "raspberries",
+    "grams": 60.0
+   }
+  ],
+  "steps": [
+   "Whisk chia, cocoa and maple syrup into milk",
+   "Refrigerate 4 hours",
+   "Top with raspberries"
+  ]
+ },
+ {
+  "name": "Roasted Spiced Chickpeas",
+  "mealType": "SNACK",
+  "cuisine": "Indian",
+  "servings": 1,
+  "prepMinutes": 30,
+  "ingredients": [
+   {
+    "food": "chickpeas",
+    "grams": 150.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 5.0
+   },
+   {
+    "food": "smoked paprika",
+    "grams": 2.0
+   },
+   {
+    "food": "ground cumin",
+    "grams": 1.0
+   }
+  ],
+  "steps": [
+   "Pat chickpeas dry",
+   "Toss with oil and spices",
+   "Roast at 200 C for 25 minutes until crisp"
+  ]
+ },
+ {
+  "name": "Kiwi & Orange Vitamin C Yogurt Cup",
+  "mealType": "SNACK",
+  "cuisine": "Fusion",
+  "servings": 1,
+  "prepMinutes": 5,
+  "ingredients": [
+   {
+    "food": "kiwi",
+    "grams": 150.0
+   },
+   {
+    "food": "orange",
+    "grams": 150.0
+   },
+   {
+    "food": "greek yogurt",
+    "grams": 150.0
+   }
+  ],
+  "steps": [
+   "Peel and dice kiwi and orange",
+   "Layer with yogurt (a vitamin C rich snack 30-60 minutes before training)"
+  ]
+ },
+ {
+  "name": "Almond Butter Stuffed Dates & Milk",
+  "mealType": "SNACK",
+  "cuisine": "Middle Eastern",
+  "servings": 1,
+  "prepMinutes": 3,
+  "ingredients": [
+   {
+    "food": "dates",
+    "grams": 50.0
+   },
+   {
+    "food": "almond butter",
+    "grams": 20.0
+   },
+   {
+    "food": "milk",
+    "grams": 200.0
+   }
+  ],
+  "steps": [
+   "Pit dates and fill with almond butter",
+   "Serve with a glass of milk"
+  ]
+ },
+ {
+  "name": "Ricotta Blueberry Toast",
+  "mealType": "SNACK",
+  "cuisine": "Italian",
+  "servings": 1,
+  "prepMinutes": 5,
+  "ingredients": [
+   {
+    "food": "ricotta",
+    "grams": 80.0
+   },
+   {
+    "food": "whole wheat bread",
+    "grams": 40.0
+   },
+   {
+    "food": "blueberries",
+    "grams": 80.0
+   },
+   {
+    "food": "honey",
+    "grams": 5.0
+   }
+  ],
+  "steps": [
+   "Toast bread",
+   "Spread ricotta and top with blueberries and honey"
+  ]
+ },
+ {
+  "name": "Peanut Butter Oat Energy Balls",
+  "mealType": "SNACK",
+  "cuisine": "American",
+  "servings": 1,
+  "prepMinutes": 15,
+  "ingredients": [
+   {
+    "food": "rolled oats",
+    "grams": 40.0
+   },
+   {
+    "food": "dates",
+    "grams": 30.0
+   },
+   {
+    "food": "peanut butter",
+    "grams": 20.0
+   },
+   {
+    "food": "ground flaxseed",
+    "grams": 10.0
+   },
+   {
+    "food": "cocoa powder",
+    "grams": 5.0
+   }
+  ],
+  "steps": [
+   "Blend dates until sticky",
+   "Mix in oats, peanut butter, flax and cocoa",
+   "Roll into 4 balls and chill"
+  ]
+ },
+ {
+  "name": "Mozzarella, Tomato & Basil Plate",
+  "mealType": "SNACK",
+  "cuisine": "Italian",
+  "servings": 1,
+  "prepMinutes": 5,
+  "ingredients": [
+   {
+    "food": "mozzarella",
+    "grams": 80.0
+   },
+   {
+    "food": "tomato",
+    "grams": 200.0
+   },
+   {
+    "food": "basil",
+    "grams": 5.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 5.0
+   },
+   {
+    "food": "whole wheat bread",
+    "grams": 30.0
+   }
+  ],
+  "steps": [
+   "Slice mozzarella and tomato",
+   "Arrange with basil and drizzle with oil",
+   "Serve with bread"
+  ]
+ },
+ {
+  "name": "Pear, Cheddar & Walnuts",
+  "mealType": "SNACK",
+  "cuisine": "British",
+  "servings": 1,
+  "prepMinutes": 3,
+  "ingredients": [
+   {
+    "food": "pear",
+    "grams": 170.0
+   },
+   {
+    "food": "cheddar",
+    "grams": 30.0
+   },
+   {
+    "food": "walnuts",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Slice pear and cheddar",
+   "Serve with walnuts"
+  ]
+ },
+ {
+  "name": "Cherry Recovery Smoothie",
+  "mealType": "SNACK",
+  "cuisine": "Fusion",
+  "servings": 1,
+  "prepMinutes": 5,
+  "ingredients": [
+   {
+    "food": "cherries",
+    "grams": 150.0
+   },
+   {
+    "food": "greek yogurt",
+    "grams": 150.0
+   },
+   {
+    "food": "milk",
+    "grams": 150.0
+   },
+   {
+    "food": "rolled oats",
+    "grams": 20.0
+   }
+  ],
+  "steps": [
+   "Pit cherries",
+   "Blend all ingredients until smooth"
+  ]
+ },
+ {
+  "name": "Green Mango Smoothie",
+  "mealType": "SNACK",
+  "cuisine": "Fusion",
+  "servings": 1,
+  "prepMinutes": 5,
+  "ingredients": [
+   {
+    "food": "spinach",
+    "grams": 50.0
+   },
+   {
+    "food": "banana",
+    "grams": 100.0
+   },
+   {
+    "food": "mango",
+    "grams": 100.0
+   },
+   {
+    "food": "greek yogurt",
+    "grams": 150.0
+   },
+   {
+    "food": "milk",
+    "grams": 150.0
+   },
+   {
+    "food": "chia seeds",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Blend all ingredients until smooth",
+   "Serve immediately"
+  ]
+ },
+ {
+  "name": "Sardines on Toast",
+  "mealType": "SNACK",
+  "cuisine": "Portuguese",
+  "servings": 1,
+  "prepMinutes": 5,
+  "ingredients": [
+   {
+    "food": "sardines canned in oil",
+    "grams": 90.0
+   },
+   {
+    "food": "whole wheat bread",
+    "grams": 50.0
+   },
+   {
+    "food": "tomato",
+    "grams": 80.0
+   },
+   {
+    "food": "lemon",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Toast bread",
+   "Top with sliced tomato and sardines",
+   "Squeeze over lemon"
+  ]
+ },
+ {
+  "name": "Orange & Pumpkin Seeds",
+  "mealType": "SNACK",
+  "cuisine": "Fusion",
+  "servings": 1,
+  "prepMinutes": 2,
+  "ingredients": [
+   {
+    "food": "orange",
+    "grams": 200.0
+   },
+   {
+    "food": "pumpkin seeds",
+    "grams": 25.0
+   }
+  ],
+  "steps": [
+   "Peel and segment the orange",
+   "Serve with pumpkin seeds"
+  ]
+ },
+ {
+  "name": "Frozen Berry Hemp Yogurt Bowl",
+  "mealType": "SNACK",
+  "cuisine": "Fusion",
+  "servings": 1,
+  "prepMinutes": 3,
+  "ingredients": [
+   {
+    "food": "frozen mixed berries",
+    "grams": 150.0
+   },
+   {
+    "food": "greek yogurt",
+    "grams": 200.0
+   },
+   {
+    "food": "hemp seeds",
+    "grams": 15.0
+   }
+  ],
+  "steps": [
+   "Thaw berries briefly",
+   "Stir into yogurt and top with hemp seeds"
+  ]
+ },
+ {
+  "name": "Quick Miso Tofu Soup",
+  "mealType": "SNACK",
+  "cuisine": "Japanese",
+  "servings": 1,
+  "prepMinutes": 10,
+  "ingredients": [
+   {
+    "food": "miso paste",
+    "grams": 15.0
+   },
+   {
+    "food": "firm tofu",
+    "grams": 100.0
+   },
+   {
+    "food": "spinach",
+    "grams": 40.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 10.0
+   },
+   {
+    "food": "vegetable broth",
+    "grams": 300.0
+   }
+  ],
+  "steps": [
+   "Simmer broth with cubed tofu and spinach 3 minutes",
+   "Off the heat whisk in miso",
+   "Top with spring onion"
+  ]
+ }
+]

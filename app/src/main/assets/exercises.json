@@ -1,0 +1,709 @@
+[
+ {
+  "id": "fb_repeaters_73",
+  "name": "7:3 Repeaters (20 mm)",
+  "category": "FINGERBOARD",
+  "description": "Intermittent hangs on a 20 mm edge: 6 reps of 7 s on / 3 s off per set, 3 min between sets, at 60-70 % of max total load. Develops forearm capillarisation and oxidative recovery between contractions.",
+  "cues": [
+   "Half-crimp, thumb off",
+   "Shoulders engaged, slight elbow bend",
+   "Stop the set if grip position degrades"
+  ],
+  "sets": 4,
+  "reps": 6,
+  "workSec": 7,
+  "repRestSec": 3,
+  "setRestSec": 180,
+  "loadBasis": "FINGER_1RM",
+  "source": "Lattice Training fingerboard methodology; López-Rivera & González-Badillo (2012) Sports Technology 5:100-110; Medernach et al. (2015) J Strength Cond Res 29:3093-3102",
+  "intensity": 0.65
+ },
+ {
+  "id": "fb_max_hangs_10s",
+  "name": "Max Hangs 10 s (20 mm)",
+  "category": "FINGERBOARD",
+  "description": "Single 10 s hangs on a 20 mm edge at 80-90 % of max total load with full 3 min recovery. Maximises neuromuscular recruitment of the finger flexors with low metabolic fatigue.",
+  "cues": [
+   "Load so the last 2-3 s are hard but clean",
+   "Half-crimp or open-hand only",
+   "Full 3 min rest - this is strength, not endurance"
+  ],
+  "sets": 5,
+  "reps": 1,
+  "workSec": 10,
+  "repRestSec": 0,
+  "setRestSec": 180,
+  "loadBasis": "FINGER_1RM",
+  "source": "Lattice Training fingerboard methodology; López-Rivera & González-Badillo (2012) Sports Technology 5:100-110; Hörst (2016)",
+  "intensity": 0.85
+ },
+ {
+  "id": "fb_density_hangs",
+  "name": "Density Hangs (20 mm)",
+  "category": "FINGERBOARD",
+  "description": "Long 30 s low-intensity hangs (~50-55 % max) to accumulate time-under-tension for connective-tissue conditioning during capacity phases.",
+  "cues": [
+   "Open-hand grip",
+   "Smooth loading, no bouncing",
+   "Effort should feel 6/10"
+  ],
+  "sets": 4,
+  "reps": 1,
+  "workSec": 30,
+  "repRestSec": 0,
+  "setRestSec": 120,
+  "loadBasis": "FINGER_1RM",
+  "source": "Lattice Training density hangs; Baar K. (2017) Sports Med 47(Suppl 1):5-11 (tendon loading)",
+  "intensity": 0.55
+ },
+ {
+  "id": "climb_arc",
+  "name": "ARC Traversing (Aerobic Restoration & Capillarity)",
+  "category": "CLIMBING",
+  "description": "Continuous easy climbing for 20 min at a pump level of 3-4/10. Builds local aerobic capacity and recovery between hard moves.",
+  "cues": [
+   "Stay just below the pump",
+   "Shake out and breathe",
+   "Climb 3-4 grades below your max"
+  ],
+  "sets": 2,
+  "reps": 1,
+  "workSec": 1200,
+  "repRestSec": 0,
+  "setRestSec": 300,
+  "loadBasis": "NONE",
+  "source": "Hörst E. Training for Climbing, 3rd ed. (2016)"
+ },
+ {
+  "id": "climb_limit_bouldering",
+  "name": "Limit Bouldering",
+  "category": "CLIMBING",
+  "description": "4-6 boulders at or near your maximum grade, 3-5 quality attempts each, with 3 min rest between attempts. Builds maximal recruitment and movement skill.",
+  "cues": [
+   "Full rest between attempts",
+   "Stop when attempts get sloppy",
+   "Mix steep, crimpy and dynamic styles"
+  ],
+  "sets": 5,
+  "reps": 1,
+  "workSec": 60,
+  "repRestSec": 0,
+  "setRestSec": 180,
+  "loadBasis": "NONE",
+  "source": "Hörst E. Training for Climbing, 3rd ed. (2016); Lattice Training"
+ },
+ {
+  "id": "climb_4x4",
+  "name": "4x4 Boulder Circuits",
+  "category": "CLIMBING",
+  "description": "Four boulders climbed back-to-back (one set), rested 4 min, repeated 4 times. Classic anaerobic power-endurance protocol.",
+  "cues": [
+   "Choose problems 3-4 grades below max",
+   "Minimal rest between problems within a set",
+   "Stop if technique fails"
+  ],
+  "sets": 4,
+  "reps": 4,
+  "workSec": 60,
+  "repRestSec": 10,
+  "setRestSec": 240,
+  "loadBasis": "NONE",
+  "source": "Hörst E. Training for Climbing, 3rd ed. (2016)"
+ },
+ {
+  "id": "climb_route_intervals",
+  "name": "Route Intervals",
+  "category": "CLIMBING",
+  "description": "Climb a route 2-3 grades below onsight level, rest an equal time to climbing time, repeat. Builds lactate tolerance and route-length endurance.",
+  "cues": [
+   "Work:rest of ~1:1",
+   "Keep a steady pace",
+   "Clip efficiently"
+  ],
+  "sets": 5,
+  "reps": 1,
+  "workSec": 180,
+  "repRestSec": 0,
+  "setRestSec": 180,
+  "loadBasis": "NONE",
+  "source": "Hörst E. Training for Climbing, 3rd ed. (2016)"
+ },
+ {
+  "id": "climb_campus_ladders",
+  "name": "Campus Board Ladders",
+  "category": "CLIMBING",
+  "description": "Explosive ladder moves on a campus board (1-3-5 etc.) with full recovery. Advanced contact-strength and rate-of-force-development training; only for climbers with years of finger training.",
+  "cues": [
+   "Only when fresh and fully warmed up",
+   "Stop at first sign of finger or elbow pain",
+   "Quality over quantity"
+  ],
+  "sets": 5,
+  "reps": 1,
+  "workSec": 10,
+  "repRestSec": 0,
+  "setRestSec": 180,
+  "loadBasis": "NONE",
+  "source": "Hörst E. Training for Climbing, 3rd ed. (2016); Lattice Training"
+ },
+ {
+  "id": "climb_projecting",
+  "name": "Performance Climbing / Projecting",
+  "category": "CLIMBING",
+  "description": "Low-volume, high-quality attempts on goal routes or boulders. Used in the taper/peak phase to express fitness gained.",
+  "cues": [
+   "Long rests",
+   "Visualise sequences",
+   "End the session before fatigue"
+  ],
+  "sets": 4,
+  "reps": 1,
+  "workSec": 300,
+  "repRestSec": 0,
+  "setRestSec": 300,
+  "loadBasis": "NONE",
+  "source": "Hörst E. Training for Climbing, 3rd ed. (2016)"
+ },
+ {
+  "id": "pull_weighted_volume",
+  "name": "Weighted Pull-ups (Volume)",
+  "category": "PULL",
+  "description": "4 sets of 6 at ~75 % of max total load (bodyweight + added). Builds pulling muscle cross-section in the capacity phase.",
+  "cues": [
+   "Full hang to chin over bar",
+   "Controlled 2 s lowering",
+   "2-3 reps in reserve"
+  ],
+  "sets": 4,
+  "reps": 6,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 150,
+  "loadBasis": "PULL_1RM",
+  "source": "ACSM Position Stand: Progression Models in Resistance Training (Med Sci Sports Exerc 2009;41:687-708)",
+  "intensity": 0.75
+ },
+ {
+  "id": "pull_weighted_strength",
+  "name": "Weighted Pull-ups (Max Strength)",
+  "category": "PULL",
+  "description": "5 sets of 3 at 85-90 % of max total load with 3 min rest. Neural strength development for lock-offs and steep climbing.",
+  "cues": [
+   "Brace the core",
+   "Pull elbows to ribs",
+   "Rest the full 3 minutes"
+  ],
+  "sets": 5,
+  "reps": 3,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 180,
+  "loadBasis": "PULL_1RM",
+  "source": "ACSM Position Stand: Progression Models in Resistance Training (Med Sci Sports Exerc 2009;41:687-708)",
+  "intensity": 0.875
+ },
+ {
+  "id": "pull_explosive",
+  "name": "Explosive Pull-ups",
+  "category": "PULL",
+  "description": "Bodyweight pull-ups performed with maximal intent, aiming to pull the chest to the bar. Develops rate of force development.",
+  "cues": [
+   "Fast concentric, controlled descent",
+   "Stop when speed drops",
+   "Full rest between sets"
+  ],
+  "sets": 5,
+  "reps": 3,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 150,
+  "loadBasis": "BODYWEIGHT",
+  "source": "ACSM Position Stand: Progression Models in Resistance Training (Med Sci Sports Exerc 2009;41:687-708); Hörst (2016)"
+ },
+ {
+  "id": "push_ohp",
+  "name": "Overhead Press",
+  "category": "PUSH",
+  "description": "Standing barbell or dumbbell press. Antagonist work to balance the pulling-dominant shoulder of climbers.",
+  "cues": [
+   "Ribs down, glutes squeezed",
+   "Bar path close to the face",
+   "Finish with biceps by the ears"
+  ],
+  "sets": 4,
+  "reps": 6,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 150,
+  "loadBasis": "RPE",
+  "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor; ACSM Position Stand: Progression Models in Resistance Training (Med Sci Sports Exerc 2009;41:687-708)"
+ },
+ {
+  "id": "push_dips",
+  "name": "Weighted Dips",
+  "category": "PUSH",
+  "description": "Parallel-bar dips with added load as tolerated. Strengthens triceps and anterior shoulder for mantles and press moves.",
+  "cues": [
+   "Shoulders depressed, not shrugged",
+   "Descend to ~90 degrees elbow",
+   "Stop if anterior shoulder pain"
+  ],
+  "sets": 4,
+  "reps": 6,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 150,
+  "loadBasis": "RPE",
+  "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor"
+ },
+ {
+  "id": "push_deficit_pushups",
+  "name": "Deficit Push-ups",
+  "category": "PUSH",
+  "description": "Push-ups from parallettes or plates allowing the chest to drop below the hands, increasing scapular range of motion.",
+  "cues": [
+   "Full protraction at the top",
+   "Elbows ~45 degrees from torso",
+   "Slow 3 s lowering"
+  ],
+  "sets": 3,
+  "reps": 12,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 90,
+  "loadBasis": "BODYWEIGHT",
+  "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor"
+ },
+ {
+  "id": "push_reverse_wrist_curl",
+  "name": "Reverse Wrist Curls",
+  "category": "PUSH",
+  "description": "Light dumbbell wrist extensions to strengthen the forearm extensors and reduce lateral elbow overuse risk.",
+  "cues": [
+   "Forearm supported on thigh",
+   "Slow 3 s lowering",
+   "Light load, 15-20 reps"
+  ],
+  "sets": 3,
+  "reps": 15,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 60,
+  "loadBasis": "RPE",
+  "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor"
+ },
+ {
+  "id": "core_front_lever_tuck",
+  "name": "Tuck Front Lever Holds",
+  "category": "CORE",
+  "description": "Isometric tuck front lever holds on a bar or rings. Builds straight-arm scapular depression and trunk tension for steep terrain.",
+  "cues": [
+   "Arms straight, shoulders depressed",
+   "Back flat, hips level with shoulders",
+   "Breathe behind the brace"
+  ],
+  "sets": 5,
+  "reps": 1,
+  "workSec": 10,
+  "repRestSec": 0,
+  "setRestSec": 120,
+  "loadBasis": "BODYWEIGHT",
+  "source": "Hörst (2016); progressive calisthenics"
+ },
+ {
+  "id": "core_front_lever_adv",
+  "name": "Advanced Tuck / Straddle Front Lever",
+  "category": "CORE",
+  "description": "Harder front lever progressions (flat back advanced tuck, one leg or straddle) held for 8 s.",
+  "cues": [
+   "Progress lever length only with clean form",
+   "Posterior pelvic tilt",
+   "Squeeze the bar"
+  ],
+  "sets": 5,
+  "reps": 1,
+  "workSec": 8,
+  "repRestSec": 0,
+  "setRestSec": 150,
+  "loadBasis": "BODYWEIGHT",
+  "source": "Hörst (2016)"
+ },
+ {
+  "id": "core_front_lever_raises",
+  "name": "Front Lever Raises",
+  "category": "CORE",
+  "description": "From hang, raise a straight (or tucked) body to front lever position and lower slowly. Dynamic trunk power.",
+  "cues": [
+   "Lead with the hips",
+   "Lower over 3 s",
+   "Keep arms locked"
+  ],
+  "sets": 4,
+  "reps": 5,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 120,
+  "loadBasis": "BODYWEIGHT",
+  "source": "Hörst (2016)"
+ },
+ {
+  "id": "core_dragonflag",
+  "name": "Dragon Flag Negatives",
+  "category": "CORE",
+  "description": "Lying on a bench holding behind the head, lower a rigid body from vertical over 4-5 s.",
+  "cues": [
+   "Weight on upper back, not neck",
+   "Body rigid like a plank",
+   "Bend knees to regress"
+  ],
+  "sets": 4,
+  "reps": 5,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 120,
+  "loadBasis": "BODYWEIGHT",
+  "source": "Progressive calisthenics; Hörst (2016)"
+ },
+ {
+  "id": "core_hanging_leg_raise",
+  "name": "Hanging Leg Raises",
+  "category": "CORE",
+  "description": "Strict straight-leg raises from a dead hang to toes-to-bar or 90 degrees. Develops hip-flexor and abdominal compression for high feet.",
+  "cues": [
+   "No swinging",
+   "Exhale on the raise",
+   "Control the descent"
+  ],
+  "sets": 3,
+  "reps": 10,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 90,
+  "loadBasis": "BODYWEIGHT",
+  "source": "Hörst (2016)"
+ },
+ {
+  "id": "core_hollow_body",
+  "name": "Hollow Body Hold",
+  "category": "CORE",
+  "description": "Supine hollow position with lower back pressed to the floor. Foundation for body tension.",
+  "cues": [
+   "Lower back glued to floor",
+   "Arms by ears",
+   "Shorten levers if back lifts"
+  ],
+  "sets": 3,
+  "reps": 1,
+  "workSec": 30,
+  "repRestSec": 0,
+  "setRestSec": 60,
+  "loadBasis": "BODYWEIGHT",
+  "source": "Gymnastics conditioning literature"
+ },
+ {
+  "id": "core_pike_compression",
+  "name": "Seated Pike Compression Lifts",
+  "category": "CORE",
+  "description": "Seated with legs straight, hands beside knees, lift the heels off the floor using active hip flexion. Trains active compression for high-steps.",
+  "cues": [
+   "Lean forward slightly",
+   "Lock knees",
+   "Pulse with control"
+  ],
+  "sets": 3,
+  "reps": 10,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 60,
+  "loadBasis": "BODYWEIGHT",
+  "source": "Kurz T. Stretching Scientifically, 4th ed. (2003)"
+ },
+ {
+  "id": "mob_jefferson_curl",
+  "name": "Jefferson Curl (Loaded)",
+  "category": "MOBILITY_LOWER",
+  "description": "Standing on a box with light load (start with 5-10 % bodyweight), segmentally roll down to loaded end-range hamstring and spinal flexion and roll back up.",
+  "cues": [
+   "Chin to chest first, vertebra by vertebra",
+   "Knees locked, 3-4 s down",
+   "Start very light and progress slowly"
+  ],
+  "sets": 3,
+  "reps": 8,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 60,
+  "loadBasis": "BODYWEIGHT",
+  "source": "Kurz T. Stretching Scientifically, 4th ed. (2003); Afonso et al. (2021) Sports Med 51:1305 (strength training vs stretching for ROM)"
+ },
+ {
+  "id": "mob_cossack_squat",
+  "name": "Cossack Squats",
+  "category": "MOBILITY_LOWER",
+  "description": "Lateral squat to one side with the other leg straight. Builds adductor length and single-leg strength for wide stems and drop-knees.",
+  "cues": [
+   "Heel down on bent leg",
+   "Toes up on straight leg",
+   "Alternate sides each rep"
+  ],
+  "sets": 3,
+  "reps": 8,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 60,
+  "loadBasis": "BODYWEIGHT",
+  "source": "Kurz T. Stretching Scientifically, 4th ed. (2003)"
+ },
+ {
+  "id": "mob_frog_stretch",
+  "name": "Frog Stretch (Timed)",
+  "category": "MOBILITY_LOWER",
+  "description": "Kneeling wide with shins parallel, rock hips back to stretch the adductors. Improves turnout and hip-to-wall positioning.",
+  "cues": [
+   "Hips in line with knees",
+   "Breathe into the stretch",
+   "Never force into pain"
+  ],
+  "sets": 3,
+  "reps": 1,
+  "workSec": 45,
+  "repRestSec": 0,
+  "setRestSec": 30,
+  "loadBasis": "NONE",
+  "source": "Kurz T. Stretching Scientifically, 4th ed. (2003); ACSM Guidelines (2021): 30-60 s static holds"
+ },
+ {
+  "id": "mob_middle_split",
+  "name": "Middle Split Progression",
+  "category": "MOBILITY_LOWER",
+  "description": "Horse-stance to wall-supported middle split. Use contract-relax (PNF): 5 s adductor contraction then sink deeper.",
+  "cues": [
+   "Tilt pelvis forward",
+   "Contract 5 s, relax and sink",
+   "Support with hands"
+  ],
+  "sets": 3,
+  "reps": 1,
+  "workSec": 60,
+  "repRestSec": 0,
+  "setRestSec": 30,
+  "loadBasis": "NONE",
+  "source": "Kurz T. Stretching Scientifically, 4th ed. (2003)"
+ },
+ {
+  "id": "mob_90_90",
+  "name": "90-90 Hip Opener Holds",
+  "category": "MOBILITY_LOWER",
+  "description": "Seated with front and back legs at 90 degrees. Hold internal and external hip rotation each side.",
+  "cues": [
+   "Tall spine",
+   "Hinge forward over the front shin",
+   "Switch sides when the beep sounds"
+  ],
+  "sets": 3,
+  "reps": 2,
+  "workSec": 45,
+  "repRestSec": 10,
+  "setRestSec": 30,
+  "loadBasis": "NONE",
+  "source": "Kurz T. Stretching Scientifically, 4th ed. (2003)"
+ },
+ {
+  "id": "mob_couch_stretch",
+  "name": "Couch Stretch (Hip Flexors)",
+  "category": "MOBILITY_LOWER",
+  "description": "Rear knee against a wall, front foot planted: stretches rectus femoris and hip flexors for high-step and heel-hook positions.",
+  "cues": [
+   "Squeeze glute of the back leg",
+   "Ribs down",
+   "Hold each side"
+  ],
+  "sets": 2,
+  "reps": 2,
+  "workSec": 60,
+  "repRestSec": 10,
+  "setRestSec": 30,
+  "loadBasis": "NONE",
+  "source": "Kurz T. Stretching Scientifically, 4th ed. (2003)"
+ },
+ {
+  "id": "mob_pancake",
+  "name": "Pancake Stretch (Loaded)",
+  "category": "MOBILITY_LOWER",
+  "description": "Seated straddle folding forward with a light plate held to the chest. Develops hamstring and adductor length together.",
+  "cues": [
+   "Hinge from hips, not the back",
+   "Knees up",
+   "Light load only"
+  ],
+  "sets": 3,
+  "reps": 1,
+  "workSec": 40,
+  "repRestSec": 0,
+  "setRestSec": 30,
+  "loadBasis": "NONE",
+  "source": "Kurz T. Stretching Scientifically, 4th ed. (2003)"
+ },
+ {
+  "id": "mob_wall_slides",
+  "name": "Wall Slides",
+  "category": "MOBILITY_UPPER",
+  "description": "Back to the wall, slide arms overhead while keeping contact. Trains scapular upward rotation and posterior tilt.",
+  "cues": [
+   "Lower back against wall",
+   "Elbows and wrists touch",
+   "Slow tempo"
+  ],
+  "sets": 3,
+  "reps": 10,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 45,
+  "loadBasis": "NONE",
+  "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor"
+ },
+ {
+  "id": "mob_ytw",
+  "name": "Prone Y-T-Ws",
+  "category": "MOBILITY_UPPER",
+  "description": "Lying prone, lift arms in Y, T and W shapes. Strengthens lower trapezius and rotator cuff.",
+  "cues": [
+   "Thumbs up",
+   "Squeeze shoulder blades down and back",
+   "Pause 2 s at the top"
+  ],
+  "sets": 3,
+  "reps": 8,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 45,
+  "loadBasis": "NONE",
+  "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor"
+ },
+ {
+  "id": "mob_german_hang",
+  "name": "German Hangs",
+  "category": "MOBILITY_UPPER",
+  "description": "Hang from rings or a bar with arms behind the body for shoulder extension mobility. Feet supported to control load.",
+  "cues": [
+   "Keep feet on the floor to start",
+   "Relax into the stretch",
+   "Exit slowly"
+  ],
+  "sets": 3,
+  "reps": 1,
+  "workSec": 20,
+  "repRestSec": 0,
+  "setRestSec": 60,
+  "loadBasis": "NONE",
+  "source": "Gymnastics conditioning; Vagy J. Climb Injury-Free (2016), The Climbing Doctor"
+ },
+ {
+  "id": "mob_thoracic_rotation",
+  "name": "Open-Book Thoracic Rotations",
+  "category": "MOBILITY_UPPER",
+  "description": "Side-lying with knees bent, rotate the top arm open to the floor. Restores thoracic rotation for reaches and flagging.",
+  "cues": [
+   "Keep knees together",
+   "Follow your hand with your eyes",
+   "Exhale as you rotate"
+  ],
+  "sets": 2,
+  "reps": 10,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 30,
+  "loadBasis": "NONE",
+  "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor"
+ },
+ {
+  "id": "mob_band_external_rotation",
+  "name": "Banded External Rotations",
+  "category": "MOBILITY_UPPER",
+  "description": "Elbow at the side bent to 90 degrees, rotate the forearm outward against a light band. Rotator-cuff prehab.",
+  "cues": [
+   "Towel under the elbow",
+   "Slow 3 s return",
+   "No shrugging"
+  ],
+  "sets": 3,
+  "reps": 15,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 45,
+  "loadBasis": "NONE",
+  "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor"
+ },
+ {
+  "id": "mob_scap_pullups",
+  "name": "Scapular Pull-ups",
+  "category": "MOBILITY_UPPER",
+  "description": "From a dead hang, depress and retract the scapulae without bending the elbows. Trains active shoulder engagement before hard pulling.",
+  "cues": [
+   "Arms straight",
+   "Pull shoulders away from ears",
+   "Pause 2 s"
+  ],
+  "sets": 3,
+  "reps": 8,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 45,
+  "loadBasis": "BODYWEIGHT",
+  "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor"
+ },
+ {
+  "id": "mob_doorway_pec",
+  "name": "Doorway Pec Stretch",
+  "category": "MOBILITY_UPPER",
+  "description": "Forearm on a door frame at shoulder height, step through to stretch pectorals that tighten from climbing posture.",
+  "cues": [
+   "Elbow at shoulder height",
+   "Do not arch lower back",
+   "Hold each side"
+  ],
+  "sets": 2,
+  "reps": 2,
+  "workSec": 30,
+  "repRestSec": 10,
+  "setRestSec": 30,
+  "loadBasis": "NONE",
+  "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor"
+ },
+ {
+  "id": "bench_max_hang_5s",
+  "name": "5 s Max Hang Test (20 mm)",
+  "category": "BENCHMARK",
+  "description": "After a thorough warm-up, work up in load to the heaviest clean 5 s hang on a 20 mm edge (half-crimp). Record the added weight (negative if assisted).",
+  "cues": [
+   "Warm up progressively",
+   "3 min between attempts",
+   "Max 5 attempts"
+  ],
+  "sets": 5,
+  "reps": 1,
+  "workSec": 5,
+  "repRestSec": 0,
+  "setRestSec": 180,
+  "loadBasis": "NONE",
+  "source": "Lattice Training fingerboard methodology; López-Rivera & González-Badillo (2012) Sports Technology 5:100-110"
+ },
+ {
+  "id": "bench_pullup_1rm",
+  "name": "Weighted Pull-up 1RM Test",
+  "category": "BENCHMARK",
+  "description": "Work up to the heaviest single strict pull-up (chin over bar from a dead hang). Record the added weight.",
+  "cues": [
+   "Strict form, no kip",
+   "3-5 min between attempts",
+   "Stop after first failed attempt"
+  ],
+  "sets": 5,
+  "reps": 1,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 240,
+  "loadBasis": "NONE",
+  "source": "ACSM Position Stand: Progression Models in Resistance Training (Med Sci Sports Exerc 2009;41:687-708)"
+ }
+]
