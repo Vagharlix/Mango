@@ -122,7 +122,7 @@ fun GroceryScreen(onOpenRecipe: (id: Long, portions: Double, swaps: Map<String, 
                                 Box {
                                     IconButton(onClick = { menu = true }) { Icon(Icons.Filled.ThumbDown, contentDescription = "Don't like") }
                                     DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
-                                        DropdownMenuItem(text = { Text("Don't like this recipe") }, onClick = {
+                                        DropdownMenuItem(text = { Text("Remove recipe from my book") }, onClick = {
                                             menu = false
                                             vm.hideRecipe(m.slot)
                                         })

@@ -169,7 +169,7 @@ class Converters {
         UserProfile::class, Food::class, BarcodeProduct::class, PantryItem::class,
         Recipe::class, MealSlot::class, Exercise::class, Benchmark::class,
     ],
-    version = 5,
+    version = 6,
     exportSchema = false,
 )
 @TypeConverters(Converters::class)
@@ -225,9 +225,16 @@ abstract class MangoDatabase : RoomDatabase() {
             }
         }
 
+        /** v6 adds the recipe source (French & Italian classics). */
+        private val MIGRATION_5_6 = object : Migration(5, 6) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE recipes ADD COLUMN source TEXT NOT NULL DEFAULT ''")
+            }
+        }
+
         fun create(context: Context): MangoDatabase =
             Room.databaseBuilder(context, MangoDatabase::class.java, "mango.db")
-                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
                 .fallbackToDestructiveMigration()
                 .build()
     }

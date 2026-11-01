@@ -144,7 +144,7 @@ class MealPlanViewModel(repo: Repository) : MangoViewModel(repo) {
 
     fun hideRecipe(slot: MealSlot) = launchSafe {
         repo.hideRecipe(slot.recipeId)
-        toast("Recipe hidden – you can restore it from the recipe list.")
+        toast("Removed from your book – put it back any time in Recipes › Removed.")
     }
 
     fun dislikeIngredient(term: String) = launchSafe {

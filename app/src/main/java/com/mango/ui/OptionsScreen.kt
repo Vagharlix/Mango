@@ -215,7 +215,7 @@ fun OptionsScreen(
                         }
                         Switch(checked = p.southernHemisphere, onCheckedChange = { v -> vm.quickSave { it.copy(southernHemisphere = v) } })
                     }
-                    OptionRow("About & sources", "Science references · version 0.6 beta", Sky, onClick = onOpenAbout)
+                    OptionRow("About & sources", "Science references · version 0.7 beta", Sky, onClick = onOpenAbout)
                 }
             }
         }
@@ -488,7 +488,7 @@ fun AboutScreen(onBack: () -> Unit) {
         item { BackHeader("About & sources", onBack) }
         item {
             Text(
-                "Mango 0.6 beta · works fully offline · no account, no AI service, no tracking. Every calculation runs on this device.",
+                "Mango 0.7 beta · works fully offline · no account, no AI service, no tracking. Every calculation runs on this device.",
                 fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }

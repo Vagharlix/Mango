@@ -9,7 +9,7 @@ import com.mango.data.Recipe
  */
 object FoodPreferences {
     /** Carbs that can stand in for each other as the starchy part of a dish. */
-    val SWAPPABLE_CARBS = listOf("rice", "pasta", "potatoes", "quinoa", "noodles", "barley", "buckwheat")
+    val SWAPPABLE_CARBS = listOf("rice", "pasta", "potatoes", "quinoa", "noodles", "polenta", "barley", "buckwheat")
 
     /** Bread, wraps and oats shape the dish itself, so recipes using them are skipped rather than adapted. */
     val CARB_TYPES = SWAPPABLE_CARBS + listOf("bread & wraps", "oats")
@@ -18,7 +18,7 @@ object FoodPreferences {
 
     private val CARB_FOOD = mapOf(
         "rice" to "brown rice", "pasta" to "whole wheat pasta", "potatoes" to "potato", "quinoa" to "quinoa",
-        "noodles" to "rice noodles", "barley" to "barley", "buckwheat" to "buckwheat groats",
+        "noodles" to "rice noodles", "polenta" to "polenta", "barley" to "barley", "buckwheat" to "buckwheat groats",
     )
 
     /** Closest alternatives by cut and cooking method: mince for mince, whole cuts for whole cuts, oily fish for oily fish. */
@@ -36,6 +36,11 @@ object FoodPreferences {
         "canned tuna in water" to listOf("sardines canned in oil"),
         "sardines canned in oil" to listOf("canned tuna in water"),
         "chicken broth" to listOf("vegetable broth"),
+        "veal" to listOf("chicken breast", "pork tenderloin", "chicken thigh"),
+        "stewing beef" to listOf("chicken thigh", "pork tenderloin"),
+        "cooked ham" to listOf("chicken breast"),
+        "clams" to listOf("shrimp"),
+        // Lardons and prosciutto define their dishes (quiche lorraine, saltimbocca): skipped rather than swapped.
     )
 
     /**

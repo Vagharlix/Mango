@@ -5171,5 +5171,1225 @@
    "Off the heat whisk in miso",
    "Top with spring onion"
   ]
+ },
+ {
+  "name": "Quiche Lorraine",
+  "mealType": "LUNCH",
+  "cuisine": "French",
+  "servings": 4,
+  "prepMinutes": 70,
+  "ingredients": [
+   {
+    "food": "shortcrust pastry",
+    "grams": 230.0
+   },
+   {
+    "food": "eggs",
+    "grams": 300.0
+   },
+   {
+    "food": "milk",
+    "grams": 250.0
+   },
+   {
+    "food": "creme fraiche (15%)",
+    "grams": 150.0
+   },
+   {
+    "food": "lardons",
+    "grams": 150.0
+   },
+   {
+    "food": "emmental",
+    "grams": 60.0
+   },
+   {
+    "food": "nutmeg",
+    "grams": 1.0
+   },
+   {
+    "food": "romaine lettuce",
+    "grams": 200.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 10.0
+   },
+   {
+    "food": "dijon mustard",
+    "grams": 10.0
+   },
+   {
+    "food": "lemon",
+    "grams": 15.0
+   }
+  ],
+  "steps": [
+   "Heat the oven to 200 C. Line a deep 24 cm tart tin with the pastry, prick the base and chill 20 minutes",
+   "Blind bake 15 minutes with baking beans, then 5 minutes without",
+   "Fry the lardons until golden and drain on kitchen paper",
+   "Whisk eggs, milk, creme fraiche, nutmeg and black pepper",
+   "Scatter lardons and grated emmental in the case and pour in the custard",
+   "Bake at 170 C for 30-35 minutes until just set with a slight wobble, then rest 10 minutes",
+   "Serve warm with the lettuce dressed in olive oil, mustard and lemon"
+  ],
+  "batchMeals": 2,
+  "source": "Felicity Cloake, The Guardian - \"How to cook the perfect...\" quiche lorraine"
+ },
+ {
+  "name": "Hachis Parmentier",
+  "mealType": "DINNER",
+  "cuisine": "French",
+  "servings": 4,
+  "prepMinutes": 60,
+  "ingredients": [
+   {
+    "food": "lean beef mince",
+    "grams": 500.0
+   },
+   {
+    "food": "potato",
+    "grams": 900.0
+   },
+   {
+    "food": "milk",
+    "grams": 150.0
+   },
+   {
+    "food": "butter",
+    "grams": 15.0
+   },
+   {
+    "food": "onion",
+    "grams": 150.0
+   },
+   {
+    "food": "carrot",
+    "grams": 150.0
+   },
+   {
+    "food": "garlic",
+    "grams": 8.0
+   },
+   {
+    "food": "tomato paste",
+    "grams": 30.0
+   },
+   {
+    "food": "vegetable broth",
+    "grams": 150.0
+   },
+   {
+    "food": "emmental",
+    "grams": 50.0
+   },
+   {
+    "food": "nutmeg",
+    "grams": 1.0
+   },
+   {
+    "food": "dried thyme",
+    "grams": 1.0
+   },
+   {
+    "food": "green beans",
+    "grams": 400.0
+   }
+  ],
+  "steps": [
+   "Boil the peeled potatoes 20 minutes and mash with warm milk, butter and nutmeg",
+   "Brown the beef with finely chopped onion, carrot and garlic",
+   "Stir in tomato paste and thyme, add the broth and simmer 10 minutes",
+   "Spread the meat in a baking dish, cover with the mash and grated emmental",
+   "Bake at 200 C for 25 minutes until golden",
+   "Serve with steamed green beans"
+  ],
+  "batchMeals": 3,
+  "source": "Marmiton - top-rated hachis parmentier"
+ },
+ {
+  "name": "Poulet Basquaise",
+  "mealType": "DINNER",
+  "cuisine": "French",
+  "servings": 4,
+  "prepMinutes": 60,
+  "ingredients": [
+   {
+    "food": "chicken thigh",
+    "grams": 600.0
+   },
+   {
+    "food": "bell pepper",
+    "grams": 450.0
+   },
+   {
+    "food": "tomato",
+    "grams": 400.0
+   },
+   {
+    "food": "onion",
+    "grams": 150.0
+   },
+   {
+    "food": "garlic",
+    "grams": 10.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 20.0
+   },
+   {
+    "food": "white wine",
+    "grams": 100.0
+   },
+   {
+    "food": "chili flakes",
+    "grams": 2.0
+   },
+   {
+    "food": "dried thyme",
+    "grams": 1.0
+   },
+   {
+    "food": "white rice",
+    "grams": 280.0
+   }
+  ],
+  "steps": [
+   "Brown the chicken pieces in olive oil and set aside",
+   "Soften sliced onion and peppers 10 minutes, add garlic",
+   "Add chopped tomatoes, wine, chili (Espelette pepper if you have it) and thyme",
+   "Return the chicken, cover and simmer 35 minutes",
+   "Cook the rice and serve together"
+  ],
+  "batchMeals": 3,
+  "source": "Marmiton - top-rated poulet basquaise"
+ },
+ {
+  "name": "Boeuf Bourguignon",
+  "mealType": "DINNER",
+  "cuisine": "French",
+  "servings": 4,
+  "prepMinutes": 180,
+  "ingredients": [
+   {
+    "food": "stewing beef",
+    "grams": 700.0
+   },
+   {
+    "food": "lardons",
+    "grams": 100.0
+   },
+   {
+    "food": "red wine",
+    "grams": 500.0
+   },
+   {
+    "food": "onion",
+    "grams": 200.0
+   },
+   {
+    "food": "carrot",
+    "grams": 300.0
+   },
+   {
+    "food": "mushrooms",
+    "grams": 250.0
+   },
+   {
+    "food": "garlic",
+    "grams": 10.0
+   },
+   {
+    "food": "tomato paste",
+    "grams": 20.0
+   },
+   {
+    "food": "all-purpose flour",
+    "grams": 20.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 15.0
+   },
+   {
+    "food": "dried thyme",
+    "grams": 1.0
+   },
+   {
+    "food": "vegetable broth",
+    "grams": 200.0
+   },
+   {
+    "food": "potato",
+    "grams": 800.0
+   }
+  ],
+  "steps": [
+   "Heat the oven to 150 C. Brown the beef cubes in batches in oil and set aside",
+   "Fry the lardons, then soften onion and carrot in the fat",
+   "Sprinkle over the flour, stir in tomato paste and garlic",
+   "Pour in the wine and broth, add thyme and the beef, bring to a simmer",
+   "Cover and braise in the oven 2.5 hours",
+   "Brown the mushrooms and add them for the last 30 minutes",
+   "Serve with boiled potatoes"
+  ],
+  "batchMeals": 3,
+  "source": "Felicity Cloake, The Guardian - \"How to cook the perfect...\" boeuf bourguignon"
+ },
+ {
+  "name": "Blanquette de Veau",
+  "mealType": "DINNER",
+  "cuisine": "French",
+  "servings": 4,
+  "prepMinutes": 120,
+  "ingredients": [
+   {
+    "food": "veal",
+    "grams": 700.0
+   },
+   {
+    "food": "carrot",
+    "grams": 300.0
+   },
+   {
+    "food": "onion",
+    "grams": 150.0
+   },
+   {
+    "food": "leek",
+    "grams": 150.0
+   },
+   {
+    "food": "mushrooms",
+    "grams": 250.0
+   },
+   {
+    "food": "chicken broth",
+    "grams": 800.0
+   },
+   {
+    "food": "butter",
+    "grams": 20.0
+   },
+   {
+    "food": "all-purpose flour",
+    "grams": 25.0
+   },
+   {
+    "food": "creme fraiche (15%)",
+    "grams": 120.0
+   },
+   {
+    "food": "eggs",
+    "grams": 50.0
+   },
+   {
+    "food": "lemon",
+    "grams": 20.0
+   },
+   {
+    "food": "white rice",
+    "grams": 280.0
+   },
+   {
+    "food": "parsley",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Simmer the veal in the broth with carrot, onion and leek for 1.5 hours, skimming",
+   "Melt butter, stir in flour 1 minute, then whisk in 500 ml of strained cooking liquid until smooth",
+   "Add the mushrooms and cook 10 minutes",
+   "Off the heat, whisk creme fraiche, egg yolk and lemon juice and stir into the sauce",
+   "Return veal and vegetables to the sauce",
+   "Serve with rice and parsley"
+  ],
+  "batchMeals": 3,
+  "source": "Marmiton - top-rated blanquette de veau"
+ },
+ {
+  "name": "Petit Sale aux Lentilles",
+  "mealType": "DINNER",
+  "cuisine": "French",
+  "servings": 4,
+  "prepMinutes": 70,
+  "ingredients": [
+   {
+    "food": "pork tenderloin",
+    "grams": 500.0
+   },
+   {
+    "food": "lardons",
+    "grams": 100.0
+   },
+   {
+    "food": "lentils",
+    "grams": 280.0
+   },
+   {
+    "food": "carrot",
+    "grams": 250.0
+   },
+   {
+    "food": "onion",
+    "grams": 150.0
+   },
+   {
+    "food": "garlic",
+    "grams": 8.0
+   },
+   {
+    "food": "dijon mustard",
+    "grams": 15.0
+   },
+   {
+    "food": "dried thyme",
+    "grams": 1.0
+   },
+   {
+    "food": "chicken broth",
+    "grams": 900.0
+   },
+   {
+    "food": "parsley",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Brown the lardons, then the sliced pork, and set aside",
+   "Soften onion, carrot and garlic",
+   "Add rinsed green lentils, thyme and broth and simmer 25 minutes",
+   "Return the pork and lardons for the last 10 minutes",
+   "Stir in the mustard and finish with parsley"
+  ],
+  "batchMeals": 3,
+  "source": "Marmiton - top-rated petit sale aux lentilles"
+ },
+ {
+  "name": "Soupe au Pistou",
+  "mealType": "LUNCH",
+  "cuisine": "French",
+  "servings": 4,
+  "prepMinutes": 50,
+  "ingredients": [
+   {
+    "food": "white beans",
+    "grams": 400.0
+   },
+   {
+    "food": "green beans",
+    "grams": 200.0
+   },
+   {
+    "food": "zucchini",
+    "grams": 300.0
+   },
+   {
+    "food": "potato",
+    "grams": 300.0
+   },
+   {
+    "food": "carrot",
+    "grams": 200.0
+   },
+   {
+    "food": "leek",
+    "grams": 150.0
+   },
+   {
+    "food": "tomato",
+    "grams": 300.0
+   },
+   {
+    "food": "whole wheat pasta",
+    "grams": 120.0
+   },
+   {
+    "food": "vegetable broth",
+    "grams": 1400.0
+   },
+   {
+    "food": "basil",
+    "grams": 30.0
+   },
+   {
+    "food": "garlic",
+    "grams": 10.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 30.0
+   },
+   {
+    "food": "parmesan",
+    "grams": 50.0
+   }
+  ],
+  "steps": [
+   "Simmer diced potato, carrot and leek in the broth 15 minutes",
+   "Add zucchini, green beans, tomato, white beans and pasta and cook 10 minutes",
+   "Pound or blend basil, garlic, olive oil and parmesan into a pistou",
+   "Serve the soup with a spoonful of pistou stirred into each bowl"
+  ],
+  "batchMeals": 3,
+  "source": "Marmiton - top-rated soupe au pistou"
+ },
+ {
+  "name": "Poulet a la Moutarde",
+  "mealType": "DINNER",
+  "cuisine": "French",
+  "servings": 2,
+  "prepMinutes": 35,
+  "ingredients": [
+   {
+    "food": "chicken breast",
+    "grams": 320.0
+   },
+   {
+    "food": "dijon mustard",
+    "grams": 30.0
+   },
+   {
+    "food": "creme fraiche (15%)",
+    "grams": 100.0
+   },
+   {
+    "food": "onion",
+    "grams": 80.0
+   },
+   {
+    "food": "white wine",
+    "grams": 60.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 10.0
+   },
+   {
+    "food": "green beans",
+    "grams": 300.0
+   },
+   {
+    "food": "potato",
+    "grams": 400.0
+   },
+   {
+    "food": "dried thyme",
+    "grams": 1.0
+   }
+  ],
+  "steps": [
+   "Boil the potatoes 15 minutes",
+   "Brown the chicken in oil 5 minutes per side and set aside",
+   "Soften the onion, deglaze with wine",
+   "Stir in mustard, creme fraiche and thyme, return the chicken and simmer 8 minutes",
+   "Serve with potatoes and steamed green beans"
+  ],
+  "batchMeals": 2,
+  "source": "Marmiton - top-rated poulet a la moutarde"
+ },
+ {
+  "name": "Galettes Completes",
+  "mealType": "LUNCH",
+  "cuisine": "French",
+  "servings": 2,
+  "prepMinutes": 25,
+  "ingredients": [
+   {
+    "food": "buckwheat flour",
+    "grams": 120.0
+   },
+   {
+    "food": "eggs",
+    "grams": 150.0
+   },
+   {
+    "food": "cooked ham",
+    "grams": 120.0
+   },
+   {
+    "food": "emmental",
+    "grams": 50.0
+   },
+   {
+    "food": "butter",
+    "grams": 10.0
+   },
+   {
+    "food": "arugula",
+    "grams": 60.0
+   },
+   {
+    "food": "tomato",
+    "grams": 150.0
+   }
+  ],
+  "steps": [
+   "Whisk the buckwheat flour with 300 ml water and a pinch of salt and rest 30 minutes (or overnight)",
+   "Cook a thin galette in a hot buttered pan",
+   "Crack an egg in the centre, add ham and grated emmental",
+   "When the white sets, fold the edges in to make a square",
+   "Serve with arugula and sliced tomato"
+  ],
+  "source": "Marmiton - top-rated galette complete"
+ },
+ {
+  "name": "Croque-Monsieur",
+  "mealType": "LUNCH",
+  "cuisine": "French",
+  "servings": 1,
+  "prepMinutes": 20,
+  "ingredients": [
+   {
+    "food": "whole wheat bread",
+    "grams": 100.0
+   },
+   {
+    "food": "cooked ham",
+    "grams": 60.0
+   },
+   {
+    "food": "emmental",
+    "grams": 30.0
+   },
+   {
+    "food": "milk",
+    "grams": 80.0
+   },
+   {
+    "food": "all-purpose flour",
+    "grams": 8.0
+   },
+   {
+    "food": "butter",
+    "grams": 5.0
+   },
+   {
+    "food": "nutmeg",
+    "grams": 0.5
+   },
+   {
+    "food": "romaine lettuce",
+    "grams": 80.0
+   },
+   {
+    "food": "tomato",
+    "grams": 100.0
+   }
+  ],
+  "steps": [
+   "Make a quick bechamel: melt butter, stir in flour, whisk in milk and nutmeg until thick",
+   "Spread a little bechamel on the bread, add ham and half the emmental, close the sandwich",
+   "Top with the rest of the bechamel and emmental",
+   "Bake at 220 C or grill 8-10 minutes until bubbling",
+   "Serve with a lettuce and tomato salad"
+  ],
+  "source": "Marmiton - top-rated croque-monsieur"
+ },
+ {
+  "name": "Lasagne alla Bolognese",
+  "mealType": "DINNER",
+  "cuisine": "Italian",
+  "servings": 4,
+  "prepMinutes": 150,
+  "ingredients": [
+   {
+    "food": "lasagna sheets",
+    "grams": 250.0
+   },
+   {
+    "food": "lean beef mince",
+    "grams": 500.0
+   },
+   {
+    "food": "onion",
+    "grams": 100.0
+   },
+   {
+    "food": "carrot",
+    "grams": 100.0
+   },
+   {
+    "food": "celery",
+    "grams": 80.0
+   },
+   {
+    "food": "canned tomatoes",
+    "grams": 400.0
+   },
+   {
+    "food": "tomato paste",
+    "grams": 30.0
+   },
+   {
+    "food": "red wine",
+    "grams": 100.0
+   },
+   {
+    "food": "milk",
+    "grams": 500.0
+   },
+   {
+    "food": "butter",
+    "grams": 25.0
+   },
+   {
+    "food": "all-purpose flour",
+    "grams": 30.0
+   },
+   {
+    "food": "nutmeg",
+    "grams": 1.0
+   },
+   {
+    "food": "parmesan",
+    "grams": 60.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 10.0
+   },
+   {
+    "food": "arugula",
+    "grams": 120.0
+   }
+  ],
+  "steps": [
+   "Ragu: soften finely chopped onion, carrot and celery in oil, then brown the beef",
+   "Add the wine and let it evaporate, then tomato paste, tomatoes and 100 ml of the milk",
+   "Simmer very gently 2 hours (best made the day before)",
+   "Bechamel: melt butter, stir in flour 1 minute, whisk in 400 ml milk until thick, season with nutmeg",
+   "Layer ragu, sheets, bechamel and parmesan 5-6 times, ending with bechamel and parmesan",
+   "Bake at 180 C for 40 minutes and rest 15 minutes",
+   "Serve with dressed arugula"
+  ],
+  "batchMeals": 3,
+  "source": "Accademia Italiana della Cucina (registered Bologna recipe) via GialloZafferano; Felicity Cloake, The Guardian - \"How to cook the perfect...\" lasagne"
+ },
+ {
+  "name": "Ossobuco alla Milanese with Saffron Risotto",
+  "mealType": "DINNER",
+  "cuisine": "Italian",
+  "servings": 2,
+  "prepMinutes": 120,
+  "ingredients": [
+   {
+    "food": "veal",
+    "grams": 340.0
+   },
+   {
+    "food": "all-purpose flour",
+    "grams": 15.0
+   },
+   {
+    "food": "onion",
+    "grams": 80.0
+   },
+   {
+    "food": "carrot",
+    "grams": 80.0
+   },
+   {
+    "food": "celery",
+    "grams": 60.0
+   },
+   {
+    "food": "white wine",
+    "grams": 100.0
+   },
+   {
+    "food": "canned tomatoes",
+    "grams": 150.0
+   },
+   {
+    "food": "chicken broth",
+    "grams": 600.0
+   },
+   {
+    "food": "lemon",
+    "grams": 15.0
+   },
+   {
+    "food": "parsley",
+    "grams": 10.0
+   },
+   {
+    "food": "garlic",
+    "grams": 5.0
+   },
+   {
+    "food": "white rice",
+    "grams": 140.0
+   },
+   {
+    "food": "parmesan",
+    "grams": 30.0
+   },
+   {
+    "food": "butter",
+    "grams": 15.0
+   },
+   {
+    "food": "saffron",
+    "grams": 0.2
+   },
+   {
+    "food": "olive oil",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Dust the veal in flour and brown in oil",
+   "Soften onion, carrot and celery, add wine and tomatoes, return the veal",
+   "Cover and simmer 1.5 hours with a little broth, adding more if needed",
+   "Risotto: toast rice in half the butter, add hot broth a ladle at a time for 18 minutes, then saffron, parmesan and the rest of the butter",
+   "Gremolata: chop lemon zest, garlic and parsley and scatter over the veal",
+   "Serve the ossobuco on the risotto"
+  ],
+  "source": "GialloZafferano - classic version ossobuco alla milanese"
+ },
+ {
+  "name": "Pasta e Fagioli",
+  "mealType": "LUNCH",
+  "cuisine": "Italian",
+  "servings": 4,
+  "prepMinutes": 45,
+  "ingredients": [
+   {
+    "food": "white beans",
+    "grams": 500.0
+   },
+   {
+    "food": "whole wheat pasta",
+    "grams": 200.0
+   },
+   {
+    "food": "canned tomatoes",
+    "grams": 400.0
+   },
+   {
+    "food": "onion",
+    "grams": 120.0
+   },
+   {
+    "food": "carrot",
+    "grams": 120.0
+   },
+   {
+    "food": "celery",
+    "grams": 100.0
+   },
+   {
+    "food": "garlic",
+    "grams": 10.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 20.0
+   },
+   {
+    "food": "vegetable broth",
+    "grams": 1000.0
+   },
+   {
+    "food": "parmesan",
+    "grams": 40.0
+   },
+   {
+    "food": "dried oregano",
+    "grams": 1.0
+   },
+   {
+    "food": "chili flakes",
+    "grams": 1.0
+   }
+  ],
+  "steps": [
+   "Soften onion, carrot, celery and garlic in olive oil",
+   "Add tomatoes, oregano, chili, broth and half the beans",
+   "mash the rest and stir in for creaminess",
+   "Simmer 15 minutes, add the pasta and cook until tender",
+   "Rest 5 minutes and serve with parmesan"
+  ],
+  "batchMeals": 3,
+  "source": "GialloZafferano - classic version pasta e fagioli"
+ },
+ {
+  "name": "Pesto Genovese Pasta with Chicken",
+  "mealType": "LUNCH",
+  "cuisine": "Italian",
+  "servings": 2,
+  "prepMinutes": 25,
+  "ingredients": [
+   {
+    "food": "whole wheat pasta",
+    "grams": 140.0
+   },
+   {
+    "food": "chicken breast",
+    "grams": 260.0
+   },
+   {
+    "food": "green beans",
+    "grams": 200.0
+   },
+   {
+    "food": "potato",
+    "grams": 150.0
+   },
+   {
+    "food": "basil",
+    "grams": 40.0
+   },
+   {
+    "food": "pine nuts",
+    "grams": 20.0
+   },
+   {
+    "food": "parmesan",
+    "grams": 30.0
+   },
+   {
+    "food": "garlic",
+    "grams": 4.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 20.0
+   },
+   {
+    "food": "lemon",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Blend basil, toasted pine nuts, garlic, parmesan, olive oil and lemon into pesto",
+   "Grill the chicken and slice",
+   "Boil diced potato 8 minutes, add pasta and green beans and cook until the pasta is done",
+   "Drain, keeping a splash of water, and toss with pesto and chicken"
+  ],
+  "source": "GialloZafferano - classic version pesto alla genovese"
+ },
+ {
+  "name": "Saltimbocca alla Romana",
+  "mealType": "DINNER",
+  "cuisine": "Italian",
+  "servings": 2,
+  "prepMinutes": 25,
+  "ingredients": [
+   {
+    "food": "veal",
+    "grams": 300.0
+   },
+   {
+    "food": "prosciutto",
+    "grams": 50.0
+   },
+   {
+    "food": "dried sage",
+    "grams": 2.0
+   },
+   {
+    "food": "all-purpose flour",
+    "grams": 15.0
+   },
+   {
+    "food": "butter",
+    "grams": 10.0
+   },
+   {
+    "food": "white wine",
+    "grams": 80.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 10.0
+   },
+   {
+    "food": "potato",
+    "grams": 400.0
+   },
+   {
+    "food": "spinach",
+    "grams": 300.0
+   },
+   {
+    "food": "garlic",
+    "grams": 4.0
+   },
+   {
+    "food": "lemon",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Boil or roast the potatoes",
+   "Flatten the veal escalopes, top each with prosciutto and sage and secure with a toothpick",
+   "Dust lightly in flour and fry in oil and butter 2 minutes per side",
+   "Deglaze the pan with wine to make a quick sauce",
+   "Wilt the spinach with garlic and lemon and serve"
+  ],
+  "source": "GialloZafferano - classic version saltimbocca alla romana"
+ },
+ {
+  "name": "Polenta con Ragu",
+  "mealType": "DINNER",
+  "cuisine": "Italian",
+  "servings": 4,
+  "prepMinutes": 70,
+  "ingredients": [
+   {
+    "food": "polenta",
+    "grams": 280.0
+   },
+   {
+    "food": "lean beef mince",
+    "grams": 450.0
+   },
+   {
+    "food": "canned tomatoes",
+    "grams": 600.0
+   },
+   {
+    "food": "onion",
+    "grams": 120.0
+   },
+   {
+    "food": "carrot",
+    "grams": 120.0
+   },
+   {
+    "food": "celery",
+    "grams": 80.0
+   },
+   {
+    "food": "garlic",
+    "grams": 8.0
+   },
+   {
+    "food": "red wine",
+    "grams": 100.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 15.0
+   },
+   {
+    "food": "parmesan",
+    "grams": 50.0
+   },
+   {
+    "food": "butter",
+    "grams": 15.0
+   },
+   {
+    "food": "broccoli",
+    "grams": 400.0
+   }
+  ],
+  "steps": [
+   "Soften onion, carrot, celery and garlic in oil and brown the beef",
+   "Add wine, then tomatoes, and simmer 45 minutes",
+   "Whisk polenta into 1.2 litres of boiling salted water and stir 30-40 minutes (or per packet)",
+   "Finish the polenta with butter and parmesan",
+   "Serve topped with ragu and steamed broccoli"
+  ],
+  "batchMeals": 3,
+  "source": "GialloZafferano - classic version polenta con ragu"
+ },
+ {
+  "name": "Frittata di Zucchine",
+  "mealType": "BREAKFAST",
+  "cuisine": "Italian",
+  "servings": 1,
+  "prepMinutes": 15,
+  "ingredients": [
+   {
+    "food": "eggs",
+    "grams": 150.0
+   },
+   {
+    "food": "zucchini",
+    "grams": 150.0
+   },
+   {
+    "food": "parmesan",
+    "grams": 15.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 5.0
+   },
+   {
+    "food": "onion",
+    "grams": 30.0
+   },
+   {
+    "food": "whole wheat bread",
+    "grams": 60.0
+   },
+   {
+    "food": "basil",
+    "grams": 3.0
+   }
+  ],
+  "steps": [
+   "Soften sliced onion and zucchini in oil 5 minutes",
+   "Whisk eggs with parmesan and torn basil and pour over",
+   "Cook gently until almost set, then finish under the grill",
+   "Serve with bread"
+  ],
+  "source": "GialloZafferano - classic version frittata di zucchine"
+ },
+ {
+  "name": "Gnocchi alla Sorrentina",
+  "mealType": "DINNER",
+  "cuisine": "Italian",
+  "servings": 2,
+  "prepMinutes": 35,
+  "ingredients": [
+   {
+    "food": "potato gnocchi",
+    "grams": 400.0
+   },
+   {
+    "food": "canned tomatoes",
+    "grams": 400.0
+   },
+   {
+    "food": "mozzarella",
+    "grams": 120.0
+   },
+   {
+    "food": "parmesan",
+    "grams": 20.0
+   },
+   {
+    "food": "basil",
+    "grams": 10.0
+   },
+   {
+    "food": "garlic",
+    "grams": 6.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 10.0
+   },
+   {
+    "food": "arugula",
+    "grams": 60.0
+   }
+  ],
+  "steps": [
+   "Simmer garlic, oil and tomatoes 15 minutes into a sauce",
+   "Cook the gnocchi until they float and stir into the sauce with torn basil",
+   "Tip into a baking dish, top with mozzarella and parmesan",
+   "Bake at 220 C for 10 minutes until bubbling",
+   "Serve with arugula"
+  ],
+  "source": "GialloZafferano - classic version gnocchi alla sorrentina"
+ },
+ {
+  "name": "Spaghetti alle Vongole",
+  "mealType": "DINNER",
+  "cuisine": "Italian",
+  "servings": 2,
+  "prepMinutes": 25,
+  "ingredients": [
+   {
+    "food": "whole wheat pasta",
+    "grams": 180.0
+   },
+   {
+    "food": "clams",
+    "grams": 200.0
+   },
+   {
+    "food": "garlic",
+    "grams": 10.0
+   },
+   {
+    "food": "chili flakes",
+    "grams": 1.0
+   },
+   {
+    "food": "white wine",
+    "grams": 60.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 20.0
+   },
+   {
+    "food": "parsley",
+    "grams": 15.0
+   },
+   {
+    "food": "lemon",
+    "grams": 10.0
+   },
+   {
+    "food": "tomato",
+    "grams": 200.0
+   }
+  ],
+  "steps": [
+   "Soak the clams (about 1 kg in shell for two) in salted water 30 minutes and discard any open ones",
+   "Cook the pasta",
+   "Fry garlic and chili in oil, add the clams and wine, cover until they open (3-4 minutes)",
+   "Add halved tomatoes, then the pasta with a splash of its water",
+   "Toss with parsley and a squeeze of lemon"
+  ],
+  "source": "GialloZafferano - classic version spaghetti alle vongole"
+ },
+ {
+  "name": "Pasta alla Norma",
+  "mealType": "DINNER",
+  "cuisine": "Italian",
+  "servings": 2,
+  "prepMinutes": 40,
+  "ingredients": [
+   {
+    "food": "whole wheat pasta",
+    "grams": 160.0
+   },
+   {
+    "food": "eggplant",
+    "grams": 400.0
+   },
+   {
+    "food": "canned tomatoes",
+    "grams": 400.0
+   },
+   {
+    "food": "ricotta",
+    "grams": 120.0
+   },
+   {
+    "food": "garlic",
+    "grams": 6.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 20.0
+   },
+   {
+    "food": "basil",
+    "grams": 10.0
+   },
+   {
+    "food": "chili flakes",
+    "grams": 0.5
+   }
+  ],
+  "steps": [
+   "Cube the eggplant and roast with most of the oil at 220 C for 20 minutes",
+   "Simmer garlic and tomatoes with a little oil 15 minutes",
+   "Stir in the eggplant and basil",
+   "Toss with the cooked pasta and top with spoonfuls of ricotta"
+  ],
+  "source": "GialloZafferano - classic version pasta alla Norma"
  }
 ]

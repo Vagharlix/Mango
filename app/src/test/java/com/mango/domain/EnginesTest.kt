@@ -60,7 +60,8 @@ class EnginesTest {
     }
 
     @Test fun allRecipeIngredientsExistInCatalog() {
-        assertTrue(recipes.size >= 100)
+        assertTrue(recipes.size >= 130)
+        assertTrue(recipes.count { it.source.isNotEmpty() && it.cuisine in setOf("French", "Italian") } >= 20)
         recipes.forEach { r ->
             r.ingredients.forEach { assertNotNull("${r.name}: ${it.food}", foodsByName[it.food]) }
             assertTrue(r.name, r.perServing.kcal > 100)
@@ -76,13 +77,13 @@ class EnginesTest {
         fun cap(food: Food): Double = when {
             food.name.endsWith("broth") -> 400.0
             food.category == FoodCategory.FAT_OIL -> 10.0
-            food.name in setOf("parmesan", "cheddar") -> 30.0
+            food.name in setOf("parmesan", "cheddar", "emmental") -> 30.0
             food.name in setOf("feta", "mozzarella") -> 60.0
             food.category == FoodCategory.NUT_SEED -> 35.0
             food.name == "eggs" -> 150.0
             food.category == FoodCategory.PROTEIN -> 180.0
             food.name in setOf("lentils", "red lentils") -> 90.0
-            food.category == FoodCategory.GRAIN && "bread" !in food.name && "tortilla" !in food.name -> 90.0
+            food.category == FoodCategory.GRAIN && "bread" !in food.name && "tortilla" !in food.name && "gnocchi" !in food.name -> 90.0
             food.category == FoodCategory.SPICE -> 5.0
             else -> 250.0
         }
@@ -254,7 +255,7 @@ class EnginesTest {
         assertEquals(DislikeSuggestions.COMMON.take(8), DislikeSuggestions.suggest("", foods, emptyList()).map { it.term })
         val nuts = DislikeSuggestions.suggest("nu", foods, emptyList())
         assertEquals("nuts", nuts.first().term)
-        assertTrue(nuts.first().isGroup && nuts.first().foodCount == 4) // walnuts, almonds, cashews, almond butter
+        assertTrue(nuts.first().isGroup && nuts.first().foodCount == 5) // walnuts, almonds, cashews, almond butter, pine nuts
         val beans = DislikeSuggestions.suggest("bea", foods, listOf("black beans")).map { it.term }
         assertTrue(beans.containsAll(listOf("kidney beans", "white beans")) && "black beans" !in beans)
         // Every suggestion actually filters something when added.

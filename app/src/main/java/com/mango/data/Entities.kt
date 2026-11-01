@@ -199,6 +199,8 @@ data class Recipe(
     val isHidden: Boolean = false,
     /** How many main meals one cooking session can cover (1 = cook fresh each time). */
     val batchMeals: Int = 1,
+    /** Reference the recipe was written from (e.g. a Guardian or GialloZafferano classic); empty = Mango original. */
+    val source: String = "",
 )
 
 /** One planned meal. Composite key keeps exactly one slot per day and meal type. */
