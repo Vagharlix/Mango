@@ -30,6 +30,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -195,7 +196,7 @@ fun MealsScreen(
         return
     }
 
-    var selected by remember { mutableLongStateOf(s.today) }
+    var selected by rememberSaveable { mutableLongStateOf(s.today) }
     val meals = s.meals[selected].orEmpty()
     val target = s.targets[selected]
 

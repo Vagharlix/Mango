@@ -60,8 +60,10 @@ class EnginesTest {
     }
 
     @Test fun allRecipeIngredientsExistInCatalog() {
-        assertTrue(recipes.size >= 130)
+        assertTrue(recipes.size >= 155)
         assertTrue(recipes.count { it.source.isNotEmpty() && it.cuisine in setOf("French", "Italian") } >= 20)
+        val asian = setOf("Japanese", "Chinese", "Thai", "Vietnamese", "Indonesian", "Malaysian", "Filipino")
+        assertTrue(recipes.count { it.source.isNotEmpty() && it.cuisine in asian } >= 25)
         recipes.forEach { r ->
             r.ingredients.forEach { assertNotNull("${r.name}: ${it.food}", foodsByName[it.food]) }
             assertTrue(r.name, r.perServing.kcal > 100)

@@ -70,6 +70,7 @@ enum class Equipment(val label: String) {
 /** How a prescription's load is derived. 1RM bases are percentages of total system load (bodyweight + added). */
 enum class LoadBasis { FINGER_1RM, PULL_1RM, BODYWEIGHT, RPE, NONE }
 
+@Serializable
 @Entity(tableName = "user_profile")
 data class UserProfile(
     @PrimaryKey val id: Int = 1,
@@ -142,6 +143,7 @@ data class Food(
 )
 
 /** Local barcode cache: maps a scanned product to a food in the catalog (generic or created from Open Food Facts). */
+@Serializable
 @Entity(tableName = "barcode_products")
 data class BarcodeProduct(
     @PrimaryKey val barcode: String,
@@ -204,6 +206,7 @@ data class Recipe(
 )
 
 /** One planned meal. Composite key keeps exactly one slot per day and meal type. */
+@Serializable
 @Entity(tableName = "meal_slots", primaryKeys = ["epochDay", "mealType"])
 data class MealSlot(
     val epochDay: Long,
@@ -242,6 +245,7 @@ data class Exercise(
     fun isAvailable(equipment: Collection<Equipment>): Boolean = requires.all { group -> group.any { it in equipment } }
 }
 
+@Serializable
 @Entity(tableName = "benchmarks")
 data class Benchmark(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,

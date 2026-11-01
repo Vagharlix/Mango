@@ -62,6 +62,9 @@ interface BarcodeDao {
 
     @Upsert
     suspend fun upsert(product: BarcodeProduct)
+
+    @Query("SELECT * FROM barcode_products")
+    suspend fun getAll(): List<BarcodeProduct>
 }
 
 @Dao
@@ -80,6 +83,12 @@ interface PantryDao {
 
     @Query("DELETE FROM pantry WHERE id = :id")
     suspend fun delete(id: Long)
+
+    @Query("DELETE FROM pantry")
+    suspend fun clear()
+
+    @Insert
+    suspend fun insertAll(items: List<PantryItem>)
 }
 
 @Dao
@@ -107,6 +116,9 @@ interface RecipeDao {
 
     @Query("DELETE FROM recipes WHERE id = :id AND isCustom = 1")
     suspend fun deleteCustom(id: Long)
+
+    @Query("DELETE FROM recipes WHERE isCustom = 1")
+    suspend fun deleteAllCustom()
 }
 
 @Dao
@@ -125,6 +137,12 @@ interface MealSlotDao {
 
     @Query("DELETE FROM meal_slots WHERE status = 'PLANNED' AND recipeId = :recipeId AND epochDay >= :from")
     suspend fun deletePlannedForRecipe(recipeId: Long, from: Long)
+
+    @Query("SELECT * FROM meal_slots")
+    suspend fun getAll(): List<MealSlot>
+
+    @Query("DELETE FROM meal_slots")
+    suspend fun clear()
 }
 
 @Dao
@@ -140,6 +158,15 @@ interface ExerciseDao {
 interface BenchmarkDao {
     @Query("SELECT * FROM benchmarks ORDER BY epochDay")
     fun observeAll(): Flow<List<Benchmark>>
+
+    @Query("SELECT * FROM benchmarks ORDER BY epochDay")
+    suspend fun getAll(): List<Benchmark>
+
+    @Query("DELETE FROM benchmarks")
+    suspend fun clear()
+
+    @Insert
+    suspend fun insertAll(benchmarks: List<Benchmark>)
 
     @Insert
     suspend fun insert(benchmark: Benchmark)

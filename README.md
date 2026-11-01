@@ -9,7 +9,7 @@ Everything is computed on the device with deterministic Kotlin. There is no AI, 
 
 ```
 app/src/main/
-├── assets/                foods.json (128 foods, USDA values) · recipes.json (112 recipes) · exercises.json (48 protocols)
+├── assets/                foods.json (173 foods, USDA values) · recipes.json (159 recipes) · exercises.json (48 protocols)
 ├── res/raw/               beep_short.wav · beep_long.wav (SoundPool)
 └── java/com/mango/
     ├── MangoApp.kt        Application: creates the DB and repository, seeds assets
@@ -75,6 +75,15 @@ The protocols (7:3 repeaters, 10 s max hangs, weighted pulls, antagonist push, f
 * **Breakfast rotation:** 2 different breakfasts a week by default, alternating; change it in Profile.
 * **Fewer items to buy:** recipes that reuse the week's ingredients are favoured. Interchangeable foods (canned beans, berries, nuts, topping seeds, spinach/kale, lemon/lime) are reduced to one per week, preferring what's in the pantry and never a disliked food. A typical week drops from ~55 to ~36 distinct items.
 * **Spice rack:** spices, oils, sauces and stock are listed under Pantry → Spice rack. You keep them stocked yourself, so they never appear on shopping lists. Untick any you'd rather buy weekly.
+
+### Recipe book
+
+* **Classics:** 20 French & Italian dishes (Felicity Cloake's Guardian column, Accademia Italiana della Cucina via GialloZafferano, Marmiton) and 27 Japanese, Chinese and Southeast Asian dishes (Just One Cookbook, The Woks of Life, Fuchsia Dunlop, Hot Thai Kitchen, Andrea Nguyen, RecipeTin Eats, Kawaling Pinoy). Each is written for one adult's portions and shows "Based on" with a link to look up the original.
+* **Removing recipes:** tap ⊖ on any card (Undo right away); removed recipes are never planned and can be put back from the "Removed" filter.
+
+## Backup & restore
+
+Options → Backup & restore writes everything the user created or changed to a JSON file they choose (profile and options, custom/edited/removed recipes, own foods, pantry, barcodes, benchmarks, meal plan). Bundled data isn't included. Ids are cross-referenced by name so a backup restores on a fresh install. With auto-save on, one chosen file is rewritten a few seconds after every change. Restoring keeps the previous data aside so it can be undone.
 
 ## Barcodes
 

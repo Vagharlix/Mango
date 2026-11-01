@@ -29,6 +29,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -191,7 +192,7 @@ private fun PantryRow(e: PantryEntry, today: Long, onClick: () -> Unit) {
 /** Searchable list over the local food catalog. */
 @Composable
 fun FoodSearch(foods: List<Food>, onPick: (Food) -> Unit, selected: Food? = null) {
-    var query by remember { mutableStateOf("") }
+    var query by rememberSaveable { mutableStateOf("") }
     val matches = remember(query, foods) {
         val q = query.trim().lowercase()
         foods.filter { q.isEmpty() || q in it.name }.sortedBy { !it.name.startsWith(q) }.take(40)

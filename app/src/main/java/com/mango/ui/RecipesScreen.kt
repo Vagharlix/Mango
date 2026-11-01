@@ -42,6 +42,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -76,17 +77,17 @@ class RecipesViewModel(repo: Repository) : MangoViewModel(repo) {
 fun RecipesScreen(onOpen: (Long) -> Unit, onCreate: () -> Unit, onBack: () -> Unit) {
     val vm = mangoViewModel { RecipesViewModel(it) }
     val recipes by vm.recipes.collectAsStateWithLifecycle()
-    var query by remember { mutableStateOf("") }
-    var type by remember { mutableStateOf<MealType?>(null) }
-    var classicsOnly by remember { mutableStateOf(false) }
-    var showRemoved by remember { mutableStateOf(false) }
+    // Saveable so search and filters survive opening a recipe and coming back.
+    var query by rememberSaveable { mutableStateOf("") }
+    var type by rememberSaveable { mutableStateOf<MealType?>(null) }
+    var showRemoved by rememberSaveable { mutableStateOf(false) }
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val removedCount = recipes.count { it.isHidden }
-    val shown = remember(recipes, query, type, classicsOnly, showRemoved) {
+    val shown = remember(recipes, query, type, showRemoved) {
         val q = query.trim().lowercase()
         recipes.filter { r ->
-            (type == null || r.mealType == type) && r.isHidden == showRemoved && (!classicsOnly || r.source.isNotEmpty()) &&
+            (type == null || r.mealType == type) && r.isHidden == showRemoved &&
                 (q.isEmpty() || q in r.name.lowercase() || r.ingredients.any { q in it.food } || q in r.cuisine.lowercase())
         }
     }
@@ -115,7 +116,6 @@ fun RecipesScreen(onOpen: (Long) -> Unit, onCreate: () -> Unit, onBack: () -> Un
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     item { FilterChip(selected = type == null, onClick = { type = null }, label = { Text("All") }) }
                     items(MealType.entries) { t -> FilterChip(selected = type == t, onClick = { type = t }, label = { Text(t.label) }) }
-                    item { FilterChip(selected = classicsOnly, onClick = { classicsOnly = !classicsOnly }, label = { Text("French & Italian classics") }) }
                     item { FilterChip(selected = showRemoved, onClick = { showRemoved = !showRemoved }, label = { Text("Removed ($removedCount)") }) }
                 }
             }
@@ -170,7 +170,7 @@ fun RecipeDetailScreen(id: Long, initialServings: Double, swaps: Map<String, Str
     val foods by vm.foods.collectAsStateWithLifecycle()
     val r = recipes.firstOrNull { it.id == id }
     // Quantities are shown for what you cook: your planned portion from a meal, otherwise one person.
-    var servings by remember { mutableStateOf(initialServings.coerceIn(0.25, 12.0)) }
+    var servings by rememberSaveable { mutableStateOf(initialServings.coerceIn(0.25, 12.0)) }
     if (r == null) {
         Column(Modifier.padding(16.dp)) { BackBar(onBack) }
         return

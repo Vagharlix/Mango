@@ -53,6 +53,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalContext
+import com.mango.MangoApp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.mango.data.ActivityLevel
@@ -93,7 +95,16 @@ class ProfileViewModel(repo: Repository) : MangoViewModel(repo) {
                 _isNew.value = false
             }
             // Equipment is edited live from several screens; keep the draft in sync with what is stored.
-            repo.profile.collect { stored -> if (stored != null) _draft.update { it.copy(equipment = stored.equipment) } }
+            // A profile appearing from elsewhere (e.g. a restored backup) replaces the blank welcome draft.
+            repo.profile.collect { stored ->
+                if (stored == null) return@collect
+                if (_isNew.value) {
+                    _draft.value = stored
+                    _isNew.value = false
+                } else {
+                    _draft.update { it.copy(equipment = stored.equipment) }
+                }
+            }
         }
     }
 
@@ -152,8 +163,10 @@ fun OptionsScreen(
     onOpenDislikes: () -> Unit,
     onOpenStaples: () -> Unit,
     onOpenAbout: () -> Unit,
+    onOpenBackup: () -> Unit,
 ) {
     val vm = mangoViewModel { OptionsViewModel(it) }
+    val backup by (LocalContext.current.applicationContext as MangoApp).backups.status.collectAsStateWithLifecycle()
     val s by vm.state.collectAsStateWithLifecycle()
     val p = s.profile
     var pickDay by remember { mutableStateOf(false) }
@@ -215,7 +228,24 @@ fun OptionsScreen(
                         }
                         Switch(checked = p.southernHemisphere, onCheckedChange = { v -> vm.quickSave { it.copy(southernHemisphere = v) } })
                     }
-                    OptionRow("About & sources", "Science references · version 0.7 beta", Sky, onClick = onOpenAbout)
+                    OptionRow(
+                        "Backup & restore",
+                        when {
+                            backup.error != null -> "Auto-save needs attention"
+                            backup.autoFile != null -> "Auto-save on" + if (backup.lastSaved.isNotEmpty()) " · ${backup.lastSaved}" else ""
+                            else -> "Save your settings and recipes to a file"
+                        },
+                        if (backup.error != null) Danger else Sky,
+                        onClick = onOpenBackup,
+                    )
+                    OptionRow("About & sources", "Science references · version 0.8 beta", Sky, onClick = onOpenAbout)
+                }
+            }
+        }
+        if (p == null) {
+            item {
+                OptionsSection("Already used Mango?") {
+                    OptionRow("Restore a backup", "Bring back your profile, recipes and plan from a backup file", Sky, first = true, onClick = onOpenBackup)
                 }
             }
         }
@@ -310,7 +340,7 @@ private fun SettingsPage(
 // ============================ Body & targets ============================
 
 @Composable
-fun BodyScreen(onBack: () -> Unit) {
+fun BodyScreen(onBack: () -> Unit, onRestore: () -> Unit = {}) {
     val vm = mangoViewModel { ProfileViewModel(it) }
     val p by vm.draft.collectAsStateWithLifecycle()
     val isNew by vm.isNew.collectAsStateWithLifecycle()
@@ -327,6 +357,7 @@ fun BodyScreen(onBack: () -> Unit) {
                     "Fine-tune training, equipment and food afterwards in Options.",
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+            TextButton(onClick = onRestore) { Text("Used Mango before? Restore a backup instead") }
         }
         SectionLabel("Biometrics")
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -488,7 +519,7 @@ fun AboutScreen(onBack: () -> Unit) {
         item { BackHeader("About & sources", onBack) }
         item {
             Text(
-                "Mango 0.7 beta · works fully offline · no account, no AI service, no tracking. Every calculation runs on this device.",
+                "Mango 0.8 beta · works fully offline · no account, no AI service, no tracking. Every calculation runs on this device.",
                 fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }

@@ -19,6 +19,9 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import androidx.room.withTransaction
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import kotlinx.serialization.json.Json
 import java.io.IOException
 import java.time.LocalDate
@@ -463,5 +466,87 @@ class Repository(private val context: Context, private val db: MangoDatabase) {
     suspend fun deleteCustomRecipe(id: Long) = planLock.withLock {
         mealDao.deletePlannedForRecipe(id, today())
         recipeDao.deleteCustom(id)
+    }
+
+    // ---------------- Backup & restore ----------------
+
+    /** Every table that a backup captures; emits whenever any of them changes (drives the auto-save file). */
+    val backupChanges: Flow<Unit> = combine(
+        profile, foods, recipes, pantryDao.observeAll(), benchmarks, mealDao.observeRange(Long.MIN_VALUE, Long.MAX_VALUE),
+    ) { _ -> Unit }
+
+    suspend fun createBackup(): MangoBackup = withContext(Dispatchers.IO) {
+        seeded.await()
+        BackupCodec.build(
+            profile = profileDao.get(),
+            foods = foodDao.getAll(),
+            recipes = recipeDao.getAll(),
+            pantry = pantryDao.getAll(),
+            barcodes = db.barcodeDao().getAll(),
+            benchmarks = db.benchmarkDao().getAll(),
+            meals = mealDao.getAll(),
+            appVersion = appVersion(),
+            createdAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+        )
+    }
+
+    private fun appVersion(): String = try {
+        context.packageManager.getPackageInfo(context.packageName, 0).versionName.orEmpty()
+    } catch (e: Exception) {
+        ""
+    }
+
+    /**
+     * Replaces the user's data with a backup. Bundled catalog data stays; the backup's own foods, custom and
+     * edited recipes, removed recipes, pantry, barcodes, benchmarks, meal plan and profile are restored.
+     */
+    suspend fun restore(b: MangoBackup) = withContext(Dispatchers.IO) {
+        seeded.await()
+        planLock.withLock {
+            db.withTransaction {
+                // Own foods first: recipes and pantry refer to them by name.
+                val existingFoods = foodDao.getAll().associateBy { it.name }
+                b.userFoods.forEach { f ->
+                    val old = existingFoods[f.name]
+                    when {
+                        old == null -> foodDao.insert(f.copy(id = 0))
+                        old.isUserAdded -> foodDao.updateAll(listOf(f.copy(id = old.id)))
+                    }
+                }
+                val foods = foodDao.getAll()
+                val foodByName = foods.associateBy { it.name }
+
+                // Recipes: drop current custom ones, reset bundled ones to "unremoved", then apply the backup.
+                mealDao.clear()
+                recipeDao.deleteAllCustom()
+                val bundled = recipeDao.getAll()
+                bundled.filter { it.isHidden }.forEach { recipeDao.setHidden(it.id, false) }
+                val bundledByName = bundled.associateBy { it.name }
+                val customIds = mutableMapOf<Long, Long>()
+                b.recipes.forEach { r ->
+                    val computed = NutritionEngine.withNutrients(r, foodByName)
+                    val target = bundledByName[r.name]
+                    if (!r.isCustom && target != null) {
+                        recipeDao.update(computed.copy(id = target.id, isUserModified = true))
+                    } else {
+                        customIds[r.id] = recipeDao.insert(computed.copy(id = 0, isCustom = true))
+                    }
+                }
+                b.removedRecipes.forEach { name -> bundledByName[name]?.let { recipeDao.setHidden(it.id, true) } }
+                val resolve = BackupCodec.recipeResolver(b, customIds, recipeDao.getAll().associate { it.name to it.id })
+
+                pantryDao.clear()
+                pantryDao.insertAll(b.pantry.mapNotNull { p ->
+                    foodByName[p.food]?.let { PantryItem(foodId = it.id, grams = p.grams, expiresOnEpochDay = p.expiresOnEpochDay, addedOnEpochDay = p.addedOnEpochDay) }
+                })
+                b.barcodes.forEach { bc -> foodByName[bc.food]?.let { db.barcodeDao().upsert(BarcodeProduct(bc.barcode, bc.productName, it.id)) } }
+                db.benchmarkDao().clear()
+                db.benchmarkDao().insertAll(b.benchmarks.map { it.copy(id = 0) })
+                mealDao.upsertAll(BackupCodec.restoredMeals(b, resolve))
+                BackupCodec.restoredProfile(b, resolve)?.let { profileDao.upsert(it) }
+            }
+        }
+        // Fill any day the backup didn't cover (e.g. an old backup) with a fresh plan.
+        ensureWeekPlan()
     }
 }
