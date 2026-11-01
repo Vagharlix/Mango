@@ -282,6 +282,73 @@ class EnginesTest {
         }
     }
 
+    @Test fun neverTheSameDishOnConsecutiveDays() {
+        listOf(LocalDate.of(2026, 11, 2), LocalDate.of(2027, 3, 1), LocalDate.of(2027, 7, 5)).forEach { start ->
+            listOf(emptyList(), listOf("pork", "fish", "mushrooms")).forEach { dislikes ->
+                val plan = MealPlanner.plan(week(start.toEpochDay()), request(today = start.toEpochDay(), dislikes = dislikes))
+                val byDay = plan.groupBy { it.epochDay }.mapValues { (_, v) -> v.map { it.recipeId }.toSet() }
+                byDay.forEach { (d, ids) ->
+                    val overlap = ids intersect byDay[d + 1].orEmpty()
+                    assertTrue("$start $dislikes day $d repeats $overlap the next day", overlap.isEmpty())
+                }
+            }
+        }
+    }
+
+    @Test fun breakfastsComeFromThePicks() {
+        val picks = recipes.filter { it.mealType == MealType.BREAKFAST }.take(3).map { it.id }.toSet()
+        val req = request().copy(breakfastPicks = picks)
+        val ids = MealPlanner.plan(week(req.today), req).filter { it.mealType == MealType.BREAKFAST }.map { it.recipeId }.toSet()
+        assertTrue(picks.containsAll(ids))
+        assertEquals(2, ids.size)
+    }
+
+    @Test fun carbAndProteinPreferencesAdaptRecipes() {
+        val carbOff = FoodPreferences.CARB_TYPES - setOf("rice", "pasta")
+        val bolognese = recipes.first { it.name == "Lean Beef Bolognese" }
+        val tagine = recipes.first { it.name == "Moroccan Chicken & Chickpea Tagine" } // quinoa
+        val swaps = FoodPreferences.swaps(tagine, carbOff, emptyList(), emptyMap(), emptyList(), foodsByName)!!
+        assertEquals("brown rice", swaps["quinoa"])
+        // Equal energy: 120 g dry quinoa (368 kcal/100 g) -> ~120.3 g brown rice (367 kcal/100 g).
+        val rice = MealPlanner.effectiveIngredients(tagine, swaps, foodsByName).first { it.food == "brown rice" }
+        assertEquals(120 * 368.0 / 367.0, rice.grams, 0.01)
+        val potatoToRice = FoodPreferences.swaps(recipes.first { it.name == "Baked Cod with Tomatoes & Olives" }, carbOff, emptyList(), emptyMap(), emptyList(), foodsByName)!!
+        assertEquals("brown rice", potatoToRice["potato"])
+        assertTrue(FoodPreferences.swaps(bolognese, carbOff, emptyList(), emptyMap(), emptyList(), foodsByName)!!.isEmpty())
+        // Bread can't be swapped: recipes built around it are skipped.
+        assertEquals(null, FoodPreferences.swaps(recipes.first { it.name == "Sardines on Toast" }, carbOff, emptyList(), emptyMap(), emptyList(), foodsByName))
+        // No pork this week: pork becomes chicken; no fish or seafood: shrimp falls back to chicken, salmon dishes are skipped.
+        val pork = recipes.first { it.name == "Pork Tenderloin with Apples & Brussels Sprouts" }
+        assertEquals("chicken breast", FoodPreferences.swaps(pork, emptyList(), listOf("pork"), emptyMap(), emptyList(), foodsByName)!!["pork tenderloin"])
+        val shrimp = recipes.first { it.name == "Shrimp & Sweetcorn Summer Skillet" }
+        assertEquals("chicken breast", FoodPreferences.swaps(shrimp, emptyList(), listOf("fish", "seafood"), emptyMap(), emptyList(), foodsByName)!!["shrimp"])
+        assertEquals(null, FoodPreferences.swaps(recipes.first { it.name == "Baked Salmon with Sweet Potato & Broccoli" }, emptyList(), listOf("fish", "seafood"), emptyMap(), emptyList(), foodsByName))
+        // Replacements never land on a disliked food.
+        assertEquals("chicken thigh", FoodPreferences.swaps(pork, emptyList(), listOf("pork"), emptyMap(), listOf("chicken breast"), foodsByName)!!["pork tenderloin"])
+    }
+
+    @Test fun adaptedWeekOnlyUsesAllowedCarbs() {
+        val carbOff = FoodPreferences.CARB_TYPES - setOf("rice", "pasta")
+        val adapted = recipes.mapNotNull { r ->
+            val sw = FoodPreferences.swaps(r, carbOff, listOf("pork"), emptyMap(), emptyList(), foodsByName) ?: return@mapNotNull null
+            NutritionEngine.withNutrients(r.copy(ingredients = MealPlanner.effectiveIngredients(r, sw, foodsByName)), foodsByName)
+        }
+        val req = request().copy(recipes = adapted)
+        val plan = MealPlanner.plan(week(req.today), req)
+        assertEquals(28, plan.size)
+        val byId = adapted.associateBy { it.id }
+        plan.flatMap { byId.getValue(it.recipeId).ingredients }.map { foodsByName.getValue(it.food) }.forEach { f ->
+            assertTrue(f.name, f.carbType == null || f.carbType in setOf("rice", "pasta"))
+            assertTrue(f.name, f.proteinType != "pork")
+        }
+    }
+
+    @Test fun cantFindItOffersSimilarProduce() {
+        val names = FoodPreferences.replacementsFor(foodsByName.getValue("spinach"), foods).map { it.name }
+        assertTrue(names.containsAll(listOf("kale", "arugula", "romaine lettuce")) && "spinach" !in names)
+        assertTrue(FoodPreferences.replacementsFor(foodsByName.getValue("zucchini"), foods).any { it.name == "eggplant" })
+    }
+
     @Test fun breakfastsRotateBetweenTwoRecipes() {
         val req = request()
         val breakfasts = MealPlanner.plan(week(req.today), req).filter { it.mealType == MealType.BREAKFAST }.sortedBy { it.epochDay }
@@ -302,7 +369,11 @@ class EnginesTest {
             val recipe = byId.getValue(cook.recipeId)
             assertTrue(b.all { it.recipeId == cook.recipeId && it.mealType != MealType.BREAKFAST && it.mealType != MealType.SNACK })
             assertTrue(b.size in 2..recipe.batchMeals)
-            b.filter { it.isLeftover }.forEach { assertTrue(it.epochDay - cook.epochDay in 1..MealPlanner.BATCH_WINDOW_DAYS) }
+            b.filter { it.isLeftover }.forEach {
+                val gap = it.epochDay - cook.epochDay
+                // Fridge leftovers 2 days later; a third, frozen portion only for freezable 3-meal recipes.
+                assertTrue("gap $gap", gap == MealPlanner.FRIDGE_LEFTOVER_DAY.toLong() || (recipe.batchMeals >= 3 && gap in MealPlanner.FREEZER_DAYS))
+            }
         }
         // Batch cooking means fewer cooking sessions than meals.
         val sessions = plan.count { it.mealType in setOf(MealType.LUNCH, MealType.DINNER) && !it.isLeftover }

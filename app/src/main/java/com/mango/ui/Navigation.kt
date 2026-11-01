@@ -44,6 +44,7 @@ object Routes {
     const val EXERCISE = "exercise/{week}/{day}/{index}"
     const val PLAN = "plan"
     const val STAPLES = "staples"
+    const val FOOD_PREFS = "foodprefs"
     fun recipe(id: Long, portions: Double? = null, swaps: Map<String, String> = emptyMap()) =
         "recipe/$id?portions=${portions ?: 1.0}&swaps=" + Uri.encode(swaps.entries.joinToString("|") { "${it.key}>${it.value}" })
 
@@ -144,12 +145,18 @@ fun MangoNavHost(openTimer: Boolean, onTimerOpened: () -> Unit) {
                     onSetupProfile = { nav.switchTab(Routes.PROFILE) },
                 )
             }
-            composable(Routes.GROCERY) { GroceryScreen(onOpenRecipe = { id, portions, swaps -> nav.navigate(Routes.recipe(id, portions, swaps)) }) }
+            composable(Routes.GROCERY) {
+                GroceryScreen(
+                    onOpenRecipe = { id, portions, swaps -> nav.navigate(Routes.recipe(id, portions, swaps)) },
+                    onOpenFoodPrefs = { nav.navigate(Routes.FOOD_PREFS) },
+                )
+            }
             composable(Routes.PANTRY) {
                 PantryScreen(onScan = { nav.navigate(Routes.SCANNER) }, onOpenStaples = { nav.navigate(Routes.STAPLES) })
             }
             composable(Routes.STAPLES) { StaplesScreen(onBack = { nav.popBackStack() }) }
-            composable(Routes.PROFILE) { ProfileScreen() }
+            composable(Routes.PROFILE) { ProfileScreen(onOpenFoodPrefs = { nav.navigate(Routes.FOOD_PREFS) }) }
+            composable(Routes.FOOD_PREFS) { FoodPreferencesScreen(onBack = { nav.popBackStack() }) }
             composable(Routes.TIMER) { TimerScreen(onClose = { nav.popBackStack() }) }
             composable(Routes.SCANNER) { ScannerScreen(onDone = { nav.popBackStack() }) }
             composable(Routes.RECIPES) {

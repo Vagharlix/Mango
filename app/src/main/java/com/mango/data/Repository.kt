@@ -5,6 +5,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import com.mango.domain.DailyTargets
 import com.mango.domain.FoodMatcher
+import com.mango.domain.FoodPreferences
 import com.mango.domain.MealPlanner
 import com.mango.domain.NutritionEngine
 import com.mango.domain.Periodization
@@ -127,7 +128,7 @@ class Repository(private val context: Context, private val db: MangoDatabase) {
             programStartEpochDay = if (p.programStartEpochDay == 0L) today() else p.programStartEpochDay,
             dislikedIngredients = p.dislikedIngredients.map { it.trim().lowercase() }.filter { it.isNotEmpty() }.distinct(),
             programWeeks = p.programWeeks.coerceIn(4, 52),
-            breakfastVariety = p.breakfastVariety.coerceIn(1, 7),
+            breakfastVariety = p.breakfastVariety.coerceIn(2, 7),
         )
         val previous = profileDao.get()
         profileDao.upsert(clean)
@@ -229,7 +230,7 @@ class Repository(private val context: Context, private val db: MangoDatabase) {
         }
         if (portions > 0) {
             val foodIds = foodDao.getAll().associate { it.name to it.id }
-            val (updated, emptied) = MealPlanner.consume(pantryDao.getAll(), foodIds, recipe, portions, slot.swaps)
+            val (updated, emptied) = MealPlanner.consume(pantryDao.getAll(), foodIds, recipe, portions, slot.swaps, foodDao.getAll().associateBy { it.name })
             updated.forEach { pantryDao.update(it) }
             emptied.forEach { pantryDao.delete(it) }
         }
@@ -271,15 +272,17 @@ class Repository(private val context: Context, private val db: MangoDatabase) {
         val keys = toFill.toSet()
         val existing = mealDao.getRange(today - MealPlanner.ANTI_REPEAT_DAYS, today + 14)
             .filterNot { (it.epochDay to it.mealType) in keys }
+        val byName = foods.associateBy { it.name }
         val req = PlanRequest(
-            recipes = recipeDao.getAll(),
-            foods = foods.associateBy { it.name },
+            recipes = adaptedRecipes(p, byName),
+            foods = byName,
             pantry = stock(foods, p),
             today = today,
             dislikes = p.dislikedIngredients,
             southernHemisphere = p.southernHemisphere,
             produceBoost = boost,
             breakfastVariety = p.breakfastVariety,
+            breakfastPicks = p.breakfastPicks.toSet(),
             existing = existing,
             exclude = exclude,
             targetsFor = { targetsFor(p, it) },
@@ -292,14 +295,54 @@ class Repository(private val context: Context, private val db: MangoDatabase) {
     private suspend fun consolidateLocked(p: UserProfile) {
         val today = today()
         val foods = foodDao.getAll()
+        val byName = foods.associateBy { it.name }
         val changed = MealPlanner.consolidate(
             slots = mealDao.getRange(today, today + 6),
             recipes = recipeDao.getAll().associateBy { it.id },
-            foods = foods.associateBy { it.name },
+            foods = byName,
             pantry = stock(foods, p),
             dislikes = p.dislikedIngredients,
+            baseSwaps = { preferenceSwaps(it, p, byName).orEmpty() },
         )
         if (changed.isNotEmpty()) mealDao.upsertAll(changed)
+    }
+
+    private fun activeManualSwaps(p: UserProfile): Map<String, String> =
+        if (today() <= p.manualSwapsUntil) p.manualSwaps else emptyMap()
+
+    private fun preferenceSwaps(r: Recipe, p: UserProfile, foods: Map<String, Food>): Map<String, String>? =
+        FoodPreferences.swaps(r, p.carbOff, p.proteinOff, activeManualSwaps(p), p.dislikedIngredients, foods)
+
+    /**
+     * Recipes as the planner should see them: adapted to the user's carb/protein choices and replacements
+     * (macros recomputed), recipes that can't be adapted left out.
+     */
+    private suspend fun adaptedRecipes(p: UserProfile, foods: Map<String, Food>): List<Recipe> =
+        recipeDao.getAll().mapNotNull { r ->
+            val swaps = preferenceSwaps(r, p, foods) ?: return@mapNotNull null
+            if (swaps.isEmpty()) r else NutritionEngine.withNutrients(r.copy(ingredients = MealPlanner.effectiveIngredients(r, swaps, foods)), foods)
+        }
+
+    /** Carb / protein types and breakfast picks; the not-yet-cooked meals of the week are re-planned. */
+    suspend fun updateFoodPreferences(carbOff: List<String>, proteinOff: List<String>, breakfastPicks: List<Long>, breakfastVariety: Int) {
+        val p = profileDao.get() ?: throw IllegalStateException("Create your profile first")
+        profileDao.upsert(p.copy(carbOff = carbOff, proteinOff = proteinOff, breakfastPicks = breakfastPicks, breakfastVariety = breakfastVariety.coerceIn(2, 7)))
+        regenerateWeek()
+    }
+
+    /** "Can't find it": use [replacement] instead of [food] in this week's meals, until the next grocery day. */
+    suspend fun replaceIngredient(food: String, replacement: String) = planLock.withLock {
+        val p = profileDao.get() ?: return@withLock
+        val updated = p.copy(manualSwaps = activeManualSwaps(p) + (food to replacement), manualSwapsUntil = shoppingWindow(p).last)
+        profileDao.upsert(updated)
+        consolidateLocked(updated)
+    }
+
+    suspend fun clearReplacement(food: String) = planLock.withLock {
+        val p = profileDao.get() ?: return@withLock
+        val updated = p.copy(manualSwaps = p.manualSwaps - food)
+        profileDao.upsert(updated)
+        consolidateLocked(updated)
     }
 
     private suspend fun stock(foods: List<Food>, p: UserProfile? = null): List<StockItem> {

@@ -14,7 +14,8 @@
    "poultry",
    "meat"
   ],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "proteinType": "chicken"
  },
  {
   "name": "chicken thigh",
@@ -31,7 +32,8 @@
    "poultry",
    "meat"
   ],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "proteinType": "chicken"
  },
  {
   "name": "turkey mince",
@@ -48,7 +50,8 @@
    "poultry",
    "meat"
   ],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "proteinType": "turkey"
  },
  {
   "name": "lean beef mince",
@@ -66,7 +69,8 @@
    "red meat",
    "meat"
   ],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "proteinType": "beef"
  },
  {
   "name": "beef sirloin",
@@ -84,7 +88,8 @@
    "red meat",
    "meat"
   ],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "proteinType": "beef"
  },
  {
   "name": "pork tenderloin",
@@ -102,7 +107,8 @@
    "red meat",
    "meat"
   ],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "proteinType": "pork"
  },
  {
   "name": "salmon fillet",
@@ -119,7 +125,8 @@
    "fish",
    "seafood"
   ],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "proteinType": "fish"
  },
  {
   "name": "cod fillet",
@@ -136,7 +143,8 @@
    "fish",
    "seafood"
   ],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "proteinType": "fish"
  },
  {
   "name": "canned tuna in water",
@@ -153,7 +161,8 @@
    "fish",
    "seafood"
   ],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "proteinType": "fish"
  },
  {
   "name": "sardines canned in oil",
@@ -170,7 +179,8 @@
    "fish",
    "seafood"
   ],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "proteinType": "fish"
  },
  {
   "name": "mackerel fillet",
@@ -187,7 +197,8 @@
    "fish",
    "seafood"
   ],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "proteinType": "fish"
  },
  {
   "name": "shrimp",
@@ -204,7 +215,8 @@
    "shellfish",
    "seafood"
   ],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "proteinType": "seafood"
  },
  {
   "name": "eggs",
@@ -272,7 +284,8 @@
    "soy",
    "legume"
   ],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "family": "green vegetables"
  },
  {
   "name": "lentils",
@@ -538,7 +551,8 @@
   "groups": [
    "oats"
   ],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "carbType": "oats"
  },
  {
   "name": "brown rice",
@@ -552,7 +566,8 @@
   "omega3": 0.04,
   "shelfLifeDays": 365,
   "groups": [],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "carbType": "rice"
  },
  {
   "name": "white rice",
@@ -566,7 +581,8 @@
   "omega3": 0.02,
   "shelfLifeDays": 730,
   "groups": [],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "carbType": "rice"
  },
  {
   "name": "quinoa",
@@ -580,7 +596,8 @@
   "omega3": 0.26,
   "shelfLifeDays": 365,
   "groups": [],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "carbType": "quinoa"
  },
  {
   "name": "buckwheat groats",
@@ -594,7 +611,8 @@
   "omega3": 0.08,
   "shelfLifeDays": 365,
   "groups": [],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "carbType": "buckwheat"
  },
  {
   "name": "barley",
@@ -611,7 +629,8 @@
    "gluten",
    "wheat"
   ],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "carbType": "barley"
  },
  {
   "name": "whole wheat pasta",
@@ -628,7 +647,8 @@
    "gluten",
    "wheat"
   ],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "carbType": "pasta"
  },
  {
   "name": "whole wheat bread",
@@ -647,7 +667,8 @@
   ],
   "seasonMonths": [],
   "unitGrams": 35.0,
-  "unitName": "slice"
+  "unitName": "slice",
+  "carbType": "bread & wraps"
  },
  {
   "name": "whole wheat tortilla",
@@ -666,7 +687,8 @@
   ],
   "seasonMonths": [],
   "unitGrams": 45.0,
-  "unitName": "tortilla"
+  "unitName": "tortilla",
+  "carbType": "bread & wraps"
  },
  {
   "name": "rice noodles",
@@ -680,7 +702,8 @@
   "omega3": 0.02,
   "shelfLifeDays": 730,
   "groups": [],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "carbType": "noodles"
  },
  {
   "name": "potato",
@@ -706,7 +729,8 @@
    12
   ],
   "unitGrams": 170.0,
-  "unitName": "potato"
+  "unitName": "potato",
+  "carbType": "potatoes"
  },
  {
   "name": "sweet potato",
@@ -729,7 +753,9 @@
    12
   ],
   "unitGrams": 200.0,
-  "unitName": "sweet potato"
+  "unitName": "sweet potato",
+  "carbType": "potatoes",
+  "family": "squash & sweet potato"
  },
  {
   "name": "spinach",
@@ -752,7 +778,8 @@
    10,
    11
   ],
-  "swapGroup": "cooking greens"
+  "swapGroup": "cooking greens",
+  "family": "leafy greens"
  },
  {
   "name": "kale",
@@ -774,7 +801,8 @@
    11,
    12
   ],
-  "swapGroup": "cooking greens"
+  "swapGroup": "cooking greens",
+  "family": "leafy greens"
  },
  {
   "name": "broccoli",
@@ -797,7 +825,8 @@
    11
   ],
   "unitGrams": 300.0,
-  "unitName": "head"
+  "unitName": "head",
+  "family": "cabbage family"
  },
  {
   "name": "bell pepper",
@@ -818,7 +847,8 @@
    10
   ],
   "unitGrams": 150.0,
-  "unitName": "pepper"
+  "unitName": "pepper",
+  "family": "summer vegetables"
  },
  {
   "name": "tomato",
@@ -839,7 +869,8 @@
    9
   ],
   "unitGrams": 120.0,
-  "unitName": "tomato"
+  "unitName": "tomato",
+  "family": "salad vegetables"
  },
  {
   "name": "cucumber",
@@ -860,7 +891,8 @@
    9
   ],
   "unitGrams": 300.0,
-  "unitName": "cucumber"
+  "unitName": "cucumber",
+  "family": "salad vegetables"
  },
  {
   "name": "carrot",
@@ -885,7 +917,8 @@
    12
   ],
   "unitGrams": 60.0,
-  "unitName": "carrot"
+  "unitName": "carrot",
+  "family": "roots"
  },
  {
   "name": "onion",
@@ -901,7 +934,8 @@
   "groups": [],
   "seasonMonths": [],
   "unitGrams": 110.0,
-  "unitName": "onion"
+  "unitName": "onion",
+  "family": "onions"
  },
  {
   "name": "garlic",
@@ -952,7 +986,8 @@
    9
   ],
   "unitGrams": 200.0,
-  "unitName": "zucchini"
+  "unitName": "zucchini",
+  "family": "summer vegetables"
  },
  {
   "name": "eggplant",
@@ -972,7 +1007,8 @@
    9
   ],
   "unitGrams": 300.0,
-  "unitName": "eggplant"
+  "unitName": "eggplant",
+  "family": "summer vegetables"
  },
  {
   "name": "cauliflower",
@@ -996,7 +1032,8 @@
    12
   ],
   "unitGrams": 600.0,
-  "unitName": "head"
+  "unitName": "head",
+  "family": "cabbage family"
  },
  {
   "name": "brussels sprouts",
@@ -1016,7 +1053,8 @@
    10,
    11,
    12
-  ]
+  ],
+  "family": "cabbage family"
  },
  {
   "name": "butternut squash",
@@ -1036,7 +1074,8 @@
    10,
    11,
    12
-  ]
+  ],
+  "family": "squash & sweet potato"
  },
  {
   "name": "beetroot",
@@ -1057,7 +1096,8 @@
    10,
    11,
    12
-  ]
+  ],
+  "family": "roots"
  },
  {
   "name": "asparagus",
@@ -1075,7 +1115,8 @@
    4,
    5,
    6
-  ]
+  ],
+  "family": "green vegetables"
  },
  {
   "name": "green beans",
@@ -1094,7 +1135,8 @@
    7,
    8,
    9
-  ]
+  ],
+  "family": "green vegetables"
  },
  {
   "name": "peas",
@@ -1112,7 +1154,8 @@
    5,
    6,
    7
-  ]
+  ],
+  "family": "green vegetables"
  },
  {
   "name": "red cabbage",
@@ -1134,7 +1177,8 @@
    10,
    11,
    12
-  ]
+  ],
+  "family": "cabbage family"
  },
  {
   "name": "romaine lettuce",
@@ -1154,7 +1198,8 @@
    7,
    8,
    9
-  ]
+  ],
+  "family": "leafy greens"
  },
  {
   "name": "arugula",
@@ -1176,7 +1221,8 @@
    8,
    9,
    10
-  ]
+  ],
+  "family": "leafy greens"
  },
  {
   "name": "mushrooms",
@@ -1232,7 +1278,8 @@
   ],
   "unitGrams": 60.0,
   "unitName": "lemon",
-  "swapGroup": "citrus"
+  "swapGroup": "citrus",
+  "family": "citrus"
  },
  {
   "name": "lime",
@@ -1249,7 +1296,8 @@
   "seasonMonths": [],
   "unitGrams": 45.0,
   "unitName": "lime",
-  "swapGroup": "citrus"
+  "swapGroup": "citrus",
+  "family": "citrus"
  },
  {
   "name": "orange",
@@ -1272,7 +1320,8 @@
    12
   ],
   "unitGrams": 150.0,
-  "unitName": "orange"
+  "unitName": "orange",
+  "family": "citrus"
  },
  {
   "name": "kiwi",
@@ -1295,7 +1344,8 @@
    12
   ],
   "unitGrams": 75.0,
-  "unitName": "kiwi"
+  "unitName": "kiwi",
+  "family": "tropical fruit"
  },
  {
   "name": "strawberries",
@@ -1314,7 +1364,8 @@
    6,
    7
   ],
-  "swapGroup": "berries"
+  "swapGroup": "berries",
+  "family": "berries"
  },
  {
   "name": "blueberries",
@@ -1333,7 +1384,8 @@
    8,
    9
   ],
-  "swapGroup": "berries"
+  "swapGroup": "berries",
+  "family": "berries"
  },
  {
   "name": "raspberries",
@@ -1353,7 +1405,8 @@
    8,
    9
   ],
-  "swapGroup": "berries"
+  "swapGroup": "berries",
+  "family": "berries"
  },
  {
   "name": "frozen mixed berries",
@@ -1368,7 +1421,8 @@
   "shelfLifeDays": 180,
   "groups": [],
   "seasonMonths": [],
-  "swapGroup": "berries"
+  "swapGroup": "berries",
+  "family": "berries"
  },
  {
   "name": "banana",
@@ -1384,7 +1438,8 @@
   "groups": [],
   "seasonMonths": [],
   "unitGrams": 120.0,
-  "unitName": "banana"
+  "unitName": "banana",
+  "family": "tropical fruit"
  },
  {
   "name": "apple",
@@ -1409,7 +1464,8 @@
    12
   ],
   "unitGrams": 180.0,
-  "unitName": "apple"
+  "unitName": "apple",
+  "family": "orchard fruit"
  },
  {
   "name": "pear",
@@ -1432,7 +1488,8 @@
    12
   ],
   "unitGrams": 170.0,
-  "unitName": "pear"
+  "unitName": "pear",
+  "family": "orchard fruit"
  },
  {
   "name": "mango",
@@ -1448,7 +1505,8 @@
   "groups": [],
   "seasonMonths": [],
   "unitGrams": 200.0,
-  "unitName": "mango"
+  "unitName": "mango",
+  "family": "tropical fruit"
  },
  {
   "name": "cherries",
@@ -1465,7 +1523,8 @@
   "seasonMonths": [
    6,
    7
-  ]
+  ],
+  "family": "berries"
  },
  {
   "name": "pomegranate",
@@ -1484,7 +1543,8 @@
    10,
    11,
    12
-  ]
+  ],
+  "family": "berries"
  },
  {
   "name": "celery",
@@ -1503,7 +1563,8 @@
    8,
    9,
    10
-  ]
+  ],
+  "family": "roots"
  },
  {
   "name": "leek",
@@ -1524,7 +1585,8 @@
    10,
    11,
    12
-  ]
+  ],
+  "family": "onions"
  },
  {
   "name": "parsley",
@@ -1545,7 +1607,8 @@
    8,
    9,
    10
-  ]
+  ],
+  "family": "herbs"
  },
  {
   "name": "basil",
@@ -1564,7 +1627,8 @@
    7,
    8,
    9
-  ]
+  ],
+  "family": "herbs"
  },
  {
   "name": "cilantro",
@@ -1587,7 +1651,8 @@
    7,
    8,
    9
-  ]
+  ],
+  "family": "herbs"
  },
  {
   "name": "spring onion",
@@ -1608,7 +1673,8 @@
    7,
    8,
    9
-  ]
+  ],
+  "family": "onions"
  },
  {
   "name": "chili pepper",
@@ -1644,7 +1710,8 @@
    7,
    8,
    9
-  ]
+  ],
+  "family": "green vegetables"
  },
  {
   "name": "canned tomatoes",
@@ -1724,7 +1791,8 @@
    "meat"
   ],
   "seasonMonths": [],
-  "isStaple": true
+  "isStaple": true,
+  "proteinType": "chicken"
  },
  {
   "name": "olives",

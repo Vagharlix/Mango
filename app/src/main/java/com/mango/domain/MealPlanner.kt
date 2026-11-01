@@ -45,6 +45,8 @@ data class PlanRequest(
     val reuseWeight: Double = MealPlanner.REUSE_WEIGHT,
     /** Different breakfasts per week; once reached, breakfasts rotate. */
     val breakfastVariety: Int = 2,
+    /** Breakfast recipes the user picked (empty = any). */
+    val breakfastPicks: Set<Long> = emptySet(),
     /** Batch cooking: long recipes cover extra main meals in the following days as leftovers. */
     val batchCooking: Boolean = true,
     val targetsFor: (Long) -> DailyTargets,
@@ -57,16 +59,22 @@ data class PlanRequest(
  *         plan converges on fewer different items (one kind of beans, one grain…) and less leftover waste.
  *       + Ease·[EASE_WEIGHT]: hands-on minutes per meal, where a batch recipe's prep is shared by every
  *         meal it covers, so a 40-minute curry eaten three times beats a 25-minute dish cooked once.
- * Breakfasts rotate between [PlanRequest.breakfastVariety] recipes; batch recipes fill up to
- * [Recipe.batchMeals] main meals within [BATCH_WINDOW_DAYS] days (USDA: cooked leftovers keep 3-4 days).
+ * Hard rule: the same recipe is never eaten on two consecutive days (leftovers included).
+ * Breakfasts rotate between [PlanRequest.breakfastVariety] recipes (from the user's picks); batch recipes
+ * cover up to [Recipe.batchMeals] main meals: from the fridge on day +2, frozen for 3-meal recipes on days +4..+6.
  */
 object MealPlanner {
     const val ANTI_REPEAT_DAYS = 3
     const val EXPIRY_WINDOW_DAYS = 3
     const val BOOST_EXPIRY_WINDOW_DAYS = 5
-    const val REUSE_WEIGHT = 30.0
+    const val REUSE_WEIGHT = 50.0
     const val EASE_WEIGHT = 25.0
-    const val BATCH_WINDOW_DAYS = 2
+    /** Leftovers from the fridge are eaten 2 days after cooking (never the next day; USDA: 3-4 days max). */
+    const val FRIDGE_LEFTOVER_DAY = 2
+    /** Freezable batches (3-meal recipes: soups, stews, curries, sauces) can serve a frozen portion later in the week. */
+    val FREEZER_DAYS = 4..6
+    /** Longest span between cooking a batch and eating its last portion. */
+    const val BATCH_WINDOW_DAYS = 6
     private val MAINS = setOf(MealType.LUNCH, MealType.DINNER)
 
     // ---------- Dislikes ----------
@@ -181,11 +189,18 @@ object MealPlanner {
         foods[food]?.swapGroup?.let { "group:$it" } ?: food
 
     /** The ingredients actually cooked for a meal: recipe ingredients with the meal's substitutions applied. */
-    fun effectiveIngredients(recipe: Recipe, swaps: Map<String, String>): List<RecipeIngredient> =
+    fun effectiveIngredients(recipe: Recipe, swaps: Map<String, String>, foods: Map<String, Food> = emptyMap()): List<RecipeIngredient> =
         if (swaps.isEmpty()) {
             recipe.ingredients
         } else {
-            recipe.ingredients.map { it.copy(food = swaps[it.food] ?: it.food) }
+            recipe.ingredients.map { ing ->
+                val target = swaps[ing.food] ?: return@map ing
+                val from = foods[ing.food]
+                val to = foods[target]
+                // Carbs are swapped at equal energy (100 g dry rice ≈ 470 g potato); everything else gram for gram.
+                val factor = if (from?.carbType != null && to?.carbType != null && to.kcal > 0) from.kcal / to.kcal else 1.0
+                RecipeIngredient(target, ing.grams * factor)
+            }
                 .groupBy { it.food }
                 .map { (food, list) -> RecipeIngredient(food, list.sumOf { it.grams }) }
         }
@@ -227,7 +242,7 @@ object MealPlanner {
         req.existing.filter { it.mealType == MealType.BREAKFAST && it.status != MealStatus.SKIPPED && it.epochDay in req.today - 6..req.today + 6 }
             .sortedBy { it.epochDay }
             .forEach {
-                if (it.recipeId in allowedIds) rotation += it.recipeId
+                if (it.recipeId in allowedIds && (req.breakfastPicks.isEmpty() || it.recipeId in req.breakfastPicks)) rotation += it.recipeId
                 lastBreakfast[it.recipeId] = maxOf(lastBreakfast[it.recipeId] ?: Long.MIN_VALUE, it.epochDay)
             }
 
@@ -241,12 +256,18 @@ object MealPlanner {
             return slot
         }
 
-        /** Free main-meal slots in the next days for leftovers: at most one per day, alternating lunch/dinner. */
-        fun leftoverSlots(day: Long, type: MealType, count: Int): List<Pair<Long, MealType>> {
+        /** Same recipe on the given day or a neighbouring one: forbidden (no repeats on consecutive days). */
+        fun nearby(id: Long, d: Long, extra: Collection<Long> = emptyList()): Boolean =
+            (d - 1..d + 1).any { id in used[it].orEmpty() || it in extra }
+
+        /** Slots for leftovers: day +2 from the fridge, then (freezable recipes) a frozen portion on days +4..+6. */
+        fun leftoverSlots(r: Recipe, day: Long, type: MealType, count: Int): List<Pair<Long, MealType>> {
             val out = mutableListOf<Pair<Long, MealType>>()
             var last = type
-            for (d in day + 1..day + BATCH_WINDOW_DAYS) {
+            val days = listOf(day + FRIDGE_LEFTOVER_DAY) + if (r.batchMeals >= 3) FREEZER_DAYS.map { day + it } else emptyList()
+            for (d in days) {
                 if (out.size >= count) break
+                if (nearby(r.id, d, extra = listOf(day) + out.map { it.first })) continue
                 val order = if (last == MealType.DINNER) listOf(MealType.LUNCH, MealType.DINNER) else listOf(MealType.DINNER, MealType.LUNCH)
                 order.firstOrNull { (d to it) in free }?.let { out += d to it; last = it }
             }
@@ -256,7 +277,7 @@ object MealPlanner {
         for ((day, type) in queue) {
             if ((day to type) !in free) continue // already covered by a batch
             if (type == MealType.BREAKFAST && rotation.size >= req.breakfastVariety) {
-                val next = rotation.mapNotNull { byId[it] }.filter { it.id in allowedIds }
+                val next = rotation.mapNotNull { byId[it] }.filter { it.id in allowedIds && !nearby(it.id, day) }
                     .minByOrNull { lastBreakfast[it.id] ?: Long.MIN_VALUE }
                 if (next != null) {
                     take(next, day, type)
@@ -265,18 +286,23 @@ object MealPlanner {
                 }
             }
             val targets = req.targetsFor(day)
-            val pool = allowed.filter { it.mealType == type }
+            val pool = allowed.filter { it.mealType == type }.let { all ->
+                if (type == MealType.BREAKFAST && req.breakfastPicks.isNotEmpty()) all.filter { it.id in req.breakfastPicks }.ifEmpty { all } else all
+            }
             val recent = (day - ANTI_REPEAT_DAYS..day + ANTI_REPEAT_DAYS).flatMap { used[it].orEmpty() }.toSet()
-            val candidates = pool.filter { it.id !in recent }
-                .ifEmpty { pool.filter { it.id !in used[day].orEmpty() } }
+            // Never the same dish on consecutive days; with a bigger choice, not within 3 days either.
+            val notNearby = pool.filter { !nearby(it.id, day) }
+            val candidates = notNearby.filter { it.id !in recent }
+                .ifEmpty { notNearby }
+                .ifEmpty { allowed.filter { it.mealType == type && !nearby(it.id, day) } }
                 .ifEmpty { pool }
             if (candidates.isEmpty()) continue
             val best = candidates.map { r ->
-                val covered = if (req.batchCooking && type in MAINS && r.batchMeals > 1) 1 + leftoverSlots(day, type, r.batchMeals - 1).size else 1
+                val covered = if (req.batchCooking && type in MAINS && r.batchMeals > 1) 1 + leftoverSlots(r, day, type, r.batchMeals - 1).size else 1
                 val portions = portionsFor(r, type, targets)
                 r to score(r, portions, day, stock, req, targets, basket, covered).total + variety(r.id, day)
             }.maxWith(compareBy<Pair<Recipe, Double>> { it.second }.thenByDescending { it.first.id }).first
-            val extra = if (req.batchCooking && type in MAINS && best.batchMeals > 1) leftoverSlots(day, type, best.batchMeals - 1) else emptyList()
+            val extra = if (req.batchCooking && type in MAINS && best.batchMeals > 1) leftoverSlots(best, day, type, best.batchMeals - 1) else emptyList()
             val batchId = if (extra.isEmpty()) 0L else day * 10 + type.ordinal + 1
             take(best, day, type, batchId)
             extra.forEach { (d, t) -> take(best, d, t, batchId, leftover = true) }
@@ -300,12 +326,14 @@ object MealPlanner {
         foods: Map<String, Food>,
         pantry: List<StockItem>,
         dislikes: List<String>,
+        baseSwaps: (Recipe) -> Map<String, String> = { emptyMap() },
     ): List<MealSlot> {
         val planned = slots.filter { it.status == MealStatus.PLANNED && it.recipeId in recipes }
         val needed = mutableMapOf<String, Double>()
         planned.forEach { s ->
             val r = recipes.getValue(s.recipeId)
-            r.ingredients.forEach { needed[it.food] = (needed[it.food] ?: 0.0) + it.grams * s.portions / r.servings.coerceAtLeast(1) }
+            effectiveIngredients(r, baseSwaps(r), foods)
+                .forEach { needed[it.food] = (needed[it.food] ?: 0.0) + it.grams * s.portions / r.servings.coerceAtLeast(1) }
         }
         val inPantry = pantry.groupBy { it.food }.mapValues { (_, v) -> v.sumOf { it.grams } }
         val canonical = needed.keys
@@ -317,9 +345,12 @@ object MealPlanner {
                     .maxWithOrNull(compareBy<String>({ inPantry[it] ?: 0.0 }, { needed[it] ?: 0.0 }).thenByDescending { it })
             }
         return planned.mapNotNull { s ->
-            val swaps = recipes.getValue(s.recipeId).ingredients.mapNotNull { ing ->
-                val target = foods[ing.food]?.swapGroup?.let { canonical[it] }
-                if (target != null && target != ing.food) ing.food to target else null
+            val r = recipes.getValue(s.recipeId)
+            val base = baseSwaps(r)
+            val swaps = r.ingredients.mapNotNull { ing ->
+                val used = base[ing.food] ?: ing.food
+                val target = foods[used]?.swapGroup?.let { canonical[it] } ?: used
+                if (target != ing.food) ing.food to target else null
             }.toMap()
             if (swaps != s.swaps) s.copy(swaps = swaps) else null
         }
@@ -337,7 +368,7 @@ object MealPlanner {
         slots.filter { it.epochDay >= today && needsIngredients(it, slots) }.forEach { s ->
             val r = recipes[s.recipeId] ?: return@forEach
             val factor = s.portions / r.servings.coerceAtLeast(1)
-            effectiveIngredients(r, s.swaps).forEach { need[it.food] = (need[it.food] ?: 0.0) + it.grams * factor }
+            effectiveIngredients(r, s.swaps, foods).forEach { need[it.food] = (need[it.food] ?: 0.0) + it.grams * factor }
         }
         val have = pantry.filter { it.expiresOn >= today }.groupBy { it.food }.mapValues { (_, v) -> v.sumOf { it.grams } }
         return need.mapNotNull { (name, grams) ->
@@ -357,11 +388,12 @@ object MealPlanner {
         recipe: Recipe,
         portions: Double,
         swaps: Map<String, String> = emptyMap(),
+        foods: Map<String, Food> = emptyMap(),
     ): Pair<List<PantryItem>, List<Long>> {
         val factor = portions / recipe.servings.coerceAtLeast(1)
         val lots = items.sortedBy { it.expiresOnEpochDay }.associateBy { it.id }.toMutableMap()
         val changed = mutableSetOf<Long>()
-        for (ing in effectiveIngredients(recipe, swaps)) {
+        for (ing in effectiveIngredients(recipe, swaps, foods)) {
             val foodId = foodIdByName[ing.food] ?: continue
             var remaining = ing.grams * factor
             for (lot in lots.values.filter { it.foodId == foodId && it.grams > 0 }.sortedBy { it.expiresOnEpochDay }) {

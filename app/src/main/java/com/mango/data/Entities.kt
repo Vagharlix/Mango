@@ -96,6 +96,15 @@ data class UserProfile(
     val breakfastVariety: Int = 2,
     /** Spice-rack staples the user does NOT keep stocked (they then appear on shopping lists). */
     val stapleOptOut: List<String> = emptyList(),
+    /** Breakfast recipes the rotation may use (empty = any breakfast). */
+    val breakfastPicks: List<Long> = emptyList(),
+    /** Carb types switched off (e.g. "quinoa"); recipes adapt to the remaining ones. */
+    val carbOff: List<String> = emptyList(),
+    /** Protein types switched off (e.g. "pork"); recipes adapt to the remaining ones. */
+    val proteinOff: List<String> = emptyList(),
+    /** Temporary replacements for items that can't be found (food → replacement) until [manualSwapsUntil]. */
+    val manualSwaps: Map<String, String> = emptyMap(),
+    val manualSwapsUntil: Long = 0,
 )
 
 /** Nutrients per 100 g. Values from USDA FoodData Central. */
@@ -124,6 +133,12 @@ data class Food(
     val swapGroup: String? = null,
     /** Spice or long-life staple kept in the spice rack rather than bought per week. */
     val isStaple: Boolean = false,
+    /** Carb type the user can switch off (rice, pasta, potatoes…). */
+    val carbType: String? = null,
+    /** Protein type the user can switch off (chicken, beef, pork, fish…). */
+    val proteinType: String? = null,
+    /** Family of similar produce offered as replacements when an item can't be found. */
+    val family: String? = null,
 )
 
 /** Local barcode cache: maps a scanned product to a food in the catalog (generic or created from Open Food Facts). */

@@ -176,7 +176,7 @@ fun RecipeDetailScreen(id: Long, initialServings: Double, swaps: Map<String, Str
         item {
             GroupedCard {
                 val replaced = swaps.entries.groupBy({ it.value }, { it.key })
-                MealPlanner.effectiveIngredients(r, swaps).forEachIndexed { i, ing ->
+                MealPlanner.effectiveIngredients(r, swaps, byName).forEachIndexed { i, ing ->
                     if (i > 0) HorizontalDivider(color = Hairline)
                     val grams = ing.grams * factor
                     val food = byName[ing.food]

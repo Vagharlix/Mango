@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material.icons.filled.ThumbDown
 import androidx.compose.material3.AlertDialog
@@ -42,19 +43,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mango.data.Food
 import com.mango.data.MealStatus
+import com.mango.domain.FoodPreferences
 import com.mango.data.Recipe
 import com.mango.domain.ShoppingItem
 import kotlin.math.ceil
 
 /** Pre-grocery loop: review the 7-day menu, swap/dislike, and watch the shopping list update live. */
 @Composable
-fun GroceryScreen(onOpenRecipe: (id: Long, portions: Double, swaps: Map<String, String>) -> Unit) {
+fun GroceryScreen(onOpenRecipe: (id: Long, portions: Double, swaps: Map<String, String>) -> Unit, onOpenFoodPrefs: () -> Unit) {
     val vm = mangoViewModel { MealPlanViewModel(it) }
     val s by vm.state.collectAsStateWithLifecycle()
     val message by vm.message.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
     var dislikeFor by remember { mutableStateOf<Recipe?>(null) }
+    var replacing by remember { mutableStateOf<Food?>(null) }
+    val allFoods by vm.allFoods.collectAsStateWithLifecycle()
     LaunchedEffect(message) {
         message?.let {
             snackbar.showSnackbar(it)
@@ -79,6 +84,7 @@ fun GroceryScreen(onOpenRecipe: (id: Long, portions: Double, swaps: Map<String, 
                     "Next shop: " + java.time.DayOfWeek.of(profile.groceryDay).getDisplayName(java.time.format.TextStyle.FULL, java.util.Locale.getDefault())
                 }
                 ScreenHeader("Grocery", eyebrow = eyebrow) {
+                    RoundIconButton(Icons.Filled.Tune, "Food preferences", onClick = onOpenFoodPrefs)
                     RoundIconButton(Icons.Filled.Refresh, "Regenerate week", onClick = vm::regenerate)
                 }
             }
@@ -141,7 +147,28 @@ fun GroceryScreen(onOpenRecipe: (id: Long, portions: Double, swaps: Map<String, 
             if (s.shopping.isEmpty()) {
                 item { Text("Nothing to buy – your pantry covers the plan. Zero waste!", color = Leaf) }
             }
-            items(s.shopping, key = { it.food.id }) { item -> ShoppingRow(item) { vm.markBought(item) } }
+            val replacements = profile.manualSwaps.takeIf { s.today <= profile.manualSwapsUntil }.orEmpty()
+            if (replacements.isNotEmpty()) {
+                item {
+                    SectionCard {
+                        SectionLabel("Replaced this week", color = Sky)
+                        replacements.forEach { (from, to) ->
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text("$to instead of $from", fontSize = 14.sp, modifier = Modifier.weight(1f))
+                                TextButton(onClick = { vm.clearReplacement(from) }) { Text("Undo") }
+                            }
+                        }
+                    }
+                }
+            }
+            items(s.shopping, key = { it.food.id }) { item ->
+                ShoppingRow(
+                    item = item,
+                    canReplace = FoodPreferences.replacementsFor(item.food, allFoods).isNotEmpty(),
+                    onReplace = { replacing = item.food },
+                    onBought = { vm.markBought(item) },
+                )
+            }
         }
         SnackbarHost(snackbar, Modifier.align(Alignment.BottomCenter))
     }
@@ -150,17 +177,41 @@ fun GroceryScreen(onOpenRecipe: (id: Long, portions: Double, swaps: Map<String, 
         vm.dislikeIngredient(term)
         dislikeFor = null
     } }
+
+    replacing?.let { food ->
+        AlertDialog(
+            onDismissRequest = { replacing = null },
+            title = { Text("Can't find ${food.name}?") },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text("Pick a replacement for this week's meals:", style = MaterialTheme.typography.bodySmall)
+                    FoodPreferences.replacementsFor(food, allFoods).forEach { alt ->
+                        Text(
+                            alt.name.replaceFirstChar { it.uppercase() },
+                            modifier = Modifier.fillMaxWidth().clickable {
+                                vm.replace(food.name, alt.name)
+                                replacing = null
+                            }.padding(vertical = 12.dp),
+                            fontSize = 16.sp,
+                        )
+                    }
+                }
+            },
+            confirmButton = {},
+            dismissButton = { TextButton(onClick = { replacing = null }) { Text("Cancel") } },
+        )
+    }
 }
 
 @Composable
-private fun ShoppingRow(item: ShoppingItem, onBought: () -> Unit) {
+private fun ShoppingRow(item: ShoppingItem, canReplace: Boolean, onReplace: () -> Unit, onBought: () -> Unit) {
     Row(Modifier.fillMaxWidth().clickable(onClick = onBought), verticalAlignment = Alignment.CenterVertically) {
         Checkbox(checked = false, onCheckedChange = { onBought() })
         Column(Modifier.weight(1f)) {
             Text(item.food.name.replaceFirstChar { it.uppercase() })
-            Text(item.food.category.name.lowercase().replace('_', ' '), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(quantityText(item.grams, item.food.unitGrams, item.food.unitName), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
-        Text(quantityText(item.grams, item.food.unitGrams, item.food.unitName), style = MaterialTheme.typography.bodyMedium)
+        if (canReplace) TextButton(onClick = onReplace) { Text("Can't find it?", fontSize = 12.sp) }
     }
 }
 

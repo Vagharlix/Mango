@@ -158,6 +158,15 @@ class MealPlanViewModel(repo: Repository) : MangoViewModel(repo) {
     }
 
     fun markBought(item: ShoppingItem) = launchSafe { repo.markBought(item) }
+
+    fun replace(food: String, replacement: String) = launchSafe {
+        repo.replaceIngredient(food, replacement)
+        toast("Using $replacement instead of $food this week")
+    }
+
+    fun clearReplacement(food: String) = launchSafe { repo.clearReplacement(food) }
+
+    val allFoods = repo.foods.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 }
 
 @Composable
@@ -305,11 +314,18 @@ private fun MealCard(meal: PlannedMeal, today: Long, onOpen: () -> Unit, onCook:
                     if (meal.slot.status == MealStatus.PLANNED) {
                         when {
                             meal.isBatchCook && meal.leftovers.isNotEmpty() -> Text(
-                                "Cook ${servingsText(meal.cookPortions)} – also covers " + meal.leftovers.joinToString(", ") { mealLabel(it, today) },
+                                "Cook ${servingsText(meal.cookPortions)} – also covers " + meal.leftovers.joinToString(", ") { mealLabel(it, today) } +
+                                    if (meal.leftovers.any { it.epochDay - meal.slot.epochDay > MealPlanner.FRIDGE_LEFTOVER_DAY }) ". Freeze 1 portion." else "",
                                 fontSize = 12.sp, color = Leaf,
                             )
                             meal.slot.isLeftover -> Text(
-                                meal.cookSlot?.let { "From ${mealLabel(it, today)} – just reheat" } ?: "Cook fresh (batch was re-planned)",
+                                meal.cookSlot?.let {
+                                    if (meal.slot.epochDay - it.epochDay > MealPlanner.FRIDGE_LEFTOVER_DAY) {
+                                        "Frozen portion from ${mealLabel(it, today)} – thaw in the fridge the night before"
+                                    } else {
+                                        "From ${mealLabel(it, today)} – just reheat"
+                                    }
+                                } ?: "Cook fresh (batch was re-planned)",
                                 fontSize = 12.sp, color = Sky,
                             )
                         }

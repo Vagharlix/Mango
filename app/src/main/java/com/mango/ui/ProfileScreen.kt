@@ -1,5 +1,6 @@
 package com.mango.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,14 +19,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.InputChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -116,7 +116,7 @@ class ProfileViewModel(repo: Repository) : MangoViewModel(repo) {
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(onOpenFoodPrefs: () -> Unit) {
     val vm = mangoViewModel { ProfileViewModel(it) }
     val p by vm.draft.collectAsStateWithLifecycle()
     val isNew by vm.isNew.collectAsStateWithLifecycle()
@@ -221,21 +221,16 @@ fun ProfileScreen() {
 
             SectionCard {
                 Text("Meal planning", style = MaterialTheme.typography.titleMedium)
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Column(Modifier.weight(1f)) {
-                        Text("Different breakfasts per week")
+                Row(Modifier.fillMaxWidth().clickable(enabled = !isNew, onClick = onOpenFoodPrefs), verticalAlignment = Alignment.CenterVertically) {
+                    Column(Modifier.weight(1f).padding(vertical = 6.dp)) {
+                        Text("Food preferences")
                         Text(
-                            "Breakfasts rotate between these. Longer dishes (curries, stews, sauces) are batch cooked for 2-3 meals.",
+                            if (isNew) "Available once your profile is created" else
+                                "Breakfasts (${p.breakfastVariety}/week), carbs and meat & fish you want to eat",
                             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
-                    IconButton(onClick = { vm.update { it.copy(breakfastVariety = (it.breakfastVariety - 1).coerceAtLeast(1)) } }) {
-                        Icon(Icons.Filled.Remove, contentDescription = "Fewer breakfasts")
-                    }
-                    Text(p.breakfastVariety.toString(), style = MaterialTheme.typography.titleMedium)
-                    IconButton(onClick = { vm.update { it.copy(breakfastVariety = (it.breakfastVariety + 1).coerceAtMost(7)) } }) {
-                        Icon(Icons.Filled.Add, contentDescription = "More breakfasts")
-                    }
+                    Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null, tint = Faint)
                 }
                 Text("Grocery day", style = MaterialTheme.typography.titleMedium)
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
