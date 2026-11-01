@@ -37,9 +37,14 @@ object Routes {
     const val TIMER = "timer"
     const val SCANNER = "scanner"
     const val RECIPES = "recipes"
-    const val RECIPE = "recipe/{id}"
+    const val RECIPE = "recipe/{id}?portions={portions}"
     const val EDITOR = "editor/{id}"
-    fun recipe(id: Long) = "recipe/$id"
+    const val SESSION = "session/{week}/{day}"
+    const val EXERCISE = "exercise/{week}/{day}/{index}"
+    const val PLAN = "plan"
+    fun recipe(id: Long, portions: Double? = null) = "recipe/$id" + (portions?.let { "?portions=$it" } ?: "")
+    fun session(week: Int, day: Int) = "session/$week/$day"
+    fun exercise(week: Int, day: Int, index: Int) = "exercise/$week/$day/$index"
     fun editor(id: Long) = "editor/$id"
 }
 
@@ -87,19 +92,53 @@ fun MangoNavHost(openTimer: Boolean, onTimerOpened: () -> Unit) {
         NavHost(nav, startDestination = Routes.TRAINING, modifier = Modifier.padding(padding)) {
             composable(Routes.TRAINING) {
                 TrainingScreen(
-                    onOpenTimer = { nav.navigate(Routes.TIMER) },
+                    onOpenSession = { week, day -> nav.navigate(Routes.session(week, day)) },
+                    onOpenPlan = { nav.navigate(Routes.PLAN) },
                     onSetupProfile = { nav.switchTab(Routes.PROFILE) },
                 )
             }
+            composable(
+                Routes.SESSION,
+                arguments = listOf(navArgument("week") { type = NavType.IntType }, navArgument("day") { type = NavType.IntType }),
+            ) { entry ->
+                val week = entry.arguments?.getInt("week") ?: 0
+                val day = entry.arguments?.getInt("day") ?: 0
+                SessionScreen(
+                    week = week,
+                    day = day,
+                    onOpenExercise = { nav.navigate(Routes.exercise(week, day, it)) },
+                    onOpenTimer = { nav.navigate(Routes.TIMER) { launchSingleTop = true } },
+                    onBack = { nav.popBackStack() },
+                )
+            }
+            composable(
+                Routes.EXERCISE,
+                arguments = listOf(
+                    navArgument("week") { type = NavType.IntType },
+                    navArgument("day") { type = NavType.IntType },
+                    navArgument("index") { type = NavType.IntType },
+                ),
+            ) { entry ->
+                ExerciseScreen(
+                    week = entry.arguments?.getInt("week") ?: 0,
+                    day = entry.arguments?.getInt("day") ?: 0,
+                    index = entry.arguments?.getInt("index") ?: 0,
+                    onOpenTimer = { nav.navigate(Routes.TIMER) { launchSingleTop = true } },
+                    onBack = { nav.popBackStack() },
+                )
+            }
+            composable(Routes.PLAN) {
+                PlanScreen(onOpenSession = { week, day -> nav.navigate(Routes.session(week, day)) }, onBack = { nav.popBackStack() })
+            }
             composable(Routes.MEALS) {
                 MealsScreen(
-                    onOpenRecipe = { nav.navigate(Routes.recipe(it)) },
+                    onOpenRecipe = { id, portions -> nav.navigate(Routes.recipe(id, portions)) },
                     onOpenRecipes = { nav.navigate(Routes.RECIPES) },
                     onOpenGrocery = { nav.switchTab(Routes.GROCERY) },
                     onSetupProfile = { nav.switchTab(Routes.PROFILE) },
                 )
             }
-            composable(Routes.GROCERY) { GroceryScreen(onOpenRecipe = { nav.navigate(Routes.recipe(it)) }) }
+            composable(Routes.GROCERY) { GroceryScreen(onOpenRecipe = { id, portions -> nav.navigate(Routes.recipe(id, portions)) }) }
             composable(Routes.PANTRY) { PantryScreen(onScan = { nav.navigate(Routes.SCANNER) }) }
             composable(Routes.PROFILE) { ProfileScreen() }
             composable(Routes.TIMER) { TimerScreen(onClose = { nav.popBackStack() }) }
@@ -111,9 +150,16 @@ fun MangoNavHost(openTimer: Boolean, onTimerOpened: () -> Unit) {
                     onBack = { nav.popBackStack() },
                 )
             }
-            composable(Routes.RECIPE, arguments = listOf(navArgument("id") { type = NavType.LongType })) { entry ->
+            composable(
+                Routes.RECIPE,
+                arguments = listOf(
+                    navArgument("id") { type = NavType.LongType },
+                    navArgument("portions") { type = NavType.FloatType; defaultValue = 1f },
+                ),
+            ) { entry ->
                 RecipeDetailScreen(
                     id = entry.arguments?.getLong("id") ?: 0,
+                    initialServings = (entry.arguments?.getFloat("portions") ?: 1f).toDouble(),
                     onEdit = { nav.navigate(Routes.editor(it)) },
                     onBack = { nav.popBackStack() },
                 )

@@ -79,15 +79,30 @@ class Repository(private val context: Context, private val db: MangoDatabase) {
             // Exercises are read-only reference data: refresh on every start so asset updates (new protocols,
             // equipment requirements) reach existing installs.
             db.exerciseDao().insertAll(readAsset<List<Exercise>>("exercises.json"))
-            if (recipeDao.count() == 0) {
-                val byName = foodDao.getAll().associateBy { it.name }
-                recipeDao.insertAll(readAsset<List<Recipe>>("recipes.json").map { NutritionEngine.withNutrients(it, byName) })
-            }
+            syncSeedRecipes()
             seeded.complete(Unit)
         } catch (e: Exception) {
             seeded.completeExceptionally(e)
             throw e
         }
+    }
+
+    /**
+     * Inserts new bundled recipes and refreshes bundled ones the user never edited, so recipe corrections
+     * in app updates reach existing installs. Custom and user-modified recipes are never touched.
+     */
+    private suspend fun syncSeedRecipes() {
+        val byName = foodDao.getAll().associateBy { it.name }
+        val existing = recipeDao.getAll().associateBy { it.name }
+        val seeds = readAsset<List<Recipe>>("recipes.json").map { NutritionEngine.withNutrients(it, byName) }
+        val fresh = seeds.filter { it.name !in existing }
+        if (fresh.isNotEmpty()) recipeDao.insertAll(fresh)
+        val changed = seeds.mapNotNull { seed ->
+            val old = existing[seed.name]?.takeUnless { it.isCustom || it.isUserModified } ?: return@mapNotNull null
+            seed.copy(id = old.id, isHidden = old.isHidden).takeIf { it != old }
+        }
+        changed.forEach { recipeDao.update(it) }
+        if (changed.isNotEmpty()) planLock.withLock { reportionLocked(changed.associateBy { it.id }) }
     }
 
     private inline fun <reified T> readAsset(name: String): T =
@@ -320,15 +335,17 @@ class Repository(private val context: Context, private val db: MangoDatabase) {
         val computed = NutritionEngine.withNutrients(recipe, byName)
         if (recipe.id == 0L) return recipeDao.insert(computed.copy(isCustom = true))
         recipeDao.update(computed.copy(isUserModified = true))
-        // Keep portions of already-planned meals on target with the new macros.
-        planLock.withLock {
-            val p = profileDao.get() ?: return@withLock
-            val replanned = mealDao.getRange(today(), today() + 13)
-                .filter { it.status == MealStatus.PLANNED && it.recipeId == recipe.id }
-                .map { it.copy(portions = MealPlanner.portionsFor(computed, it.mealType, targetsFor(p, it.epochDay))) }
-            if (replanned.isNotEmpty()) mealDao.upsertAll(replanned)
-        }
+        planLock.withLock { reportionLocked(mapOf(computed.id to computed)) }
         return recipe.id
+    }
+
+    /** Keeps portions of already-planned meals on target after a recipe's macros changed. */
+    private suspend fun reportionLocked(changed: Map<Long, Recipe>) {
+        val p = profileDao.get() ?: return
+        val replanned = mealDao.getRange(today(), today() + 13)
+            .filter { it.status == MealStatus.PLANNED && it.recipeId in changed }
+            .map { it.copy(portions = MealPlanner.portionsFor(changed.getValue(it.recipeId), it.mealType, targetsFor(p, it.epochDay))) }
+        if (replanned.isNotEmpty()) mealDao.upsertAll(replanned)
     }
 
     suspend fun deleteCustomRecipe(id: Long) = planLock.withLock {

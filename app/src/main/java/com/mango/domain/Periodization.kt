@@ -33,6 +33,8 @@ data class Prescription(
     val loadText: String,
     /** Name of the planned exercise this one replaces because its equipment isn't available. */
     val substitutedFor: String? = null,
+    /** Compact load for tags and tiles: "+6.5 kg", "−5 kg", "BW", "RPE 7-8" or "". */
+    val load: String = "",
 ) {
     val isTimed: Boolean get() = workSec > 0 || setRestSec > 0
 
@@ -72,7 +74,16 @@ data class TrainingWeek(
 data class StrengthBaseline(val fingerAddedKg: Double, val pullAddedKg: Double, val bodyWeightKg: Double)
 
 @Serializable
-data class TimerInterval(val label: String, val detail: String, val seconds: Int, val isWork: Boolean)
+data class TimerInterval(
+    val label: String,
+    val detail: String,
+    val seconds: Int,
+    val isWork: Boolean,
+    val exercise: String = "",
+    val set: Int = 0,
+    val sets: Int = 0,
+    val cues: List<String> = emptyList(),
+)
 
 fun formatDuration(sec: Int): String =
     if (sec < 60) "${sec}s" else "%d:%02d".format(sec / 60, sec % 60)
@@ -214,22 +225,60 @@ object Periodization {
 
     private fun fmtKg(v: Double) = if (v % 1.0 == 0.0) v.toInt().toString() else v.toString()
 
+    private fun signedKg(v: Double) = if (v >= 0) "+${fmtKg(v)} kg" else "−${fmtKg(abs(v))} kg"
+
+    fun shortLoad(ex: Exercise, intensity: Double?, baseline: StrengthBaseline, equipment: Set<Equipment>): String = when (ex.loadBasis) {
+        LoadBasis.FINGER_1RM -> {
+            val added = targetAddedKg(intensity ?: 0.0, baseline.bodyWeightKg, baseline.fingerAddedKg)
+            if (Equipment.WEIGHTS !in equipment && added > 0) "BW" else signedKg(added)
+        }
+        LoadBasis.PULL_1RM -> signedKg(targetAddedKg(intensity ?: 0.0, baseline.bodyWeightKg, baseline.pullAddedKg))
+        LoadBasis.BODYWEIGHT -> "BW"
+        LoadBasis.RPE -> "RPE 7-8"
+        LoadBasis.NONE -> ""
+    }
+
+    /** What the athlete does during a work interval, shown big on the timer. */
+    fun workLabel(ex: Exercise): String = when {
+        ex.id.startsWith("fb_edge") -> "LIFT"
+        ex.category == ExerciseCategory.FINGERBOARD || ex.id == "bench_max_hang_5s" -> "HANG"
+        ex.category == ExerciseCategory.CLIMBING -> "CLIMB"
+        ex.category == ExerciseCategory.CORE || ex.category.isMobility -> if (ex.workSec > 0) "HOLD" else "WORK"
+        else -> "WORK"
+    }
+
     fun intervals(p: Prescription): List<TimerInterval> {
-        val out = mutableListOf(TimerInterval("GET READY", p.exercise.name, 10, false))
+        val ex = p.exercise
+        val cues = ex.cues.take(3)
+        fun iv(label: String, detail: String, sec: Int, work: Boolean, set: Int) =
+            TimerInterval(label, detail, sec, work, ex.name, set, p.sets, cues)
+        val work = workLabel(ex)
+        val out = mutableListOf(iv("GET READY", ex.name, 10, false, 1))
         for (s in 1..p.sets) {
             if (p.workSec > 0) {
                 for (r in 1..p.reps) {
                     val rep = if (p.reps > 1) " · rep $r/${p.reps}" else ""
-                    out += TimerInterval("WORK", "Set $s/${p.sets}$rep", p.workSec, true)
-                    if (r < p.reps && p.repRestSec > 0) out += TimerInterval("REST", "Next: rep ${r + 1}", p.repRestSec, false)
+                    out += iv(work, "Set $s/${p.sets}$rep", p.workSec, true, s)
+                    if (r < p.reps && p.repRestSec > 0) out += iv("REST", "Next: rep ${r + 1}", p.repRestSec, false, s)
                 }
             } else {
-                out += TimerInterval("WORK", "Set $s/${p.sets} · ${p.reps} reps", max(20, p.reps * 4), true)
+                out += iv(work, "Set $s/${p.sets} · ${p.reps} reps", max(20, p.reps * 4), true, s)
             }
-            if (s < p.sets && p.setRestSec > 0) out += TimerInterval("REST", "Next: set ${s + 1}", p.setRestSec, false)
+            if (s < p.sets && p.setRestSec > 0) out += iv("REST", "Next: set ${s + 1}", p.setRestSec, false, s + 1)
         }
         return out
     }
+
+    /** A whole session back to back: one countdown, then a 60 s set-up break before each next exercise. */
+    fun sessionIntervals(items: List<Prescription>): List<TimerInterval> =
+        items.filter { it.isTimed }.flatMapIndexed { i, p ->
+            val single = intervals(p)
+            if (i == 0) single else listOf(single.first().copy(label = "SET UP", detail = "Next: ${p.exercise.name}", seconds = 60)) + single.drop(1)
+        }
+
+    /** Rough session length: all work and rest intervals plus ~1 min set-up per exercise. */
+    fun estimateMinutes(items: List<Prescription>): Int =
+        if (items.isEmpty()) 0 else ((items.sumOf { p -> intervals(p).drop(1).sumOf { it.seconds } } + items.size * 60) / 60.0).roundToInt().coerceAtLeast(5)
 
     /**
      * Ordered substitutes used when a planned exercise's equipment is missing. Each replacement trains the
@@ -348,6 +397,7 @@ object Periodization {
                 Prescription(
                     ex, sets, ex.reps, ex.workSec, ex.repRestSec, ex.setRestSec, intensity,
                     loadText(ex, intensity, baseline, equipment), substitutedFor = planned?.name,
+                    load = shortLoad(ex, intensity, baseline, equipment),
                 )
             }
 

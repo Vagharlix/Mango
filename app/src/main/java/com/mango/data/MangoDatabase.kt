@@ -93,9 +93,6 @@ interface RecipeDao {
     @Query("SELECT * FROM recipes WHERE id = :id")
     suspend fun getById(id: Long): Recipe?
 
-    @Query("SELECT COUNT(*) FROM recipes")
-    suspend fun count(): Int
-
     @Insert
     suspend fun insertAll(recipes: List<Recipe>)
 

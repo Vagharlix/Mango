@@ -128,7 +128,7 @@ fun ProfileScreen() {
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Text(if (isNew) "Welcome to Mango" else "Profile", style = MaterialTheme.typography.headlineSmall)
+            ScreenHeader(if (isNew) "Welcome to Mango" else "Profile", eyebrow = if (isNew) "Let's set things up" else "Settings & targets")
             if (isNew) {
                 Text(
                     "Set up your biometrics to generate your training block and meal plan. Everything is computed on this device.",

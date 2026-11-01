@@ -130,6 +130,19 @@ class EnginesTest {
         assertEquals(Phase.PEAK, weeks[12].phase)
     }
 
+    @Test fun guidedSessionChainsExercisesWithSetUpBreaks() {
+        val day = weeksWith(Equipment.DEFAULT)[5].days[0] // Max Strength, day 1
+        val all = Periodization.sessionIntervals(day.items)
+        val timed = day.items.filter { it.isTimed }
+        assertEquals(1, all.count { it.label == "GET READY" })
+        assertEquals(timed.size - 1, all.count { it.label == "SET UP" && it.seconds == 60 })
+        assertEquals(timed.sumOf { p -> Periodization.intervals(p).count { it.isWork } }, all.count { it.isWork })
+        val hang = day.items.first { it.exercise.id == "fb_max_hangs_10s" }
+        assertEquals("HANG", Periodization.intervals(hang)[1].label)
+        assertEquals("+6.5 kg", hang.load) // 85 % of (70 + 20) - 70
+        assertTrue(Periodization.estimateMinutes(day.items) in 30..120)
+    }
+
     // ---------- Equipment ----------
 
     private fun weeksWith(equipment: List<Equipment>) =
@@ -258,9 +271,9 @@ class EnginesTest {
         val byId = mapOf(r.id to r)
         val planned = MealSlot(today, MealType.DINNER, r.id, r.servings.toDouble())
         val full = MealPlanner.shoppingList(listOf(planned), byId, foodsByName, emptyList(), today)
-        assertTrue(full.any { it.food.name == "turkey mince" && it.grams == 400.0 })
+        assertTrue(full.any { it.food.name == "turkey mince" && it.grams == 320.0 })
         // Turkey bought for a meal that was skipped stays in the pantry and is no longer needed.
-        val pantry = listOf(StockItem("turkey mince", 400.0, today + 2, false))
+        val pantry = listOf(StockItem("turkey mince", 320.0, today + 2, false))
         val next = MealPlanner.shoppingList(listOf(planned), byId, foodsByName, pantry, today)
         assertTrue(next.none { it.food.name == "turkey mince" })
         assertTrue(MealPlanner.shoppingList(listOf(planned.copy(status = MealStatus.SKIPPED)), byId, foodsByName, emptyList(), today).isEmpty())

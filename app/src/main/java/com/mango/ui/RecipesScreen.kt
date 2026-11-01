@@ -1,5 +1,6 @@
 package com.mango.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,9 +14,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FilterChip
@@ -36,12 +38,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.mango.data.MealType
 import com.mango.data.Recipe
 import com.mango.data.Repository
-import com.mango.domain.NutritionEngine
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 
@@ -57,14 +59,6 @@ class RecipesViewModel(repo: Repository) : MangoViewModel(repo) {
         repo.deleteCustomRecipe(recipe.id)
         repo.ensureWeekPlan()
         onDone()
-    }
-}
-
-@Composable
-fun BackHeader(title: String, onBack: () -> Unit) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back") }
-        Text(title, style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f))
     }
 }
 
@@ -118,58 +112,97 @@ fun RecipesScreen(onOpen: (Long) -> Unit, onCreate: () -> Unit, onBack: () -> Un
 }
 
 @Composable
-fun RecipeDetailScreen(id: Long, onEdit: (Long) -> Unit, onBack: () -> Unit) {
+fun RecipeDetailScreen(id: Long, initialServings: Double, onEdit: (Long) -> Unit, onBack: () -> Unit) {
     val vm = mangoViewModel { RecipesViewModel(it) }
     val recipes by vm.recipes.collectAsStateWithLifecycle()
     val foods by vm.foods.collectAsStateWithLifecycle()
     val r = recipes.firstOrNull { it.id == id }
+    // Quantities are shown for what you cook: your planned portion from a meal, otherwise one person.
+    var servings by remember { mutableStateOf(initialServings.coerceIn(0.25, 12.0)) }
     if (r == null) {
-        Column(Modifier.padding(16.dp)) { BackHeader("Recipe", onBack) }
+        Column(Modifier.padding(16.dp)) { BackBar(onBack) }
         return
     }
     val byName = remember(foods) { foods.associateBy { it.name } }
-    val n = r.perServing
+    val factor = servings / r.servings.coerceAtLeast(1)
+    val n = r.perServing * servings
 
-    LazyColumn(contentPadding = PaddingValues(16.dp, 8.dp, 16.dp, 32.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        item { BackHeader(r.name, onBack) }
+    LazyColumn(contentPadding = PaddingValues(16.dp, 4.dp, 16.dp, 32.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        item { BackBar(onBack) }
         item {
-            Row {
-                Pill(r.mealType.label)
-                Pill(r.cuisine, Sky)
-                Pill("${r.prepMinutes} min", Leaf)
-                if (r.isHidden) Pill("HIDDEN", Danger)
+            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                SectionLabel(r.mealType.label, color = MangoOrange)
+                Text(r.name, fontSize = 26.sp, fontWeight = FontWeight.ExtraBold, lineHeight = 30.sp)
+                Row {
+                    Pill(r.cuisine, Sky)
+                    Pill("${r.prepMinutes} min", Leaf)
+                    if (r.isCustom) Pill("Custom", Leaf)
+                    if (r.isUserModified) Pill("Edited", Sky)
+                    if (r.isHidden) Pill("Hidden", Danger)
+                }
             }
         }
         item {
-            SectionCard {
-                Text("Per serving (recipe makes ${r.servings})", style = MaterialTheme.typography.titleMedium)
-                Text("${n.kcal.fmt()} kcal · Protein ${n.protein.fmt(1)} g · Carbs ${n.carbs.fmt(1)} g · Fat ${n.fat.fmt(1)} g")
+            Row(
+                Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surface, RoundedCornerShape(14.dp)).padding(horizontal = 8.dp, vertical = 6.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Column(Modifier.weight(1f).padding(start = 8.dp)) {
+                    Text("Quantities for", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(servingsText(servings), fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                }
+                IconButton(onClick = { servings = (servings - 0.25).coerceAtLeast(0.25) }) { Icon(Icons.Filled.Remove, contentDescription = "Fewer servings") }
+                IconButton(onClick = { servings = (servings + 0.25).coerceAtMost(12.0) }) { Icon(Icons.Filled.Add, contentDescription = "More servings") }
+            }
+        }
+        item {
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    StatTile("Energy", "${n.kcal.fmt()} kcal", Modifier.weight(1f), highlight = true)
+                    StatTile("Protein", "${n.protein.fmt()} g", Modifier.weight(1f))
+                }
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    StatTile("Carbs", "${n.carbs.fmt()} g", Modifier.weight(1f))
+                    StatTile("Fat", "${n.fat.fmt()} g", Modifier.weight(1f))
+                }
                 Text(
                     "Fibre ${n.fiber.fmt(1)} g · Vitamin C ${n.vitaminC.fmt()} mg · Omega-3 ${n.omega3.fmt(2)} g",
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         }
-        item { Text("Ingredients", style = MaterialTheme.typography.titleMedium) }
-        items(r.ingredients) { ing ->
-            val ni = NutritionEngine.ingredientNutrients(ing, byName)
-            Row(Modifier.fillMaxWidth()) {
-                Text("${ing.grams.fmt()} g  ${ing.food}", modifier = Modifier.weight(1f))
-                Text("${ni.kcal.fmt()} kcal · P ${ni.protein.fmt(1)}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        item { SectionLabel("Ingredients", Modifier.padding(top = 4.dp)) }
+        item {
+            GroupedCard {
+                r.ingredients.forEachIndexed { i, ing ->
+                    if (i > 0) HorizontalDivider(color = Hairline)
+                    val grams = ing.grams * factor
+                    val food = byName[ing.food]
+                    Row(Modifier.fillMaxWidth().padding(14.dp, 11.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Text(ing.food.replaceFirstChar { it.uppercase() }, fontSize = 15.sp, modifier = Modifier.weight(1f))
+                        Text(
+                            quantityText(roundGrams(grams), food?.unitGrams, food?.unitName),
+                            fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
             }
         }
-        item {
-            HorizontalDivider()
-            Text("Method", style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 8.dp))
-        }
+        item { SectionLabel("Method", Modifier.padding(top = 4.dp)) }
         itemsIndexed(r.steps) { i, step ->
             Row {
                 Text("${i + 1}.", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary, modifier = Modifier.padding(end = 8.dp))
-                Text(step)
+                Text(step, fontSize = 15.sp, lineHeight = 21.sp)
             }
         }
         item {
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(top = 12.dp)) {
+            Text(
+                "The recipe as written makes ${r.servings} serving${if (r.servings == 1) "" else "s"}. Liquids like broth are mostly absorbed or evaporate while cooking.",
+                fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 8.dp),
+            )
+        }
+        item {
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(top = 8.dp)) {
                 Button(onClick = { onEdit(r.id) }, modifier = Modifier.weight(1f)) { Text("Edit") }
                 OutlinedButton(onClick = { vm.setHidden(r, !r.isHidden) }, modifier = Modifier.weight(1f)) {
                     Text(if (r.isHidden) "Restore" else "Hide")
@@ -181,3 +214,6 @@ fun RecipeDetailScreen(id: Long, onEdit: (Long) -> Unit, onBack: () -> Unit) {
         }
     }
 }
+
+/** Kitchen-friendly rounding: 1 g under 20 g, then 5 g steps. */
+private fun roundGrams(g: Double): Double = if (g < 20) kotlin.math.round(g) else kotlin.math.round(g / 5) * 5

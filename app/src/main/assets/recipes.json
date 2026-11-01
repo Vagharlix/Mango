@@ -166,7 +166,7 @@
   "ingredients": [
    {
     "food": "firm tofu",
-    "grams": 200.0
+    "grams": 150.0
    },
    {
     "food": "bell pepper",
@@ -1658,7 +1658,7 @@
    },
    {
     "food": "vegetable broth",
-    "grams": 800.0
+    "grams": 600.0
    },
    {
     "food": "olive oil",
@@ -1993,7 +1993,7 @@
    },
    {
     "food": "vegetable broth",
-    "grams": 800.0
+    "grams": 600.0
    },
    {
     "food": "parmesan",
@@ -2049,7 +2049,7 @@
    },
    {
     "food": "chicken broth",
-    "grams": 1000.0
+    "grams": 800.0
    },
    {
     "food": "parsley",
@@ -2489,7 +2489,7 @@
    },
    {
     "food": "vegetable broth",
-    "grams": 900.0
+    "grams": 750.0
    },
    {
     "food": "spinach",
@@ -2624,7 +2624,7 @@
   "ingredients": [
    {
     "food": "tomato",
-    "grams": 600.0
+    "grams": 500.0
    },
    {
     "food": "cucumber",
@@ -2765,7 +2765,7 @@
   "ingredients": [
    {
     "food": "turkey mince",
-    "grams": 400.0
+    "grams": 320.0
    },
    {
     "food": "kidney beans",
@@ -2828,7 +2828,7 @@
   "ingredients": [
    {
     "food": "chicken breast",
-    "grams": 350.0
+    "grams": 300.0
    },
    {
     "food": "broccoli",
@@ -2944,7 +2944,7 @@
   "ingredients": [
    {
     "food": "chicken thigh",
-    "grams": 400.0
+    "grams": 320.0
    },
    {
     "food": "coconut milk",
@@ -3008,7 +3008,7 @@
   "ingredients": [
    {
     "food": "cod fillet",
-    "grams": 400.0
+    "grams": 340.0
    },
    {
     "food": "quinoa",
@@ -3055,7 +3055,7 @@
   "ingredients": [
    {
     "food": "chickpeas",
-    "grams": 400.0
+    "grams": 300.0
    },
    {
     "food": "spinach",
@@ -3111,7 +3111,7 @@
   "ingredients": [
    {
     "food": "pork tenderloin",
-    "grams": 400.0
+    "grams": 320.0
    },
    {
     "food": "brussels sprouts",
@@ -3206,7 +3206,7 @@
   "ingredients": [
    {
     "food": "firm tofu",
-    "grams": 400.0
+    "grams": 300.0
    },
    {
     "food": "broccoli",
@@ -3270,7 +3270,7 @@
    },
    {
     "food": "turkey mince",
-    "grams": 350.0
+    "grams": 300.0
    },
    {
     "food": "quinoa",
@@ -3318,7 +3318,7 @@
   "ingredients": [
    {
     "food": "chicken thigh",
-    "grams": 400.0
+    "grams": 320.0
    },
    {
     "food": "chickpeas",
@@ -3386,7 +3386,7 @@
   "ingredients": [
    {
     "food": "beef sirloin",
-    "grams": 400.0
+    "grams": 320.0
    },
    {
     "food": "barley",
@@ -3414,7 +3414,7 @@
    },
    {
     "food": "vegetable broth",
-    "grams": 900.0
+    "grams": 700.0
    },
    {
     "food": "garlic",
@@ -3557,7 +3557,7 @@
   "ingredients": [
    {
     "food": "chicken breast",
-    "grams": 400.0
+    "grams": 320.0
    },
    {
     "food": "bell pepper",
@@ -3620,7 +3620,7 @@
    },
    {
     "food": "mushrooms",
-    "grams": 300.0
+    "grams": 250.0
    },
    {
     "food": "spinach",
@@ -3636,7 +3636,7 @@
    },
    {
     "food": "vegetable broth",
-    "grams": 900.0
+    "grams": 700.0
    },
    {
     "food": "parmesan",
@@ -3672,7 +3672,7 @@
   "ingredients": [
    {
     "food": "cod fillet",
-    "grams": 400.0
+    "grams": 340.0
    },
    {
     "food": "tomato",
@@ -3696,7 +3696,7 @@
    },
    {
     "food": "potato",
-    "grams": 500.0
+    "grams": 400.0
    },
    {
     "food": "parsley",
@@ -3723,7 +3723,7 @@
   "ingredients": [
    {
     "food": "black beans",
-    "grams": 400.0
+    "grams": 300.0
    },
    {
     "food": "whole wheat tortilla",
@@ -3778,23 +3778,23 @@
   "ingredients": [
    {
     "food": "chicken breast",
-    "grams": 350.0
+    "grams": 300.0
    },
    {
     "food": "eggplant",
-    "grams": 250.0
-   },
-   {
-    "food": "zucchini",
-    "grams": 250.0
-   },
-   {
-    "food": "bell pepper",
     "grams": 200.0
    },
    {
+    "food": "zucchini",
+    "grams": 200.0
+   },
+   {
+    "food": "bell pepper",
+    "grams": 150.0
+   },
+   {
     "food": "tomato",
-    "grams": 300.0
+    "grams": 250.0
    },
    {
     "food": "onion",
@@ -3896,7 +3896,7 @@
   "ingredients": [
    {
     "food": "pork tenderloin",
-    "grams": 400.0
+    "grams": 320.0
    },
    {
     "food": "carrot",
@@ -4114,7 +4114,7 @@
   "ingredients": [
    {
     "food": "chicken thigh",
-    "grams": 450.0
+    "grams": 350.0
    },
    {
     "food": "canned tomatoes",
@@ -4220,7 +4220,7 @@
   "ingredients": [
    {
     "food": "eggplant",
-    "grams": 600.0
+    "grams": 500.0
    },
    {
     "food": "canned tomatoes",
@@ -4272,7 +4272,7 @@
   "ingredients": [
    {
     "food": "turkey mince",
-    "grams": 400.0
+    "grams": 320.0
    },
    {
     "food": "eggs",
@@ -4391,7 +4391,7 @@
   "ingredients": [
    {
     "food": "chicken thigh",
-    "grams": 450.0
+    "grams": 350.0
    },
    {
     "food": "brussels sprouts",
@@ -4399,7 +4399,7 @@
    },
    {
     "food": "potato",
-    "grams": 500.0
+    "grams": 400.0
    },
    {
     "food": "lemon",
@@ -4438,7 +4438,7 @@
   "ingredients": [
    {
     "food": "firm tofu",
-    "grams": 400.0
+    "grams": 300.0
    },
    {
     "food": "potato",
@@ -4466,7 +4466,7 @@
    },
    {
     "food": "vegetable broth",
-    "grams": 600.0
+    "grams": 500.0
    },
    {
     "food": "soy sauce",
