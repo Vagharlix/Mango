@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.Kitchen
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Restaurant
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Icon
@@ -34,7 +34,11 @@ object Routes {
     const val MEALS = "meals"
     const val GROCERY = "grocery"
     const val PANTRY = "pantry"
-    const val PROFILE = "profile"
+    const val OPTIONS = "options"
+    const val BODY = "options/body"
+    const val OPT_TRAINING = "options/training"
+    const val DISLIKES = "options/dislikes"
+    const val ABOUT = "options/about"
     const val TIMER = "timer"
     const val SCANNER = "scanner"
     const val RECIPES = "recipes"
@@ -62,7 +66,7 @@ private val tabs = listOf(
     Tab(Routes.MEALS, "Meals", Icons.Filled.Restaurant),
     Tab(Routes.GROCERY, "Grocery", Icons.Filled.ShoppingCart),
     Tab(Routes.PANTRY, "Pantry", Icons.Filled.Kitchen),
-    Tab(Routes.PROFILE, "Profile", Icons.Filled.Person),
+    Tab(Routes.OPTIONS, "Options", Icons.Filled.Settings),
 )
 
 @Composable
@@ -101,7 +105,8 @@ fun MangoNavHost(openTimer: Boolean, onTimerOpened: () -> Unit) {
                 TrainingScreen(
                     onOpenSession = { week, day -> nav.navigate(Routes.session(week, day)) },
                     onOpenPlan = { nav.navigate(Routes.PLAN) },
-                    onSetupProfile = { nav.switchTab(Routes.PROFILE) },
+                    onSetupProfile = { nav.navigate(Routes.BODY) },
+                    onOpenTrainingSettings = { nav.navigate(Routes.OPT_TRAINING) },
                 )
             }
             composable(
@@ -142,7 +147,7 @@ fun MangoNavHost(openTimer: Boolean, onTimerOpened: () -> Unit) {
                     onOpenRecipe = { id, portions, swaps -> nav.navigate(Routes.recipe(id, portions, swaps)) },
                     onOpenRecipes = { nav.navigate(Routes.RECIPES) },
                     onOpenGrocery = { nav.switchTab(Routes.GROCERY) },
-                    onSetupProfile = { nav.switchTab(Routes.PROFILE) },
+                    onSetupProfile = { nav.navigate(Routes.BODY) },
                 )
             }
             composable(Routes.GROCERY) {
@@ -155,7 +160,20 @@ fun MangoNavHost(openTimer: Boolean, onTimerOpened: () -> Unit) {
                 PantryScreen(onScan = { nav.navigate(Routes.SCANNER) }, onOpenStaples = { nav.navigate(Routes.STAPLES) })
             }
             composable(Routes.STAPLES) { StaplesScreen(onBack = { nav.popBackStack() }) }
-            composable(Routes.PROFILE) { ProfileScreen(onOpenFoodPrefs = { nav.navigate(Routes.FOOD_PREFS) }) }
+            composable(Routes.OPTIONS) {
+                OptionsScreen(
+                    onOpenBody = { nav.navigate(Routes.BODY) },
+                    onOpenTraining = { nav.navigate(Routes.OPT_TRAINING) },
+                    onOpenFoodPrefs = { nav.navigate(Routes.FOOD_PREFS) },
+                    onOpenDislikes = { nav.navigate(Routes.DISLIKES) },
+                    onOpenStaples = { nav.navigate(Routes.STAPLES) },
+                    onOpenAbout = { nav.navigate(Routes.ABOUT) },
+                )
+            }
+            composable(Routes.BODY) { BodyScreen(onBack = { nav.popBackStack() }) }
+            composable(Routes.OPT_TRAINING) { TrainingSettingsScreen(onBack = { nav.popBackStack() }) }
+            composable(Routes.DISLIKES) { DislikesScreen(onBack = { nav.popBackStack() }) }
+            composable(Routes.ABOUT) { AboutScreen(onBack = { nav.popBackStack() }) }
             composable(Routes.FOOD_PREFS) { FoodPreferencesScreen(onBack = { nav.popBackStack() }) }
             composable(Routes.TIMER) { TimerScreen(onClose = { nav.popBackStack() }) }
             composable(Routes.SCANNER) { ScannerScreen(onDone = { nav.popBackStack() }) }

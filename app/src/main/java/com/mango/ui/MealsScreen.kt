@@ -236,7 +236,7 @@ fun MealsScreen(
             if (meals.isEmpty()) {
                 item {
                     Text(
-                        "No meals planned. If all recipes are excluded by your dislikes, edit them in your profile.",
+                        "No meals planned. If all recipes are excluded, check Options › Dislikes & allergies and Food preferences.",
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }

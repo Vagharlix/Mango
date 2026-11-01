@@ -131,6 +131,7 @@ fun TrainingScreen(
     onOpenSession: (week: Int, day: Int) -> Unit,
     onOpenPlan: () -> Unit,
     onSetupProfile: () -> Unit,
+    onOpenTrainingSettings: () -> Unit,
 ) {
     val vm = mangoViewModel { TrainingViewModel(it) }
     val s by vm.state.collectAsStateWithLifecycle()
@@ -162,8 +163,8 @@ fun TrainingScreen(
                     val today = week?.days?.getOrNull(todayIndex)
                     when {
                         s.currentWeek < 0 -> HeroCard("COMING UP", "Program starts ${profile.programStartEpochDay.asDate()}", "Your first week is listed below.")
-                        s.currentWeek >= s.weeks.size -> HeroCard("COMPLETE", "Program finished", "Restart or extend it from your profile.") {
-                            PrimaryButton("Open profile", onSetupProfile, icon = null)
+                        s.currentWeek >= s.weeks.size -> HeroCard("COMPLETE", "Program finished", "Restart it or switch to a new program.") {
+                            PrimaryButton("Training settings", onOpenTrainingSettings, icon = null)
                         }
                         today == null || today.isRest -> HeroCard("TODAY", "Rest day", "Sleep, eat well and let your tendons remodel.", labelColor = Leaf)
                         else -> HeroCard(
