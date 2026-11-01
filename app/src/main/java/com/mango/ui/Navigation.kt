@@ -43,6 +43,7 @@ object Routes {
     const val SESSION = "session/{week}/{day}"
     const val EXERCISE = "exercise/{week}/{day}/{index}"
     const val PLAN = "plan"
+    const val STAPLES = "staples"
     fun recipe(id: Long, portions: Double? = null, swaps: Map<String, String> = emptyMap()) =
         "recipe/$id?portions=${portions ?: 1.0}&swaps=" + Uri.encode(swaps.entries.joinToString("|") { "${it.key}>${it.value}" })
 
@@ -144,7 +145,10 @@ fun MangoNavHost(openTimer: Boolean, onTimerOpened: () -> Unit) {
                 )
             }
             composable(Routes.GROCERY) { GroceryScreen(onOpenRecipe = { id, portions, swaps -> nav.navigate(Routes.recipe(id, portions, swaps)) }) }
-            composable(Routes.PANTRY) { PantryScreen(onScan = { nav.navigate(Routes.SCANNER) }) }
+            composable(Routes.PANTRY) {
+                PantryScreen(onScan = { nav.navigate(Routes.SCANNER) }, onOpenStaples = { nav.navigate(Routes.STAPLES) })
+            }
+            composable(Routes.STAPLES) { StaplesScreen(onBack = { nav.popBackStack() }) }
             composable(Routes.PROFILE) { ProfileScreen() }
             composable(Routes.TIMER) { TimerScreen(onClose = { nav.popBackStack() }) }
             composable(Routes.SCANNER) { ScannerScreen(onDone = { nav.popBackStack() }) }

@@ -272,13 +272,58 @@ class EnginesTest {
         assertFalse(MealPlanner.matchesDislike(foodsByName["coconut milk"], "coconut milk", "nuts"))
     }
 
-    @Test fun antiRepetitionWithinThreeDays() {
+    @Test fun freshlyCookedMainsDontRepeatWithinThreeDays() {
         val req = request()
-        val plan = MealPlanner.plan(week(req.today), req)
+        // Leftovers and the breakfast rotation repeat on purpose; freshly cooked main meals must not.
+        val plan = MealPlanner.plan(week(req.today), req).filter { !it.isLeftover && it.mealType != MealType.BREAKFAST }
         plan.groupBy { it.recipeId }.values.forEach { uses ->
             val days = uses.map { it.epochDay }.sorted()
             days.zipWithNext().forEach { (a, b) -> assertTrue("repeat within 3 days", b - a > MealPlanner.ANTI_REPEAT_DAYS) }
         }
+    }
+
+    @Test fun breakfastsRotateBetweenTwoRecipes() {
+        val req = request()
+        val breakfasts = MealPlanner.plan(week(req.today), req).filter { it.mealType == MealType.BREAKFAST }.sortedBy { it.epochDay }
+        assertEquals(7, breakfasts.size)
+        assertEquals(2, breakfasts.map { it.recipeId }.toSet().size)
+        breakfasts.zipWithNext().forEach { (a, b) -> assertTrue("alternates", a.recipeId != b.recipeId) }
+        assertEquals(3, MealPlanner.plan(week(req.today), req.copy(breakfastVariety = 3)).filter { it.mealType == MealType.BREAKFAST }.map { it.recipeId }.toSet().size)
+    }
+
+    @Test fun longRecipesAreBatchCookedForUpToThreeMeals() {
+        val req = request()
+        val byId = recipes.associateBy { it.id }
+        val plan = MealPlanner.plan(week(req.today), req)
+        val batches = plan.filter { it.batchId != 0L }.groupBy { it.batchId }
+        assertTrue("at least two batch sessions a week", batches.size >= 2)
+        batches.values.forEach { b ->
+            val cook = b.single { !it.isLeftover }
+            val recipe = byId.getValue(cook.recipeId)
+            assertTrue(b.all { it.recipeId == cook.recipeId && it.mealType != MealType.BREAKFAST && it.mealType != MealType.SNACK })
+            assertTrue(b.size in 2..recipe.batchMeals)
+            b.filter { it.isLeftover }.forEach { assertTrue(it.epochDay - cook.epochDay in 1..MealPlanner.BATCH_WINDOW_DAYS) }
+        }
+        // Batch cooking means fewer cooking sessions than meals.
+        val sessions = plan.count { it.mealType in setOf(MealType.LUNCH, MealType.DINNER) && !it.isLeftover }
+        val noBatch = MealPlanner.plan(week(req.today), req.copy(batchCooking = false)).count { it.mealType in setOf(MealType.LUNCH, MealType.DINNER) }
+        assertTrue("$sessions vs $noBatch", sessions <= noBatch - 3)
+    }
+
+    @Test fun shoppingListSkipsCookedBatchesAndTheSpiceRack() {
+        val today = LocalDate.of(2026, 11, 2).toEpochDay()
+        val curry = recipes.first { it.name == "Butternut Squash & Red Lentil Curry" }
+        val byId = mapOf(curry.id to curry)
+        val cook = MealSlot(today, MealType.DINNER, curry.id, 1.0, batchId = 7)
+        val leftover = MealSlot(today + 1, MealType.LUNCH, curry.id, 1.0, batchId = 7, isLeftover = true)
+        val before = MealPlanner.shoppingList(listOf(cook, leftover), byId, foodsByName, emptyList(), today)
+        assertEquals(140.0, before.first { it.food.name == "red lentils" }.grams, 0.0) // recipe: 140 g for 2 servings = cook + leftover
+        // Once the batch is cooked, its leftovers need nothing more.
+        assertTrue(MealPlanner.shoppingList(listOf(cook.copy(status = MealStatus.COOKED), leftover), byId, foodsByName, emptyList(), today).isEmpty())
+        // Spice-rack staples are never on the list.
+        val staples = foods.filter { it.isStaple }.map { it.name }.toSet()
+        val withRack = MealPlanner.shoppingList(listOf(cook, leftover), byId, foodsByName, emptyList(), today, staples)
+        assertTrue(withRack.none { it.food.isStaple } && before.any { it.food.isStaple })
     }
 
     @Test fun cookedHistoryBlocksRecentRecipes() {
@@ -324,9 +369,11 @@ class EnginesTest {
     @Test fun basketReuseShortensTheShoppingList() {
         listOf(LocalDate.of(2026, 11, 2), LocalDate.of(2027, 3, 1), LocalDate.of(2027, 7, 5)).forEach { start ->
             val req = request(today = start.toEpochDay())
-            val before = distinctItems(MealPlanner.plan(week(req.today), req.copy(reuseWeight = 0.0))).size
+            // Reference: the original planner (no basket reuse, no batch cooking, a different breakfast every day).
+            val before = distinctItems(MealPlanner.plan(week(req.today), req.copy(reuseWeight = 0.0, batchCooking = false, breakfastVariety = 7))).size
             val after = distinctItems(consolidatedWeek(req)).size
-            assertTrue("$start: $before -> $after", after <= before * 0.8)
+            println("$start distinct items: $before -> $after")
+            assertTrue("$start: $before -> $after", after <= before * 0.75)
         }
     }
 

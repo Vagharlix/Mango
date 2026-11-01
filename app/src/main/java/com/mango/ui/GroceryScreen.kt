@@ -94,11 +94,15 @@ fun GroceryScreen(onOpenRecipe: (id: Long, portions: Double, swaps: Map<String, 
                     SectionLabel(if (day == s.today) "Today" else day.asDate(), color = MangoOrange)
                     s.meals[day].orEmpty().forEach { m ->
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Column(Modifier.weight(1f).clickable { m.recipe?.let { onOpenRecipe(it.id, m.slot.portions, m.slot.swaps) } }) {
+                            Column(Modifier.weight(1f).clickable { m.recipe?.let { onOpenRecipe(it.id, m.cookPortions, m.slot.swaps) } }) {
                                 Text(m.slot.mealType.label, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 Text(m.recipe?.name ?: "—", fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
                                 Text(
-                                    "${m.nutrients.kcal.fmt()} kcal · P ${m.nutrients.protein.fmt()} g" + when (m.slot.status) {
+                                    "${m.nutrients.kcal.fmt()} kcal · P ${m.nutrients.protein.fmt()} g" + when {
+                                        m.slot.isLeftover -> " · leftovers"
+                                        m.isBatchCook && m.leftovers.isNotEmpty() -> " · batch × ${m.leftovers.size + 1}"
+                                        else -> ""
+                                    } + when (m.slot.status) {
                                         MealStatus.COOKED -> " · cooked"
                                         MealStatus.SKIPPED -> " · dining out"
                                         MealStatus.PLANNED -> ""

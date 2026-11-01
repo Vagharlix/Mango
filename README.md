@@ -68,6 +68,14 @@ The protocols (7:3 repeaters, 10 s max hangs, weighted pulls, antagonist push, f
 * **Skip / dining out:** no macro compensation and no pantry deduction. The next 3 days are re-planned with a produce boost: the expiry window grows from 3 to 5 days, expiring produce counts double and the expiry weight doubles. The unused food stays in the pantry, so the next shopping list gets shorter on its own.
 * **Recipe editor:** a 4-step flow (Basics → Ingredients → Method → Review) with live macro totals. You can swap or remove ingredients. Edited recipes are marked `isUserModified`, new ones `isCustom`.
 
+### Simpler weeks
+
+* **Batch cooking:** 38 recipes that keep well (curries, stews, sauces, soups, grain salads) are cooked once and cover 2–3 main meals within the next 2 days (USDA: cooked leftovers keep 3–4 days in the fridge). Cooking the batch deducts the ingredients for every meal; leftover meals show "From Mon dinner – just reheat". Fish and seafood are always cooked fresh.
+* **Easy recipes first:** the planner scores hands-on minutes *per meal*, so a 45-minute curry eaten three times counts as 15 minutes.
+* **Breakfast rotation:** 2 different breakfasts a week by default, alternating; change it in Profile.
+* **Fewer items to buy:** recipes that reuse the week's ingredients are favoured. Interchangeable foods (canned beans, berries, nuts, topping seeds, spinach/kale, lemon/lime) are reduced to one per week, preferring what's in the pantry and never a disliked food. A typical week drops from ~55 to ~36 distinct items.
+* **Spice rack:** spices, oils, sauces and stock are listed under Pantry → Spice rack. You keep them stocked yourself, so they never appear on shopping lists. Untick any you'd rather buy weekly.
+
 ## Barcodes
 
 ML Kit (bundled model, works offline) reads EAN-13/8 and UPC-A/E barcodes. The lookup order is:

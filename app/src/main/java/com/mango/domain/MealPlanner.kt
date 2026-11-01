@@ -26,6 +26,7 @@ data class ScoreBreakdown(
     val macro: Double,
     val total: Double,
     val reuse: Double = 0.0,
+    val ease: Double = 0.0,
 )
 
 data class PlanRequest(
@@ -42,6 +43,10 @@ data class PlanRequest(
     val exclude: Set<Long> = emptySet(),
     /** Weight of the "shorter shopping list" term: favours ingredients already in this week's basket. */
     val reuseWeight: Double = MealPlanner.REUSE_WEIGHT,
+    /** Different breakfasts per week; once reached, breakfasts rotate. */
+    val breakfastVariety: Int = 2,
+    /** Batch cooking: long recipes cover extra main meals in the following days as leftovers. */
+    val batchCooking: Boolean = true,
     val targetsFor: (Long) -> DailyTargets,
 )
 
@@ -50,12 +55,19 @@ data class PlanRequest(
  * Score = PantryMatch·40 + ExpiringUsed·30 + InSeason·20 + MacroProximity·10 (each term normalised 0..1)
  *       + BasketReuse·[REUSE_WEIGHT]: share of a recipe's ingredients already bought for the week, so the
  *         plan converges on fewer different items (one kind of beans, one grain…) and less leftover waste.
+ *       + Ease·[EASE_WEIGHT]: hands-on minutes per meal, where a batch recipe's prep is shared by every
+ *         meal it covers, so a 40-minute curry eaten three times beats a 25-minute dish cooked once.
+ * Breakfasts rotate between [PlanRequest.breakfastVariety] recipes; batch recipes fill up to
+ * [Recipe.batchMeals] main meals within [BATCH_WINDOW_DAYS] days (USDA: cooked leftovers keep 3-4 days).
  */
 object MealPlanner {
     const val ANTI_REPEAT_DAYS = 3
     const val EXPIRY_WINDOW_DAYS = 3
     const val BOOST_EXPIRY_WINDOW_DAYS = 5
     const val REUSE_WEIGHT = 30.0
+    const val EASE_WEIGHT = 25.0
+    const val BATCH_WINDOW_DAYS = 2
+    private val MAINS = setOf(MealType.LUNCH, MealType.DINNER)
 
     // ---------- Dislikes ----------
 
@@ -111,6 +123,7 @@ object MealPlanner {
         req: PlanRequest,
         targets: DailyTargets,
         basket: Set<String> = emptySet(),
+        mealsCovered: Int = 1,
     ): ScoreBreakdown {
         val factor = portions / recipe.servings.coerceAtLeast(1)
         val window = if (req.produceBoost) BOOST_EXPIRY_WINDOW_DAYS else EXPIRY_WINDOW_DAYS
@@ -146,8 +159,21 @@ object MealPlanner {
         val macro = macroProximity(recipe, targets)
         val reuse = if (counted > 0 && basket.isNotEmpty()) reused.toDouble() / counted else 0.0
         val expWeight = if (req.produceBoost) 60.0 else 30.0
-        val total = pantry * 40 + exp * expWeight + season * 20 + macro * 10 + reuse * req.reuseWeight
-        return ScoreBreakdown(pantry, exp, season, macro, total, reuse)
+        val minutesPerMeal = recipe.prepMinutes.toDouble() / mealsCovered.coerceAtLeast(1)
+        val ease = 1 - ((minutesPerMeal - 15) / 45).coerceIn(0.0, 1.0)
+        val total = pantry * 40 + exp * expWeight + season * 20 + macro * 10 + reuse * req.reuseWeight + ease * EASE_WEIGHT
+        return ScoreBreakdown(pantry, exp, season, macro, total, reuse, ease)
+    }
+
+    /**
+     * Whether a planned meal still needs ingredients: leftovers don't once their batch has been cooked
+     * (the cooking deducted the whole batch). Orphan leftovers, whose cooking slot is gone, are cooked fresh.
+     */
+    fun needsIngredients(slot: MealSlot, all: List<MealSlot>): Boolean {
+        if (slot.status != MealStatus.PLANNED) return false
+        if (!slot.isLeftover) return true
+        val cook = all.firstOrNull { it.batchId == slot.batchId && !it.isLeftover }
+        return cook == null || cook.status == MealStatus.PLANNED
     }
 
     /** Interchangeable foods share one basket key, so a recipe with black beans counts as reusing chickpeas. */
@@ -178,7 +204,7 @@ object MealPlanner {
         req.existing.filter { it.status != MealStatus.SKIPPED }
             .forEach { used.getOrPut(it.epochDay) { mutableSetOf() } += it.recipeId }
         val basket = mutableSetOf<String>()
-        req.existing.filter { it.status == MealStatus.PLANNED && it.epochDay >= req.today }
+        req.existing.filter { it.epochDay >= req.today && needsIngredients(it, req.existing) }
             .sortedWith(compareBy({ it.epochDay }, { it.mealType.ordinal }))
             .forEach { s ->
                 byId[s.recipeId]?.let { r ->
@@ -190,8 +216,54 @@ object MealPlanner {
         val allowed = req.recipes.filter {
             !it.isHidden && it.id !in req.exclude && it.perServing.kcal > 0 && isAllowed(it, req.dislikes, req.foods)
         }
+        val allowedIds = allowed.map { it.id }.toSet()
+        val queue = toFill.distinct().sortedWith(compareBy({ it.first }, { it.second.ordinal }))
+        val free = queue.toMutableSet()
         val result = mutableListOf<MealSlot>()
-        for ((day, type) in toFill.distinct().sortedWith(compareBy({ it.first }, { it.second.ordinal }))) {
+
+        // Breakfast rotation: breakfasts already on this week's menu belong to the rotation.
+        val rotation = LinkedHashSet<Long>()
+        val lastBreakfast = mutableMapOf<Long, Long>()
+        req.existing.filter { it.mealType == MealType.BREAKFAST && it.status != MealStatus.SKIPPED && it.epochDay in req.today - 6..req.today + 6 }
+            .sortedBy { it.epochDay }
+            .forEach {
+                if (it.recipeId in allowedIds) rotation += it.recipeId
+                lastBreakfast[it.recipeId] = maxOf(lastBreakfast[it.recipeId] ?: Long.MIN_VALUE, it.epochDay)
+            }
+
+        fun take(r: Recipe, day: Long, type: MealType, batchId: Long = 0, leftover: Boolean = false): MealSlot {
+            val slot = MealSlot(day, type, r.id, portionsFor(r, type, req.targetsFor(day)), batchId = batchId, isLeftover = leftover)
+            stock.reserve(r, slot.portions, day)
+            basket += r.ingredients.map { basketKey(it.food, req.foods) }
+            used.getOrPut(day) { mutableSetOf() } += r.id
+            free -= day to type
+            result += slot
+            return slot
+        }
+
+        /** Free main-meal slots in the next days for leftovers: at most one per day, alternating lunch/dinner. */
+        fun leftoverSlots(day: Long, type: MealType, count: Int): List<Pair<Long, MealType>> {
+            val out = mutableListOf<Pair<Long, MealType>>()
+            var last = type
+            for (d in day + 1..day + BATCH_WINDOW_DAYS) {
+                if (out.size >= count) break
+                val order = if (last == MealType.DINNER) listOf(MealType.LUNCH, MealType.DINNER) else listOf(MealType.DINNER, MealType.LUNCH)
+                order.firstOrNull { (d to it) in free }?.let { out += d to it; last = it }
+            }
+            return out
+        }
+
+        for ((day, type) in queue) {
+            if ((day to type) !in free) continue // already covered by a batch
+            if (type == MealType.BREAKFAST && rotation.size >= req.breakfastVariety) {
+                val next = rotation.mapNotNull { byId[it] }.filter { it.id in allowedIds }
+                    .minByOrNull { lastBreakfast[it.id] ?: Long.MIN_VALUE }
+                if (next != null) {
+                    take(next, day, type)
+                    lastBreakfast[next.id] = day
+                    continue
+                }
+            }
             val targets = req.targetsFor(day)
             val pool = allowed.filter { it.mealType == type }
             val recent = (day - ANTI_REPEAT_DAYS..day + ANTI_REPEAT_DAYS).flatMap { used[it].orEmpty() }.toSet()
@@ -200,13 +272,18 @@ object MealPlanner {
                 .ifEmpty { pool }
             if (candidates.isEmpty()) continue
             val best = candidates.map { r ->
+                val covered = if (req.batchCooking && type in MAINS && r.batchMeals > 1) 1 + leftoverSlots(day, type, r.batchMeals - 1).size else 1
                 val portions = portionsFor(r, type, targets)
-                Triple(r, portions, score(r, portions, day, stock, req, targets, basket).total + variety(r.id, day))
-            }.maxWith(compareBy<Triple<Recipe, Double, Double>> { it.third }.thenByDescending { it.first.id })
-            stock.reserve(best.first, best.second, day)
-            basket += best.first.ingredients.map { basketKey(it.food, req.foods) }
-            used.getOrPut(day) { mutableSetOf() } += best.first.id
-            result += MealSlot(day, type, best.first.id, best.second)
+                r to score(r, portions, day, stock, req, targets, basket, covered).total + variety(r.id, day)
+            }.maxWith(compareBy<Pair<Recipe, Double>> { it.second }.thenByDescending { it.first.id }).first
+            val extra = if (req.batchCooking && type in MAINS && best.batchMeals > 1) leftoverSlots(day, type, best.batchMeals - 1) else emptyList()
+            val batchId = if (extra.isEmpty()) 0L else day * 10 + type.ordinal + 1
+            take(best, day, type, batchId)
+            extra.forEach { (d, t) -> take(best, d, t, batchId, leftover = true) }
+            if (type == MealType.BREAKFAST) {
+                rotation += best.id
+                lastBreakfast[best.id] = day
+            }
         }
         return result
     }
@@ -254,9 +331,10 @@ object MealPlanner {
         foods: Map<String, Food>,
         pantry: List<StockItem>,
         today: Long,
+        alwaysStocked: Set<String> = emptySet(),
     ): List<ShoppingItem> {
         val need = mutableMapOf<String, Double>()
-        slots.filter { it.status == MealStatus.PLANNED }.forEach { s ->
+        slots.filter { it.epochDay >= today && needsIngredients(it, slots) }.forEach { s ->
             val r = recipes[s.recipeId] ?: return@forEach
             val factor = s.portions / r.servings.coerceAtLeast(1)
             effectiveIngredients(r, s.swaps).forEach { need[it.food] = (need[it.food] ?: 0.0) + it.grams * factor }
@@ -265,7 +343,7 @@ object MealPlanner {
         return need.mapNotNull { (name, grams) ->
             val missing = grams - (have[name] ?: 0.0)
             val food = foods[name]
-            if (missing > 0.5 && food != null) ShoppingItem(food, ceil(missing / 10) * 10) else null
+            if (missing > 0.5 && food != null && name !in alwaysStocked) ShoppingItem(food, ceil(missing / 10) * 10) else null
         }.sortedWith(compareBy({ it.food.category.ordinal }, { it.food.name }))
     }
 

@@ -1674,7 +1674,8 @@
   "omega3": 0.01,
   "shelfLifeDays": 180,
   "groups": [],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "isStaple": true
  },
  {
   "name": "coconut milk",
@@ -1704,7 +1705,8 @@
   "omega3": 0.0,
   "shelfLifeDays": 365,
   "groups": [],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "isStaple": true
  },
  {
   "name": "chicken broth",
@@ -1721,7 +1723,8 @@
    "poultry",
    "meat"
   ],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "isStaple": true
  },
  {
   "name": "olives",
@@ -1824,7 +1827,8 @@
   "omega3": 0.01,
   "shelfLifeDays": 730,
   "groups": [],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "isStaple": true
  },
  {
   "name": "honey",
@@ -1838,7 +1842,8 @@
   "omega3": 0.0,
   "shelfLifeDays": 730,
   "groups": [],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "isStaple": true
  },
  {
   "name": "maple syrup",
@@ -1852,7 +1857,8 @@
   "omega3": 0.0,
   "shelfLifeDays": 365,
   "groups": [],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "isStaple": true
  },
  {
   "name": "soy sauce",
@@ -1870,7 +1876,8 @@
    "gluten",
    "wheat"
   ],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "isStaple": true
  },
  {
   "name": "miso paste",
@@ -1886,7 +1893,8 @@
   "groups": [
    "soy"
   ],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "isStaple": true
  },
  {
   "name": "balsamic vinegar",
@@ -1900,7 +1908,8 @@
   "omega3": 0.0,
   "shelfLifeDays": 730,
   "groups": [],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "isStaple": true
  },
  {
   "name": "dijon mustard",
@@ -1916,7 +1925,8 @@
   "groups": [
    "mustard"
   ],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "isStaple": true
  },
  {
   "name": "almonds",
@@ -2116,7 +2126,8 @@
   "omega3": 0.76,
   "shelfLifeDays": 540,
   "groups": [],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "isStaple": true
  },
  {
   "name": "rapeseed oil",
@@ -2130,7 +2141,8 @@
   "omega3": 9.1,
   "shelfLifeDays": 365,
   "groups": [],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "isStaple": true
  },
  {
   "name": "sesame oil",
@@ -2146,7 +2158,8 @@
   "groups": [
    "sesame"
   ],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "isStaple": true
  },
  {
   "name": "ground cumin",
@@ -2160,7 +2173,8 @@
   "omega3": 0.2,
   "shelfLifeDays": 730,
   "groups": [],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "isStaple": true
  },
  {
   "name": "smoked paprika",
@@ -2174,7 +2188,8 @@
   "omega3": 0.5,
   "shelfLifeDays": 730,
   "groups": [],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "isStaple": true
  },
  {
   "name": "turmeric",
@@ -2188,7 +2203,8 @@
   "omega3": 0.1,
   "shelfLifeDays": 730,
   "groups": [],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "isStaple": true
  },
  {
   "name": "cinnamon",
@@ -2202,7 +2218,8 @@
   "omega3": 0.01,
   "shelfLifeDays": 730,
   "groups": [],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "isStaple": true
  },
  {
   "name": "curry powder",
@@ -2216,7 +2233,8 @@
   "omega3": 0.4,
   "shelfLifeDays": 730,
   "groups": [],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "isStaple": true
  },
  {
   "name": "chili flakes",
@@ -2230,7 +2248,8 @@
   "omega3": 0.6,
   "shelfLifeDays": 730,
   "groups": [],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "isStaple": true
  },
  {
   "name": "dried oregano",
@@ -2244,6 +2263,7 @@
   "omega3": 0.6,
   "shelfLifeDays": 730,
   "groups": [],
-  "seasonMonths": []
+  "seasonMonths": [],
+  "isStaple": true
  }
 ]

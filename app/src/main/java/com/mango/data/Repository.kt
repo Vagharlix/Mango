@@ -127,10 +127,12 @@ class Repository(private val context: Context, private val db: MangoDatabase) {
             programStartEpochDay = if (p.programStartEpochDay == 0L) today() else p.programStartEpochDay,
             dislikedIngredients = p.dislikedIngredients.map { it.trim().lowercase() }.filter { it.isNotEmpty() }.distinct(),
             programWeeks = p.programWeeks.coerceIn(4, 52),
+            breakfastVariety = p.breakfastVariety.coerceIn(1, 7),
         )
+        val previous = profileDao.get()
         profileDao.upsert(clean)
         planLock.withLock { dropDisallowedLocked(clean) }
-        ensureWeekPlan()
+        if (previous != null && previous.breakfastVariety != clean.breakfastVariety) regenerateWeek() else ensureWeekPlan()
     }
 
     /** Equipment can change at any time (gym, home, travel); the schedule is derived from it on the fly. */
@@ -164,10 +166,21 @@ class Repository(private val context: Context, private val db: MangoDatabase) {
     }
 
     /** "Swap": replace one meal, never offering the current or previously rejected recipes. */
+    /** Swapping a batch's cooking meal replaces the whole batch; swapping a leftover frees just that meal. */
     suspend fun swap(slot: MealSlot, rejected: Set<Long>) = planLock.withLock {
         val p = profileDao.get() ?: return@withLock
-        planLocked(p, listOf(slot.epochDay to slot.mealType), exclude = rejected + slot.recipeId)
+        val keys = (listOf(slot) + if (slot.batchId != 0L && !slot.isLeftover) batchOf(slot).filter { it.status == MealStatus.PLANNED } else emptyList())
+            .map { it.epochDay to it.mealType }.distinct()
+        planLocked(p, keys, exclude = rejected + slot.recipeId)
     }
+
+    private suspend fun batchOf(slot: MealSlot): List<MealSlot> =
+        if (slot.batchId == 0L) {
+            listOf(slot)
+        } else {
+            mealDao.getRange(slot.epochDay - MealPlanner.BATCH_WINDOW_DAYS, slot.epochDay + MealPlanner.BATCH_WINDOW_DAYS)
+                .filter { it.batchId == slot.batchId }
+        }
 
     /** "Don't like": hide the recipe permanently and re-plan every future slot that used it. */
     suspend fun hideRecipe(recipeId: Long) = planLock.withLock {
@@ -203,12 +216,23 @@ class Repository(private val context: Context, private val db: MangoDatabase) {
     }
 
     /** Cooked: deduct ingredients from the pantry (first-expiry-first-out). */
+    /**
+     * Cooked: deduct ingredients from the pantry (first-expiry-first-out). Cooking a batch deducts every
+     * planned meal of the batch at once; eating its leftovers later deducts nothing more.
+     */
     suspend fun cook(slot: MealSlot) = planLock.withLock {
         val recipe = recipeDao.getById(slot.recipeId) ?: throw IllegalStateException("Recipe no longer exists")
-        val foodIds = foodDao.getAll().associate { it.name to it.id }
-        val (updated, emptied) = MealPlanner.consume(pantryDao.getAll(), foodIds, recipe, slot.portions, slot.swaps)
-        updated.forEach { pantryDao.update(it) }
-        emptied.forEach { pantryDao.delete(it) }
+        val batch = batchOf(slot)
+        val portions = when {
+            slot.isLeftover -> if (MealPlanner.needsIngredients(slot, batch)) slot.portions else 0.0
+            else -> slot.portions + batch.filter { it.isLeftover && it.status == MealStatus.PLANNED }.sumOf { it.portions }
+        }
+        if (portions > 0) {
+            val foodIds = foodDao.getAll().associate { it.name to it.id }
+            val (updated, emptied) = MealPlanner.consume(pantryDao.getAll(), foodIds, recipe, portions, slot.swaps)
+            updated.forEach { pantryDao.update(it) }
+            emptied.forEach { pantryDao.delete(it) }
+        }
         mealDao.upsertAll(listOf(slot.copy(status = MealStatus.COOKED)))
     }
 
@@ -225,7 +249,9 @@ class Repository(private val context: Context, private val db: MangoDatabase) {
             it.status == MealStatus.PLANNED &&
                 (it.epochDay > slot.epochDay || it.mealType.ordinal > slot.mealType.ordinal)
         }
-        planLocked(p, affected.map { it.epochDay to it.mealType }, boost = true)
+        // Skipping a batch's cooking meal means its leftovers won't exist either: re-plan them too.
+        val orphans = if (!slot.isLeftover) batchOf(slot).filter { it.isLeftover && it.status == MealStatus.PLANNED } else emptyList()
+        planLocked(p, (affected + orphans).map { it.epochDay to it.mealType }.distinct(), boost = true)
     }
 
     suspend fun unskip(slot: MealSlot) = mealDao.upsertAll(listOf(slot.copy(status = MealStatus.PLANNED)))
@@ -248,11 +274,12 @@ class Repository(private val context: Context, private val db: MangoDatabase) {
         val req = PlanRequest(
             recipes = recipeDao.getAll(),
             foods = foods.associateBy { it.name },
-            pantry = stock(foods),
+            pantry = stock(foods, p),
             today = today,
             dislikes = p.dislikedIngredients,
             southernHemisphere = p.southernHemisphere,
             produceBoost = boost,
+            breakfastVariety = p.breakfastVariety,
             existing = existing,
             exclude = exclude,
             targetsFor = { targetsFor(p, it) },
@@ -269,21 +296,35 @@ class Repository(private val context: Context, private val db: MangoDatabase) {
             slots = mealDao.getRange(today, today + 6),
             recipes = recipeDao.getAll().associateBy { it.id },
             foods = foods.associateBy { it.name },
-            pantry = stock(foods),
+            pantry = stock(foods, p),
             dislikes = p.dislikedIngredients,
         )
         if (changed.isNotEmpty()) mealDao.upsertAll(changed)
     }
 
-    private suspend fun stock(foods: List<Food>): List<StockItem> {
+    private suspend fun stock(foods: List<Food>, p: UserProfile? = null): List<StockItem> {
         val byId = foods.associateBy { it.id }
-        return pantryDao.getAll().mapNotNull { item ->
+        val real = pantryDao.getAll().mapNotNull { item ->
             byId[item.foodId]?.let { StockItem(it.name, item.grams, item.expiresOnEpochDay, it.category == FoodCategory.PRODUCE) }
         }
+        // The spice rack is always considered stocked, so staples never count as missing.
+        val rack = if (p == null) emptyList() else keptStaples(foods, p).map { StockItem(it, 100_000.0, today() + 3650, false) }
+        return real + rack
     }
 
-    fun shoppingList(window: LongRange): Flow<List<ShoppingItem>> = combine(
-        slots(window.first, window.last), recipes, foods, pantryDao.observeAll(),
+    fun keptStaples(foods: List<Food>, p: UserProfile): Set<String> =
+        foods.filter { it.isStaple && it.name !in p.stapleOptOut }.map { it.name }.toSet()
+
+    /** Spice rack: which staples the user keeps stocked themselves (default: all). */
+    suspend fun setStapleKept(name: String, kept: Boolean) {
+        val p = profileDao.get() ?: throw IllegalStateException("Create your profile first")
+        val optOut = if (kept) p.stapleOptOut - name else (p.stapleOptOut + name).distinct()
+        profileDao.upsert(p.copy(stapleOptOut = optOut))
+    }
+
+    fun shoppingList(window: LongRange, p: UserProfile): Flow<List<ShoppingItem>> = combine(
+        // A couple of days earlier too, so leftovers know whether their batch has been cooked.
+        slots(window.first - MealPlanner.BATCH_WINDOW_DAYS, window.last), recipes, foods, pantryDao.observeAll(),
     ) { slots, recipes, foods, pantry ->
         val byId = foods.associateBy { it.id }
         MealPlanner.shoppingList(
@@ -292,6 +333,7 @@ class Repository(private val context: Context, private val db: MangoDatabase) {
             foods = foods.associateBy { it.name },
             pantry = pantry.mapNotNull { i -> byId[i.foodId]?.let { StockItem(it.name, i.grams, i.expiresOnEpochDay, false) } },
             today = window.first,
+            alwaysStocked = keptStaples(foods, p),
         )
     }
 

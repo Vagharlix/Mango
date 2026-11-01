@@ -92,6 +92,10 @@ data class UserProfile(
     val southernHemisphere: Boolean = false,
     /** Training equipment the athlete can access right now; the schedule adapts whenever it changes. */
     val equipment: List<Equipment> = Equipment.DEFAULT,
+    /** Number of different breakfasts rotated through a week. */
+    val breakfastVariety: Int = 2,
+    /** Spice-rack staples the user does NOT keep stocked (they then appear on shopping lists). */
+    val stapleOptOut: List<String> = emptyList(),
 )
 
 /** Nutrients per 100 g. Values from USDA FoodData Central. */
@@ -118,6 +122,8 @@ data class Food(
     val isUserAdded: Boolean = false,
     /** Interchangeable-ingredient group (e.g. "beans"): one member is used for the whole week. */
     val swapGroup: String? = null,
+    /** Spice or long-life staple kept in the spice rack rather than bought per week. */
+    val isStaple: Boolean = false,
 )
 
 /** Local barcode cache: maps a scanned product to a food in the catalog (generic or created from Open Food Facts). */
@@ -176,6 +182,8 @@ data class Recipe(
     val isCustom: Boolean = false,
     val isUserModified: Boolean = false,
     val isHidden: Boolean = false,
+    /** How many main meals one cooking session can cover (1 = cook fresh each time). */
+    val batchMeals: Int = 1,
 )
 
 /** One planned meal. Composite key keeps exactly one slot per day and meal type. */
@@ -188,6 +196,10 @@ data class MealSlot(
     val status: MealStatus = MealStatus.PLANNED,
     /** Ingredient substitutions for this meal (recipe food → food actually used), see MealPlanner.consolidate. */
     val swaps: Map<String, String> = emptyMap(),
+    /** Shared by all meals of one batch-cooking session; 0 = not batch cooked. */
+    val batchId: Long = 0,
+    /** True for the meals eaten from a batch cooked earlier (no cooking, no extra pantry deduction). */
+    val isLeftover: Boolean = false,
 )
 
 @Serializable

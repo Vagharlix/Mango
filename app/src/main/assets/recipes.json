@@ -1160,7 +1160,8 @@
    "Dice cucumber, tomato and onion",
    "Toss everything with lemon juice and olive oil",
    "Top with crumbled feta, olives and parsley"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Chicken Burrito Bowl",
@@ -1216,7 +1217,8 @@
    "Saute pepper and corn",
    "Warm beans",
    "Assemble bowls and top with avocado, cilantro and lime"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Roasted Squash & Lentil Salad",
@@ -1259,7 +1261,8 @@
    "Simmer lentils 20 minutes and drain",
    "Toss lentils, squash and arugula with balsamic and remaining oil",
    "Top with feta and walnuts"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Tuna Nicoise Salad",
@@ -1511,7 +1514,8 @@
    "Spread on tortillas with beans, spinach and cheese",
    "Fold and toast in a dry pan 3 minutes per side",
    "Serve with chopped tomato"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Peanut Tofu Noodle Salad",
@@ -1567,7 +1571,8 @@
    "Whisk peanut butter, soy sauce, lime, grated ginger and a splash of water",
    "Toss noodles, shredded cabbage, carrot, edamame and tofu with the dressing",
    "Top with cilantro"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Egg & Avocado Grain Bowl",
@@ -1679,7 +1684,8 @@
    "Simmer 25 minutes",
    "Stir in spinach until wilted",
    "Serve with bread"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Chicken Kale Caesar (Yogurt Dressing)",
@@ -1839,7 +1845,8 @@
    "Add broccoli, garlic and ginger and stir-fry 4 minutes",
    "Add soy sauce and honey and toss",
    "Serve over rice with spring onion"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Baked Falafel-Style Chickpea Bowl",
@@ -1899,7 +1906,8 @@
    "Cook quinoa",
    "Whisk tahini, lemon and yogurt",
    "Serve with chopped cucumber, tomato and cabbage"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Sardine & White Bean Salad",
@@ -2014,7 +2022,8 @@
    "Add pasta, zucchini and beans and cook 10 minutes",
    "Stir in kale",
    "Serve with parmesan"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Chicken, Leek & Barley Soup",
@@ -2065,7 +2074,8 @@
    "Soften onion, leek, carrot and celery",
    "Add barley, broth and chicken and simmer 35 minutes",
    "Shred chicken back in and finish with parsley"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Tofu Banh Mi Bowl",
@@ -2163,7 +2173,8 @@
    "Warm beans with spinach, oil and paprika",
    "Split potatoes and fill with beans and cottage cheese",
    "Top with spring onion"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Tuna & White Bean Pasta Salad",
@@ -2273,7 +2284,8 @@
    "Whisk lemon, oil, cumin and cinnamon",
    "Toss quinoa, chickpeas, carrot, raisins and parsley with the dressing",
    "Top with toasted almonds and serve with yogurt"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Egg Fried Brown Rice with Peas",
@@ -2329,7 +2341,8 @@
    "Stir-fry garlic, ginger, carrot, peas and edamame 4 minutes",
    "Add rice, eggs and soy sauce and toss until hot",
    "Finish with spring onion"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Spicy Red Lentil Dal",
@@ -2394,7 +2407,8 @@
    "Add lentils, tomatoes and 600 ml water and simmer 20 minutes",
    "Stir in coconut milk and spinach",
    "Finish with lime"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Chicken Shawarma Salad",
@@ -2458,7 +2472,8 @@
    "Whisk tahini with lemon and water",
    "Toss lettuce, tomato, cucumber and onion",
    "Top with chicken and tahini and serve with bread"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Pumpkin & Feta Barley Risotto",
@@ -2514,7 +2529,8 @@
    "Add broth gradually and simmer 35 minutes, stirring",
    "Fold in spinach and white beans",
    "Top with feta and pumpkin seeds"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Mackerel, Beetroot & Potato Salad",
@@ -2817,7 +2833,8 @@
    "Add spices and toast 1 minute",
    "Add tomatoes and beans and simmer 25 minutes",
    "Serve over rice with a spoon of yogurt"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Chicken Stir-Fry with Brown Rice",
@@ -2873,7 +2890,8 @@
    "Add vegetables, garlic and ginger and cook 4 minutes",
    "Add soy sauce and toss",
    "Serve over rice"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Lean Beef Bolognese",
@@ -2933,7 +2951,8 @@
    "Add tomato paste and tomatoes and simmer 30 minutes",
    "Cook pasta",
    "Toss and serve with parmesan and basil"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Coconut Chicken Curry",
@@ -2997,7 +3016,8 @@
    "Add diced chicken and brown",
    "Add coconut milk and vegetables and simmer 15 minutes",
    "Finish with lime and cilantro"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Lemon Herb Cod with Quinoa & Asparagus",
@@ -3100,7 +3120,8 @@
    "Add curry powder, tomatoes and chickpeas and simmer 15 minutes",
    "Stir in coconut milk and spinach",
    "Serve with rice and yogurt"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Pork Tenderloin with Apples & Brussels Sprouts",
@@ -3139,7 +3160,8 @@
    "Add sprouts and apple wedges",
    "Brush pork with mustard, sear and add to the tray",
    "Roast 20 minutes until pork reaches 63 C and rest 5 minutes"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Shrimp & Zucchini Whole Wheat Linguine",
@@ -3307,7 +3329,8 @@
    "Stir in tomatoes, spinach and quinoa",
    "Fill halved peppers and top with mozzarella",
    "Bake at 190 C for 25 minutes"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Moroccan Chicken & Chickpea Tagine",
@@ -3375,7 +3398,8 @@
    "Add carrots, tomatoes, chickpeas, raisins, broth and chicken",
    "Simmer covered 30 minutes",
    "Serve over quinoa with parsley"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Beef & Barley Stew",
@@ -3431,7 +3455,8 @@
    "Add tomato paste, barley, broth, carrot, potato and beef",
    "Simmer covered 70 minutes until tender",
    "Finish with parsley"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Miso-Glazed Salmon with Greens",
@@ -3546,7 +3571,8 @@
    "Add chopped mushrooms and cook until browned",
    "Add lentils, tomato paste, tomatoes and 400 ml water and simmer 30 minutes",
    "Cook pasta and serve with parmesan"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Sheet-Pan Chicken Fajitas",
@@ -3605,7 +3631,8 @@
    "Roast at 220 C for 20 minutes",
    "Warm tortillas",
    "Fill with chicken and vegetables, avocado, yogurt, lime and cilantro"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Mushroom & White Bean Risotto",
@@ -3661,7 +3688,8 @@
    "Toast rice 1 minute",
    "Add hot broth a ladle at a time for 18 minutes, stirring",
    "Fold in beans, spinach, mushrooms, butter and parmesan"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Baked Cod with Tomatoes & Olives",
@@ -3824,7 +3852,8 @@
    "Grill chicken and slice",
    "Cook quinoa",
    "Serve topped with basil"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Butternut Squash & Red Lentil Curry",
@@ -3885,7 +3914,8 @@
    "Simmer 20 minutes",
    "Stir in coconut milk and spinach",
    "Garnish with cilantro and serve with yogurt"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Mustard Herb Pork with Root Vegetables",
@@ -3932,7 +3962,8 @@
    "Coat pork in mustard, garlic and parsley",
    "Add to the tray and roast 20 minutes",
    "Rest and slice"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Salmon & Kale Pesto Pasta",
@@ -4048,7 +4079,8 @@
    "Add soy sauce, honey and chili flakes and reduce",
    "Julienne carrot and cucumber",
    "Serve beef over rice with vegetables, lettuce, sesame oil and spring onion"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Cauliflower & Chickpea Tikka",
@@ -4103,7 +4135,8 @@
    "Simmer onion, garlic, ginger, remaining spice, tomatoes and chickpeas 15 minutes",
    "Stir in cauliflower and remaining yogurt off the heat",
    "Serve with rice and cilantro"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Chicken Cacciatore",
@@ -4158,7 +4191,8 @@
    "Saute onion, pepper, mushrooms and garlic",
    "Add tomatoes, olives and chicken and simmer 30 minutes",
    "Serve over pasta with basil"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Grilled Mackerel with Lentils & Leeks",
@@ -4261,7 +4295,8 @@
    "Layer eggplant, sauce and mozzarella",
    "Top with parmesan and bake 25 minutes",
    "Finish with basil"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Turkey Meatballs with Zucchini & Rice",
@@ -4321,7 +4356,8 @@
    "Brown in oil",
    "Add onion, remaining garlic, tomatoes and diced zucchini and simmer 20 minutes",
    "Serve over rice with basil"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Shrimp & Sweetcorn Summer Skillet",
@@ -4427,7 +4463,8 @@
    "Rub chicken with mustard and lemon",
    "Roast everything at 210 C for 35 minutes",
    "Finish with parsley"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Japanese Tofu Curry",
@@ -4483,7 +4520,8 @@
    "Add curry powder, potato, carrot, grated apple and broth and simmer 20 minutes",
    "Add cubed tofu, peas and soy sauce for 5 minutes",
    "Serve with rice"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Greek Yogurt with Walnuts & Honey",

@@ -34,6 +34,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Switch
+import androidx.compose.ui.unit.sp
+import com.mango.data.FoodCategory
+import com.mango.domain.MealPlanner
+import kotlinx.coroutines.flow.combine
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.mango.data.Food
@@ -100,7 +107,7 @@ class PantryViewModel(repo: Repository) : MangoViewModel(repo) {
 }
 
 @Composable
-fun PantryScreen(onScan: () -> Unit) {
+fun PantryScreen(onScan: () -> Unit, onOpenStaples: () -> Unit) {
     val vm = mangoViewModel { PantryViewModel(it) }
     val entries by vm.entries.collectAsStateWithLifecycle()
     val foods by vm.foods.collectAsStateWithLifecycle()
@@ -123,6 +130,7 @@ fun PantryScreen(onScan: () -> Unit) {
                     RoundIconButton(Icons.Filled.Add, "Add item", onClick = { adding = true })
                 }
             }
+            item { StaplesCard(onOpenStaples) }
             item {
                 Text(
                     "Sorted by expiry. Items expiring soon are prioritised by the meal planner.",
@@ -255,4 +263,77 @@ private fun EditPantryDialog(e: PantryEntry, today: Long, onDismiss: () -> Unit,
             }
         },
     )
+}
+
+// ============================ Spice rack & staples ============================
+
+data class StapleRow(val food: Food, val recipes: Int, val kept: Boolean)
+
+class StaplesViewModel(repo: Repository) : MangoViewModel(repo) {
+    val rows = combine(repo.profile, repo.foods, repo.recipes) { p, foods, recipes ->
+        val byName = foods.associateBy { it.name }
+        val usable = recipes.filter { !it.isHidden && (p == null || MealPlanner.isAllowed(it, p.dislikedIngredients, byName)) }
+        val counts = usable.flatMap { r -> r.ingredients.map { it.food }.distinct() }.groupingBy { it }.eachCount()
+        foods.filter { it.isStaple && (counts[it.name] ?: 0) > 0 }
+            .map { StapleRow(it, counts.getValue(it.name), p == null || it.name !in p.stapleOptOut) }
+            .sortedByDescending { it.recipes }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
+    fun setKept(row: StapleRow, kept: Boolean) = launchSafe { repo.setStapleKept(row.food.name, kept) }
+}
+
+@Composable
+fun StaplesCard(onClick: () -> Unit) {
+    SectionCard(Modifier.clickable(onClick = onClick)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Column(Modifier.weight(1f)) {
+                Text("Spice rack & staples", fontWeight = FontWeight.Bold)
+                Text(
+                    "Spices, oils and sauces you keep stocked yourself – left off shopping lists.",
+                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null, tint = Faint)
+        }
+    }
+}
+
+@Composable
+fun StaplesScreen(onBack: () -> Unit) {
+    val vm = mangoViewModel { StaplesViewModel(it) }
+    val rows by vm.rows.collectAsStateWithLifecycle()
+    val (spices, basics) = rows.partition { it.food.category == FoodCategory.SPICE }
+    LazyColumn(contentPadding = PaddingValues(16.dp, 4.dp, 16.dp, 24.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        item { BackHeader("Spice rack", onBack) }
+        item {
+            Text(
+                "Keep these at home and refill them when they run low. Ticked items never appear on your shopping list; " +
+                    "untick anything you'd rather buy with the weekly shop.",
+                fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        listOf("Spices & dried herbs" to spices, "Oils, sauces & basics" to basics).forEach { (title, list) ->
+            if (list.isNotEmpty()) {
+                item { SectionLabel(title, Modifier.padding(top = 8.dp)) }
+                item {
+                    GroupedCard {
+                        list.forEachIndexed { i, row ->
+                            if (i > 0) HorizontalDivider(color = Hairline)
+                            Row(Modifier.fillMaxWidth().padding(14.dp, 8.dp), verticalAlignment = Alignment.CenterVertically) {
+                                Column(Modifier.weight(1f)) {
+                                    Text(row.food.name.replaceFirstChar { it.uppercase() }, fontSize = 15.sp)
+                                    Text(
+                                        "Used in ${row.recipes} recipe${if (row.recipes == 1) "" else "s"}" +
+                                            if (row.food.name.endsWith("broth")) " · stock cubes or concentrate keep for months" else "",
+                                        fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    )
+                                }
+                                Switch(checked = row.kept, onCheckedChange = { vm.setKept(row, it) })
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

@@ -167,7 +167,7 @@ class Converters {
         UserProfile::class, Food::class, BarcodeProduct::class, PantryItem::class,
         Recipe::class, MealSlot::class, Exercise::class, Benchmark::class,
     ],
-    version = 3,
+    version = 4,
     exportSchema = false,
 )
 @TypeConverters(Converters::class)
@@ -199,9 +199,21 @@ abstract class MangoDatabase : RoomDatabase() {
             }
         }
 
+        /** v4 adds batch cooking, breakfast rotation and the spice rack. */
+        private val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE user_profile ADD COLUMN breakfastVariety INTEGER NOT NULL DEFAULT 2")
+                db.execSQL("ALTER TABLE user_profile ADD COLUMN stapleOptOut TEXT NOT NULL DEFAULT '[]'")
+                db.execSQL("ALTER TABLE foods ADD COLUMN isStaple INTEGER NOT NULL DEFAULT 0")
+                db.execSQL("ALTER TABLE recipes ADD COLUMN batchMeals INTEGER NOT NULL DEFAULT 1")
+                db.execSQL("ALTER TABLE meal_slots ADD COLUMN batchId INTEGER NOT NULL DEFAULT 0")
+                db.execSQL("ALTER TABLE meal_slots ADD COLUMN isLeftover INTEGER NOT NULL DEFAULT 0")
+            }
+        }
+
         fun create(context: Context): MangoDatabase =
             Room.databaseBuilder(context, MangoDatabase::class.java, "mango.db")
-                .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
                 .fallbackToDestructiveMigration()
                 .build()
     }
