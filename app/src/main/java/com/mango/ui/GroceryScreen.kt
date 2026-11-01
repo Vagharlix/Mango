@@ -49,7 +49,7 @@ import kotlin.math.ceil
 
 /** Pre-grocery loop: review the 7-day menu, swap/dislike, and watch the shopping list update live. */
 @Composable
-fun GroceryScreen(onOpenRecipe: (id: Long, portions: Double) -> Unit) {
+fun GroceryScreen(onOpenRecipe: (id: Long, portions: Double, swaps: Map<String, String>) -> Unit) {
     val vm = mangoViewModel { MealPlanViewModel(it) }
     val s by vm.state.collectAsStateWithLifecycle()
     val message by vm.message.collectAsStateWithLifecycle()
@@ -94,7 +94,7 @@ fun GroceryScreen(onOpenRecipe: (id: Long, portions: Double) -> Unit) {
                     SectionLabel(if (day == s.today) "Today" else day.asDate(), color = MangoOrange)
                     s.meals[day].orEmpty().forEach { m ->
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Column(Modifier.weight(1f).clickable { m.recipe?.let { onOpenRecipe(it.id, m.slot.portions) } }) {
+                            Column(Modifier.weight(1f).clickable { m.recipe?.let { onOpenRecipe(it.id, m.slot.portions, m.slot.swaps) } }) {
                                 Text(m.slot.mealType.label, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 Text(m.recipe?.name ?: "—", fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
                                 Text(

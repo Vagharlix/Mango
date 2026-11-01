@@ -45,11 +45,11 @@ interface FoodDao {
     @Query("SELECT COUNT(*) FROM foods WHERE name = :name")
     suspend fun countByName(name: String): Int
 
-    @Query("SELECT COUNT(*) FROM foods")
-    suspend fun count(): Int
-
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(foods: List<Food>)
+
+    @Update
+    suspend fun updateAll(foods: List<Food>)
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insert(food: Food): Long
@@ -156,6 +156,8 @@ class Converters {
     @TypeConverter fun toEquipment(v: String): List<Equipment> = json.decodeFromString(v)
     @TypeConverter fun fromRequirements(v: List<List<Equipment>>): String = json.encodeToString(v)
     @TypeConverter fun toRequirements(v: String): List<List<Equipment>> = json.decodeFromString(v)
+    @TypeConverter fun fromSwaps(v: Map<String, String>): String = json.encodeToString(v)
+    @TypeConverter fun toSwaps(v: String): Map<String, String> = json.decodeFromString(v)
     @TypeConverter fun fromIngredients(v: List<RecipeIngredient>): String = json.encodeToString(v)
     @TypeConverter fun toIngredients(v: String): List<RecipeIngredient> = json.decodeFromString(v)
 }
@@ -165,7 +167,7 @@ class Converters {
         UserProfile::class, Food::class, BarcodeProduct::class, PantryItem::class,
         Recipe::class, MealSlot::class, Exercise::class, Benchmark::class,
     ],
-    version = 2,
+    version = 3,
     exportSchema = false,
 )
 @TypeConverters(Converters::class)
@@ -189,9 +191,17 @@ abstract class MangoDatabase : RoomDatabase() {
             }
         }
 
+        /** v3 adds interchangeable-ingredient groups and per-meal substitutions. */
+        private val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE foods ADD COLUMN swapGroup TEXT")
+                db.execSQL("ALTER TABLE meal_slots ADD COLUMN swaps TEXT NOT NULL DEFAULT '{}'")
+            }
+        }
+
         fun create(context: Context): MangoDatabase =
             Room.databaseBuilder(context, MangoDatabase::class.java, "mango.db")
-                .addMigrations(MIGRATION_1_2)
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                 .fallbackToDestructiveMigration()
                 .build()
     }

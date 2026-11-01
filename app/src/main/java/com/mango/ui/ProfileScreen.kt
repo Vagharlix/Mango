@@ -11,11 +11,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -48,11 +51,14 @@ import com.mango.data.ProgramMode
 import com.mango.data.Repository
 import com.mango.data.Sex
 import com.mango.data.UserProfile
+import com.mango.domain.DislikeSuggestions
 import com.mango.domain.NutritionEngine
 import com.mango.domain.Periodization
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
@@ -62,6 +68,7 @@ import java.util.Locale
 class ProfileViewModel(repo: Repository) : MangoViewModel(repo) {
     private val _draft = MutableStateFlow(UserProfile())
     val draft = _draft.asStateFlow()
+    val foods = repo.foods.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
     private val _isNew = MutableStateFlow(true)
     val isNew = _isNew.asStateFlow()
 
@@ -234,13 +241,33 @@ fun ProfileScreen() {
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 var entry by remember { mutableStateOf("") }
+                val foods by vm.foods.collectAsStateWithLifecycle()
+                fun addDislike(term: String) {
+                    val t = term.trim().lowercase()
+                    if (t.isNotEmpty()) vm.update { it.copy(dislikedIngredients = (it.dislikedIngredients + t).distinct()) }
+                    entry = ""
+                }
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    OutlinedTextField(entry, { entry = it }, label = { Text("e.g. mushrooms") }, singleLine = true, modifier = Modifier.weight(1f))
-                    OutlinedButton(onClick = {
-                        val t = entry.trim().lowercase()
-                        if (t.isNotEmpty()) vm.update { it.copy(dislikedIngredients = (it.dislikedIngredients + t).distinct()) }
-                        entry = ""
-                    }) { Text("Add") }
+                    OutlinedTextField(entry, { entry = it }, label = { Text("Search a food or allergen") }, singleLine = true, modifier = Modifier.weight(1f))
+                    OutlinedButton(onClick = { addDislike(entry) }) { Text("Add") }
+                }
+                val suggestions = remember(entry, foods, p.dislikedIngredients) {
+                    DislikeSuggestions.suggest(entry, foods, p.dislikedIngredients)
+                }
+                if (suggestions.isNotEmpty()) {
+                    Text(
+                        if (entry.isBlank()) "Common allergens" else "Suggestions",
+                        style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        suggestions.forEach { sug ->
+                            AssistChip(
+                                onClick = { addDislike(sug.term) },
+                                label = { Text(if (sug.isGroup && sug.foodCount > 1) "${sug.term} · ${sug.foodCount} foods" else sug.term) },
+                                leadingIcon = { Icon(Icons.Filled.Add, contentDescription = null, modifier = Modifier.size(16.dp)) },
+                            )
+                        }
+                    }
                 }
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     p.dislikedIngredients.forEach { d ->

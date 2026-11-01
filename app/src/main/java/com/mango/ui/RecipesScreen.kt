@@ -44,6 +44,7 @@ import androidx.lifecycle.viewModelScope
 import com.mango.data.MealType
 import com.mango.data.Recipe
 import com.mango.data.Repository
+import com.mango.domain.MealPlanner
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 
@@ -112,7 +113,7 @@ fun RecipesScreen(onOpen: (Long) -> Unit, onCreate: () -> Unit, onBack: () -> Un
 }
 
 @Composable
-fun RecipeDetailScreen(id: Long, initialServings: Double, onEdit: (Long) -> Unit, onBack: () -> Unit) {
+fun RecipeDetailScreen(id: Long, initialServings: Double, swaps: Map<String, String>, onEdit: (Long) -> Unit, onBack: () -> Unit) {
     val vm = mangoViewModel { RecipesViewModel(it) }
     val recipes by vm.recipes.collectAsStateWithLifecycle()
     val foods by vm.foods.collectAsStateWithLifecycle()
@@ -174,12 +175,16 @@ fun RecipeDetailScreen(id: Long, initialServings: Double, onEdit: (Long) -> Unit
         item { SectionLabel("Ingredients", Modifier.padding(top = 4.dp)) }
         item {
             GroupedCard {
-                r.ingredients.forEachIndexed { i, ing ->
+                val replaced = swaps.entries.groupBy({ it.value }, { it.key })
+                MealPlanner.effectiveIngredients(r, swaps).forEachIndexed { i, ing ->
                     if (i > 0) HorizontalDivider(color = Hairline)
                     val grams = ing.grams * factor
                     val food = byName[ing.food]
                     Row(Modifier.fillMaxWidth().padding(14.dp, 11.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Text(ing.food.replaceFirstChar { it.uppercase() }, fontSize = 15.sp, modifier = Modifier.weight(1f))
+                        Column(Modifier.weight(1f)) {
+                            Text(ing.food.replaceFirstChar { it.uppercase() }, fontSize = 15.sp)
+                            replaced[ing.food]?.let { Text("instead of ${it.joinToString()} this week", fontSize = 12.sp, color = Sky) }
+                        }
                         Text(
                             quantityText(roundGrams(grams), food?.unitGrams, food?.unitName),
                             fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant,

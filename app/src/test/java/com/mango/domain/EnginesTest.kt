@@ -250,6 +250,19 @@ class EnginesTest {
         }
     }
 
+    @Test fun dislikeSuggestionsOfferGroupsAndFoods() {
+        assertEquals(DislikeSuggestions.COMMON.take(8), DislikeSuggestions.suggest("", foods, emptyList()).map { it.term })
+        val nuts = DislikeSuggestions.suggest("nu", foods, emptyList())
+        assertEquals("nuts", nuts.first().term)
+        assertTrue(nuts.first().isGroup && nuts.first().foodCount == 4) // walnuts, almonds, cashews, almond butter
+        val beans = DislikeSuggestions.suggest("bea", foods, listOf("black beans")).map { it.term }
+        assertTrue(beans.containsAll(listOf("kidney beans", "white beans")) && "black beans" !in beans)
+        // Every suggestion actually filters something when added.
+        DislikeSuggestions.suggest("mush", foods, emptyList()).forEach { sug ->
+            assertTrue(sug.term, recipes.any { !MealPlanner.isAllowed(it, listOf(sug.term), foodsByName) })
+        }
+    }
+
     @Test fun wholeWordDislikeMatching() {
         val peanut = foodsByName.getValue("peanut butter")
         assertFalse(MealPlanner.matchesDislike(peanut, peanut.name, "peas"))
@@ -285,6 +298,56 @@ class EnginesTest {
         )
         val slot = MealPlanner.plan(listOf(today to MealType.DINNER), request(pantry = pantry, today = today)).single()
         assertEquals("Baked Salmon with Sweet Potato & Broccoli", recipes.first { it.id == slot.recipeId }.name)
+    }
+
+    private fun consolidatedWeek(req: PlanRequest, pantry: List<StockItem> = emptyList(), dislikes: List<String> = emptyList()): List<MealSlot> {
+        val raw = MealPlanner.plan(week(req.today), req)
+        val changed = MealPlanner.consolidate(raw, recipes.associateBy { it.id }, foodsByName, pantry, dislikes)
+            .associateBy { it.epochDay to it.mealType }
+        return raw.map { changed[it.epochDay to it.mealType] ?: it }
+    }
+
+    private fun distinctItems(plan: List<MealSlot>): Set<String> {
+        val byId = recipes.associateBy { it.id }
+        return plan.flatMap { s -> MealPlanner.effectiveIngredients(byId.getValue(s.recipeId), s.swaps).map { it.food } }
+            .filter { foodsByName.getValue(it).category != FoodCategory.SPICE }.toSet()
+    }
+
+    @Test fun weekUsesOneMemberPerInterchangeableGroup() {
+        listOf(LocalDate.of(2026, 11, 2), LocalDate.of(2027, 3, 1), LocalDate.of(2027, 7, 5)).forEach { start ->
+            val items = distinctItems(consolidatedWeek(request(today = start.toEpochDay())))
+            items.mapNotNull { foodsByName.getValue(it).swapGroup }.groupingBy { it }.eachCount()
+                .forEach { (group, n) -> assertEquals("$start $group", 1, n) }
+        }
+    }
+
+    @Test fun basketReuseShortensTheShoppingList() {
+        listOf(LocalDate.of(2026, 11, 2), LocalDate.of(2027, 3, 1), LocalDate.of(2027, 7, 5)).forEach { start ->
+            val req = request(today = start.toEpochDay())
+            val before = distinctItems(MealPlanner.plan(week(req.today), req.copy(reuseWeight = 0.0))).size
+            val after = distinctItems(consolidatedWeek(req)).size
+            assertTrue("$start: $before -> $after", after <= before * 0.8)
+        }
+    }
+
+    @Test fun consolidationPrefersPantryAndNeverPicksDislikes() {
+        val today = LocalDate.of(2026, 11, 2).toEpochDay()
+        val withChickpeas = recipes.first { it.name == "Chickpea Spinach Curry" }
+        val withBlackBeans = recipes.first { it.name == "Black Bean Tacos with Mango Salsa" }
+        val slots = listOf(
+            MealSlot(today, MealType.DINNER, withChickpeas.id, 1.0),
+            MealSlot(today + 1, MealType.DINNER, withBlackBeans.id, 1.0),
+        )
+        val byId = recipes.associateBy { it.id }
+        val pantry = listOf(StockItem("black beans", 400.0, today + 300, false))
+        val changed = MealPlanner.consolidate(slots, byId, foodsByName, pantry, emptyList())
+        assertEquals(mapOf("chickpeas" to "black beans"), changed.single { it.recipeId == withChickpeas.id }.swaps)
+        // A disliked member is never imposed, even if it is in the pantry.
+        val respectful = MealPlanner.consolidate(slots, byId, foodsByName, pantry, listOf("black beans"))
+        assertEquals(mapOf("black beans" to "chickpeas"), respectful.single { it.recipeId == withBlackBeans.id }.swaps)
+        // The shopping list and pantry deduction follow the substitution.
+        val list = MealPlanner.shoppingList(slots.map { s -> changed.firstOrNull { it.recipeId == s.recipeId } ?: s }, byId, foodsByName, emptyList(), today)
+        assertTrue(list.none { it.food.name == "chickpeas" })
     }
 
     @Test fun portionsScaleToMealEnergyTarget() {

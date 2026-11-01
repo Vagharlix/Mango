@@ -116,6 +116,8 @@ data class Food(
     val unitGrams: Double? = null,
     val unitName: String? = null,
     val isUserAdded: Boolean = false,
+    /** Interchangeable-ingredient group (e.g. "beans"): one member is used for the whole week. */
+    val swapGroup: String? = null,
 )
 
 /** Local barcode cache: maps a scanned product to a food in the catalog (generic or created from Open Food Facts). */
@@ -184,6 +186,8 @@ data class MealSlot(
     val recipeId: Long,
     val portions: Double,
     val status: MealStatus = MealStatus.PLANNED,
+    /** Ingredient substitutions for this meal (recipe food → food actually used), see MealPlanner.consolidate. */
+    val swaps: Map<String, String> = emptyMap(),
 )
 
 @Serializable

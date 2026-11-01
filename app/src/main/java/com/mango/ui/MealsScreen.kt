@@ -140,7 +140,7 @@ class MealPlanViewModel(repo: Repository) : MangoViewModel(repo) {
 
 @Composable
 fun MealsScreen(
-    onOpenRecipe: (id: Long, portions: Double) -> Unit,
+    onOpenRecipe: (id: Long, portions: Double, swaps: Map<String, String>) -> Unit,
     onOpenRecipes: () -> Unit,
     onOpenGrocery: () -> Unit,
     onSetupProfile: () -> Unit,
@@ -213,7 +213,7 @@ fun MealsScreen(
             items(meals, key = { "${it.slot.epochDay}-${it.slot.mealType}" }) { m ->
                 MealCard(
                     meal = m,
-                    onOpen = { m.recipe?.let { onOpenRecipe(it.id, m.slot.portions) } },
+                    onOpen = { m.recipe?.let { onOpenRecipe(it.id, m.slot.portions, m.slot.swaps) } },
                     onCook = { vm.cook(m.slot) },
                     onSkip = { vm.skip(m.slot) },
                     onUnskip = { vm.unskip(m.slot) },
@@ -272,6 +272,7 @@ private fun MealCard(meal: PlannedMeal, onOpen: () -> Unit, onCook: () -> Unit, 
                 if (r != null) {
                     Text("${servingsText(meal.slot.portions)} · ${r.prepMinutes} min · ${r.cuisine}", fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     MacroLine(r.perServing, meal.slot.portions)
+                    swapsText(meal.slot.swaps)?.let { Text(it, fontSize = 12.sp, color = Sky) }
                 }
             }
             Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null, tint = Faint)
@@ -286,6 +287,10 @@ private fun MealCard(meal: PlannedMeal, onOpen: () -> Unit, onCook: () -> Unit, 
         }
     }
 }
+
+/** "Uses chickpeas instead of black beans" – substitutions that keep the week's shopping list short. */
+fun swapsText(swaps: Map<String, String>): String? =
+    if (swaps.isEmpty()) null else "Uses " + swaps.entries.joinToString(", ") { "${it.value} instead of ${it.key}" }
 
 fun servingsText(servings: Double): String {
     val n = if (servings % 1.0 == 0.0) servings.fmt() else servings.fmt(2).trimEnd('0').trimEnd('.')

@@ -75,7 +75,7 @@ class Repository(private val context: Context, private val db: MangoDatabase) {
 
     suspend fun seedIfNeeded() = withContext(Dispatchers.IO) {
         try {
-            if (foodDao.count() == 0) foodDao.insertAll(readAsset<List<Food>>("foods.json"))
+            syncSeedFoods()
             // Exercises are read-only reference data: refresh on every start so asset updates (new protocols,
             // equipment requirements) reach existing installs.
             db.exerciseDao().insertAll(readAsset<List<Exercise>>("exercises.json"))
@@ -85,6 +85,18 @@ class Repository(private val context: Context, private val db: MangoDatabase) {
             seeded.completeExceptionally(e)
             throw e
         }
+    }
+
+    /** Adds new catalog foods and refreshes bundled ones (nutrients, groups), keeping ids and user-added foods. */
+    private suspend fun syncSeedFoods() {
+        val existing = foodDao.getAll().associateBy { it.name }
+        val seeds = readAsset<List<Food>>("foods.json")
+        foodDao.insertAll(seeds.filter { it.name !in existing })
+        val changed = seeds.mapNotNull { seed ->
+            val old = existing[seed.name]?.takeUnless { it.isUserAdded } ?: return@mapNotNull null
+            seed.copy(id = old.id).takeIf { it != old }
+        }
+        if (changed.isNotEmpty()) foodDao.updateAll(changed)
     }
 
     /**
@@ -194,7 +206,7 @@ class Repository(private val context: Context, private val db: MangoDatabase) {
     suspend fun cook(slot: MealSlot) = planLock.withLock {
         val recipe = recipeDao.getById(slot.recipeId) ?: throw IllegalStateException("Recipe no longer exists")
         val foodIds = foodDao.getAll().associate { it.name to it.id }
-        val (updated, emptied) = MealPlanner.consume(pantryDao.getAll(), foodIds, recipe, slot.portions)
+        val (updated, emptied) = MealPlanner.consume(pantryDao.getAll(), foodIds, recipe, slot.portions, slot.swaps)
         updated.forEach { pantryDao.update(it) }
         emptied.forEach { pantryDao.delete(it) }
         mealDao.upsertAll(listOf(slot.copy(status = MealStatus.COOKED)))
@@ -246,6 +258,21 @@ class Repository(private val context: Context, private val db: MangoDatabase) {
             targetsFor = { targetsFor(p, it) },
         )
         mealDao.upsertAll(MealPlanner.plan(toFill, req))
+        consolidateLocked(p)
+    }
+
+    /** One member per interchangeable group (beans, berries…) across the week's planned meals. */
+    private suspend fun consolidateLocked(p: UserProfile) {
+        val today = today()
+        val foods = foodDao.getAll()
+        val changed = MealPlanner.consolidate(
+            slots = mealDao.getRange(today, today + 6),
+            recipes = recipeDao.getAll().associateBy { it.id },
+            foods = foods.associateBy { it.name },
+            pantry = stock(foods),
+            dislikes = p.dislikedIngredients,
+        )
+        if (changed.isNotEmpty()) mealDao.upsertAll(changed)
     }
 
     private suspend fun stock(foods: List<Food>): List<StockItem> {

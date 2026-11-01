@@ -1,5 +1,6 @@
 package com.mango.ui
 
+import android.net.Uri
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FitnessCenter
@@ -37,12 +38,16 @@ object Routes {
     const val TIMER = "timer"
     const val SCANNER = "scanner"
     const val RECIPES = "recipes"
-    const val RECIPE = "recipe/{id}?portions={portions}"
+    const val RECIPE = "recipe/{id}?portions={portions}&swaps={swaps}"
     const val EDITOR = "editor/{id}"
     const val SESSION = "session/{week}/{day}"
     const val EXERCISE = "exercise/{week}/{day}/{index}"
     const val PLAN = "plan"
-    fun recipe(id: Long, portions: Double? = null) = "recipe/$id" + (portions?.let { "?portions=$it" } ?: "")
+    fun recipe(id: Long, portions: Double? = null, swaps: Map<String, String> = emptyMap()) =
+        "recipe/$id?portions=${portions ?: 1.0}&swaps=" + Uri.encode(swaps.entries.joinToString("|") { "${it.key}>${it.value}" })
+
+    fun decodeSwaps(raw: String?): Map<String, String> =
+        raw.orEmpty().split('|').mapNotNull { e -> e.split('>').takeIf { it.size == 2 }?.let { it[0] to it[1] } }.toMap()
     fun session(week: Int, day: Int) = "session/$week/$day"
     fun exercise(week: Int, day: Int, index: Int) = "exercise/$week/$day/$index"
     fun editor(id: Long) = "editor/$id"
@@ -132,13 +137,13 @@ fun MangoNavHost(openTimer: Boolean, onTimerOpened: () -> Unit) {
             }
             composable(Routes.MEALS) {
                 MealsScreen(
-                    onOpenRecipe = { id, portions -> nav.navigate(Routes.recipe(id, portions)) },
+                    onOpenRecipe = { id, portions, swaps -> nav.navigate(Routes.recipe(id, portions, swaps)) },
                     onOpenRecipes = { nav.navigate(Routes.RECIPES) },
                     onOpenGrocery = { nav.switchTab(Routes.GROCERY) },
                     onSetupProfile = { nav.switchTab(Routes.PROFILE) },
                 )
             }
-            composable(Routes.GROCERY) { GroceryScreen(onOpenRecipe = { id, portions -> nav.navigate(Routes.recipe(id, portions)) }) }
+            composable(Routes.GROCERY) { GroceryScreen(onOpenRecipe = { id, portions, swaps -> nav.navigate(Routes.recipe(id, portions, swaps)) }) }
             composable(Routes.PANTRY) { PantryScreen(onScan = { nav.navigate(Routes.SCANNER) }) }
             composable(Routes.PROFILE) { ProfileScreen() }
             composable(Routes.TIMER) { TimerScreen(onClose = { nav.popBackStack() }) }
@@ -155,11 +160,13 @@ fun MangoNavHost(openTimer: Boolean, onTimerOpened: () -> Unit) {
                 arguments = listOf(
                     navArgument("id") { type = NavType.LongType },
                     navArgument("portions") { type = NavType.FloatType; defaultValue = 1f },
+                    navArgument("swaps") { type = NavType.StringType; defaultValue = "" },
                 ),
             ) { entry ->
                 RecipeDetailScreen(
                     id = entry.arguments?.getLong("id") ?: 0,
                     initialServings = (entry.arguments?.getFloat("portions") ?: 1f).toDouble(),
+                    swaps = Routes.decodeSwaps(entry.arguments?.getString("swaps")),
                     onEdit = { nav.navigate(Routes.editor(it)) },
                     onBack = { nav.popBackStack() },
                 )
