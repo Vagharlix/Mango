@@ -67,6 +67,35 @@ class EnginesTest {
         }
     }
 
+    /** Guards against over-generous recipes: per-serving energy and typical single-adult portion caps. */
+    @Test fun recipePortionsAreReasonableForOnePerson() {
+        val energy = mapOf(
+            MealType.BREAKFAST to 350.0..650.0, MealType.LUNCH to 450.0..750.0,
+            MealType.DINNER to 450.0..800.0, MealType.SNACK to 150.0..380.0,
+        )
+        fun cap(food: Food): Double = when {
+            food.name.endsWith("broth") -> 400.0
+            food.category == FoodCategory.FAT_OIL -> 10.0
+            food.name in setOf("parmesan", "cheddar") -> 30.0
+            food.name in setOf("feta", "mozzarella") -> 60.0
+            food.category == FoodCategory.NUT_SEED -> 35.0
+            food.name == "eggs" -> 150.0
+            food.category == FoodCategory.PROTEIN -> 180.0
+            food.name in setOf("lentils", "red lentils") -> 90.0
+            food.category == FoodCategory.GRAIN && "bread" !in food.name && "tortilla" !in food.name -> 90.0
+            food.category == FoodCategory.SPICE -> 5.0
+            else -> 250.0
+        }
+        recipes.forEach { r ->
+            assertTrue("${r.name}: ${r.perServing.kcal} kcal", r.perServing.kcal in energy.getValue(r.mealType))
+            r.ingredients.forEach { i ->
+                val perServing = i.grams / r.servings
+                val food = foodsByName.getValue(i.food)
+                assertTrue("${r.name}: ${i.food} $perServing g per serving", perServing <= cap(food))
+            }
+        }
+    }
+
     // ---------- Periodization ----------
 
     @Test fun phaseRatios() {
