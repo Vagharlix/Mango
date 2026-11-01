@@ -67,6 +67,7 @@ class WorkoutTimerService : Service() {
         private const val ACTION_PAUSE = "com.mango.timer.PAUSE"
         private const val ACTION_RESUME = "com.mango.timer.RESUME"
         private const val ACTION_STOP = "com.mango.timer.STOP"
+        private const val ACTION_SKIP = "com.mango.timer.SKIP"
         private const val EXTRA_TITLE = "title"
         private const val EXTRA_INTERVALS = "intervals"
 
@@ -84,6 +85,7 @@ class WorkoutTimerService : Service() {
         fun pause(context: Context) = send(context, ACTION_PAUSE)
         fun resume(context: Context) = send(context, ACTION_RESUME)
         fun stop(context: Context) = send(context, ACTION_STOP)
+        fun skip(context: Context) = send(context, ACTION_SKIP)
 
         private fun send(context: Context, action: String) {
             if (!_state.value.active) return
@@ -156,6 +158,19 @@ class WorkoutTimerService : Service() {
             }
             ACTION_RESUME -> if (!_state.value.running && !_state.value.finished) run()
             ACTION_STOP -> shutdown()
+            ACTION_SKIP -> if (!_state.value.finished) {
+                val wasRunning = _state.value.running
+                tickJob?.cancel()
+                _state.update {
+                    val next = it.index + 1
+                    it.copy(index = next, remainingMs = (it.intervals.getOrNull(next)?.seconds ?: 0) * 1000L)
+                }
+                when {
+                    _state.value.finished -> shutdown(keepState = true)
+                    wasRunning -> run()
+                    else -> notifyProgress()
+                }
+            }
             else -> if (!_state.value.active) stopSelf() // restarted by the system without a session
         }
         return START_NOT_STICKY

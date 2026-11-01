@@ -8,7 +8,7 @@
   "ingredients": [
    {
     "food": "rolled oats",
-    "grams": 70.0
+    "grams": 60.0
    },
    {
     "food": "milk",
@@ -28,7 +28,7 @@
    },
    {
     "food": "walnuts",
-    "grams": 15.0
+    "grams": 10.0
    },
    {
     "food": "honey",
@@ -166,7 +166,7 @@
   "ingredients": [
    {
     "food": "firm tofu",
-    "grams": 200.0
+    "grams": 150.0
    },
    {
     "food": "bell pepper",
@@ -410,7 +410,7 @@
   "ingredients": [
    {
     "food": "whole wheat tortilla",
-    "grams": 70.0
+    "grams": 60.0
    },
    {
     "food": "eggs",
@@ -422,7 +422,7 @@
    },
    {
     "food": "black beans",
-    "grams": 80.0
+    "grams": 60.0
    },
    {
     "food": "bell pepper",
@@ -434,7 +434,7 @@
    },
    {
     "food": "avocado",
-    "grams": 40.0
+    "grams": 30.0
    },
    {
     "food": "tomato",
@@ -873,7 +873,7 @@
   "ingredients": [
    {
     "food": "rolled oats",
-    "grams": 70.0
+    "grams": 60.0
    },
    {
     "food": "milk",
@@ -1175,11 +1175,11 @@
    },
    {
     "food": "brown rice",
-    "grams": 150.0
+    "grams": 130.0
    },
    {
     "food": "black beans",
-    "grams": 200.0
+    "grams": 150.0
    },
    {
     "food": "corn kernels",
@@ -1191,7 +1191,7 @@
    },
    {
     "food": "avocado",
-    "grams": 100.0
+    "grams": 80.0
    },
    {
     "food": "lime",
@@ -1329,11 +1329,11 @@
    },
    {
     "food": "white rice",
-    "grams": 150.0
+    "grams": 130.0
    },
    {
     "food": "edamame",
-    "grams": 150.0
+    "grams": 100.0
    },
    {
     "food": "cucumber",
@@ -1341,7 +1341,7 @@
    },
    {
     "food": "avocado",
-    "grams": 100.0
+    "grams": 80.0
    },
    {
     "food": "carrot",
@@ -1658,7 +1658,7 @@
    },
    {
     "food": "vegetable broth",
-    "grams": 800.0
+    "grams": 600.0
    },
    {
     "food": "olive oil",
@@ -1993,7 +1993,7 @@
    },
    {
     "food": "vegetable broth",
-    "grams": 800.0
+    "grams": 600.0
    },
    {
     "food": "parmesan",
@@ -2049,7 +2049,7 @@
    },
    {
     "food": "chicken broth",
-    "grams": 1000.0
+    "grams": 800.0
    },
    {
     "food": "parsley",
@@ -2224,7 +2224,7 @@
   "ingredients": [
    {
     "food": "chickpeas",
-    "grams": 300.0
+    "grams": 240.0
    },
    {
     "food": "carrot",
@@ -2264,7 +2264,7 @@
    },
    {
     "food": "greek yogurt",
-    "grams": 200.0
+    "grams": 150.0
    }
   ],
   "steps": [
@@ -2340,7 +2340,7 @@
   "ingredients": [
    {
     "food": "red lentils",
-    "grams": 180.0
+    "grams": 150.0
    },
    {
     "food": "onion",
@@ -2469,7 +2469,7 @@
   "ingredients": [
    {
     "food": "barley",
-    "grams": 160.0
+    "grams": 140.0
    },
    {
     "food": "butternut squash",
@@ -2489,7 +2489,7 @@
    },
    {
     "food": "vegetable broth",
-    "grams": 900.0
+    "grams": 750.0
    },
    {
     "food": "spinach",
@@ -2505,7 +2505,7 @@
    },
    {
     "food": "white beans",
-    "grams": 240.0
+    "grams": 150.0
    }
   ],
   "steps": [
@@ -2624,7 +2624,7 @@
   "ingredients": [
    {
     "food": "tomato",
-    "grams": 600.0
+    "grams": 500.0
    },
    {
     "food": "cucumber",
@@ -2765,15 +2765,15 @@
   "ingredients": [
    {
     "food": "turkey mince",
-    "grams": 400.0
+    "grams": 320.0
    },
    {
     "food": "kidney beans",
-    "grams": 240.0
+    "grams": 160.0
    },
    {
     "food": "black beans",
-    "grams": 200.0
+    "grams": 140.0
    },
    {
     "food": "canned tomatoes",
@@ -2805,7 +2805,7 @@
    },
    {
     "food": "brown rice",
-    "grams": 120.0
+    "grams": 100.0
    },
    {
     "food": "greek yogurt",
@@ -2828,7 +2828,7 @@
   "ingredients": [
    {
     "food": "chicken breast",
-    "grams": 350.0
+    "grams": 300.0
    },
    {
     "food": "broccoli",
@@ -2884,11 +2884,11 @@
   "ingredients": [
    {
     "food": "lean beef mince",
-    "grams": 350.0
+    "grams": 250.0
    },
    {
     "food": "whole wheat pasta",
-    "grams": 180.0
+    "grams": 160.0
    },
    {
     "food": "canned tomatoes",
@@ -2944,7 +2944,7 @@
   "ingredients": [
    {
     "food": "chicken thigh",
-    "grams": 400.0
+    "grams": 320.0
    },
    {
     "food": "coconut milk",
@@ -3008,7 +3008,7 @@
   "ingredients": [
    {
     "food": "cod fillet",
-    "grams": 400.0
+    "grams": 340.0
    },
    {
     "food": "quinoa",
@@ -3055,7 +3055,7 @@
   "ingredients": [
    {
     "food": "chickpeas",
-    "grams": 400.0
+    "grams": 300.0
    },
    {
     "food": "spinach",
@@ -3111,7 +3111,7 @@
   "ingredients": [
    {
     "food": "pork tenderloin",
-    "grams": 400.0
+    "grams": 320.0
    },
    {
     "food": "brussels sprouts",
@@ -3206,7 +3206,7 @@
   "ingredients": [
    {
     "food": "firm tofu",
-    "grams": 400.0
+    "grams": 300.0
    },
    {
     "food": "broccoli",
@@ -3270,7 +3270,7 @@
    },
    {
     "food": "turkey mince",
-    "grams": 350.0
+    "grams": 300.0
    },
    {
     "food": "quinoa",
@@ -3318,11 +3318,11 @@
   "ingredients": [
    {
     "food": "chicken thigh",
-    "grams": 400.0
+    "grams": 320.0
    },
    {
     "food": "chickpeas",
-    "grams": 240.0
+    "grams": 200.0
    },
    {
     "food": "carrot",
@@ -3358,7 +3358,7 @@
    },
    {
     "food": "quinoa",
-    "grams": 140.0
+    "grams": 120.0
    },
    {
     "food": "parsley",
@@ -3386,7 +3386,7 @@
   "ingredients": [
    {
     "food": "beef sirloin",
-    "grams": 400.0
+    "grams": 320.0
    },
    {
     "food": "barley",
@@ -3414,7 +3414,7 @@
    },
    {
     "food": "vegetable broth",
-    "grams": 900.0
+    "grams": 700.0
    },
    {
     "food": "garlic",
@@ -3498,11 +3498,11 @@
   "ingredients": [
    {
     "food": "lentils",
-    "grams": 160.0
+    "grams": 120.0
    },
    {
     "food": "whole wheat pasta",
-    "grams": 180.0
+    "grams": 160.0
    },
    {
     "food": "canned tomatoes",
@@ -3557,7 +3557,7 @@
   "ingredients": [
    {
     "food": "chicken breast",
-    "grams": 400.0
+    "grams": 320.0
    },
    {
     "food": "bell pepper",
@@ -3569,7 +3569,7 @@
    },
    {
     "food": "whole wheat tortilla",
-    "grams": 200.0
+    "grams": 180.0
    },
    {
     "food": "avocado",
@@ -3620,7 +3620,7 @@
    },
    {
     "food": "mushrooms",
-    "grams": 300.0
+    "grams": 250.0
    },
    {
     "food": "spinach",
@@ -3636,7 +3636,7 @@
    },
    {
     "food": "vegetable broth",
-    "grams": 900.0
+    "grams": 700.0
    },
    {
     "food": "parmesan",
@@ -3672,7 +3672,7 @@
   "ingredients": [
    {
     "food": "cod fillet",
-    "grams": 400.0
+    "grams": 340.0
    },
    {
     "food": "tomato",
@@ -3696,7 +3696,7 @@
    },
    {
     "food": "potato",
-    "grams": 500.0
+    "grams": 400.0
    },
    {
     "food": "parsley",
@@ -3723,11 +3723,11 @@
   "ingredients": [
    {
     "food": "black beans",
-    "grams": 400.0
+    "grams": 300.0
    },
    {
     "food": "whole wheat tortilla",
-    "grams": 200.0
+    "grams": 180.0
    },
    {
     "food": "mango",
@@ -3778,23 +3778,23 @@
   "ingredients": [
    {
     "food": "chicken breast",
-    "grams": 350.0
+    "grams": 300.0
    },
    {
     "food": "eggplant",
-    "grams": 250.0
-   },
-   {
-    "food": "zucchini",
-    "grams": 250.0
-   },
-   {
-    "food": "bell pepper",
     "grams": 200.0
    },
    {
+    "food": "zucchini",
+    "grams": 200.0
+   },
+   {
+    "food": "bell pepper",
+    "grams": 150.0
+   },
+   {
     "food": "tomato",
-    "grams": 300.0
+    "grams": 250.0
    },
    {
     "food": "onion",
@@ -3835,7 +3835,7 @@
   "ingredients": [
    {
     "food": "red lentils",
-    "grams": 160.0
+    "grams": 140.0
    },
    {
     "food": "butternut squash",
@@ -3843,7 +3843,7 @@
    },
    {
     "food": "coconut milk",
-    "grams": 150.0
+    "grams": 100.0
    },
    {
     "food": "onion",
@@ -3867,7 +3867,7 @@
    },
    {
     "food": "white rice",
-    "grams": 140.0
+    "grams": 120.0
    },
    {
     "food": "cilantro",
@@ -3875,7 +3875,7 @@
    },
    {
     "food": "greek yogurt",
-    "grams": 150.0
+    "grams": 100.0
    }
   ],
   "steps": [
@@ -3896,7 +3896,7 @@
   "ingredients": [
    {
     "food": "pork tenderloin",
-    "grams": 400.0
+    "grams": 320.0
    },
    {
     "food": "carrot",
@@ -3947,7 +3947,7 @@
    },
    {
     "food": "whole wheat pasta",
-    "grams": 180.0
+    "grams": 150.0
    },
    {
     "food": "kale",
@@ -3959,7 +3959,7 @@
    },
    {
     "food": "walnuts",
-    "grams": 30.0
+    "grams": 20.0
    },
    {
     "food": "parmesan",
@@ -3971,7 +3971,7 @@
    },
    {
     "food": "olive oil",
-    "grams": 20.0
+    "grams": 15.0
    },
    {
     "food": "lemon",
@@ -4114,7 +4114,7 @@
   "ingredients": [
    {
     "food": "chicken thigh",
-    "grams": 450.0
+    "grams": 350.0
    },
    {
     "food": "canned tomatoes",
@@ -4220,7 +4220,7 @@
   "ingredients": [
    {
     "food": "eggplant",
-    "grams": 600.0
+    "grams": 500.0
    },
    {
     "food": "canned tomatoes",
@@ -4272,7 +4272,7 @@
   "ingredients": [
    {
     "food": "turkey mince",
-    "grams": 400.0
+    "grams": 280.0
    },
    {
     "food": "eggs",
@@ -4300,7 +4300,7 @@
    },
    {
     "food": "brown rice",
-    "grams": 150.0
+    "grams": 130.0
    },
    {
     "food": "parmesan",
@@ -4391,7 +4391,7 @@
   "ingredients": [
    {
     "food": "chicken thigh",
-    "grams": 450.0
+    "grams": 350.0
    },
    {
     "food": "brussels sprouts",
@@ -4399,7 +4399,7 @@
    },
    {
     "food": "potato",
-    "grams": 500.0
+    "grams": 400.0
    },
    {
     "food": "lemon",
@@ -4438,11 +4438,11 @@
   "ingredients": [
    {
     "food": "firm tofu",
-    "grams": 400.0
+    "grams": 300.0
    },
    {
     "food": "potato",
-    "grams": 300.0
+    "grams": 250.0
    },
    {
     "food": "carrot",
@@ -4458,7 +4458,7 @@
    },
    {
     "food": "white rice",
-    "grams": 160.0
+    "grams": 140.0
    },
    {
     "food": "peas",
@@ -4466,7 +4466,7 @@
    },
    {
     "food": "vegetable broth",
-    "grams": 600.0
+    "grams": 500.0
    },
    {
     "food": "soy sauce",
@@ -4618,7 +4618,7 @@
   "ingredients": [
    {
     "food": "almonds",
-    "grams": 20.0
+    "grams": 15.0
    },
    {
     "food": "walnuts",
@@ -4626,7 +4626,7 @@
    },
    {
     "food": "raisins",
-    "grams": 20.0
+    "grams": 15.0
    },
    {
     "food": "pumpkin seeds",
@@ -4874,15 +4874,15 @@
   "ingredients": [
    {
     "food": "rolled oats",
-    "grams": 40.0
-   },
-   {
-    "food": "dates",
     "grams": 30.0
    },
    {
+    "food": "dates",
+    "grams": 25.0
+   },
+   {
     "food": "peanut butter",
-    "grams": 20.0
+    "grams": 15.0
    },
    {
     "food": "ground flaxseed",
@@ -4908,7 +4908,7 @@
   "ingredients": [
    {
     "food": "mozzarella",
-    "grams": 80.0
+    "grams": 60.0
    },
    {
     "food": "tomato",
@@ -5000,7 +5000,7 @@
    },
    {
     "food": "banana",
-    "grams": 100.0
+    "grams": 80.0
    },
    {
     "food": "mango",
@@ -5012,7 +5012,7 @@
    },
    {
     "food": "milk",
-    "grams": 150.0
+    "grams": 100.0
    },
    {
     "food": "chia seeds",

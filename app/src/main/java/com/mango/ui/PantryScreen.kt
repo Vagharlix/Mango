@@ -19,7 +19,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -119,13 +118,12 @@ fun PantryScreen(onScan: () -> Unit) {
     Box(Modifier.fillMaxSize()) {
         LazyColumn(contentPadding = PaddingValues(16.dp, 16.dp, 16.dp, 96.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             item {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("Pantry", style = MaterialTheme.typography.headlineSmall, modifier = Modifier.weight(1f))
-                    OutlinedButton(onClick = { adding = true }) {
-                        Icon(Icons.Filled.Add, contentDescription = null)
-                        Text(" Add")
-                    }
+                val expiring = entries.count { it.item.expiresOnEpochDay - vm.today <= 3 }
+                ScreenHeader("Pantry", eyebrow = "${entries.size} items" + if (expiring > 0) " · $expiring expiring soon" else "") {
+                    RoundIconButton(Icons.Filled.Add, "Add item", onClick = { adding = true })
                 }
+            }
+            item {
                 Text(
                     "Sorted by expiry. Items expiring soon are prioritised by the meal planner.",
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,

@@ -23,7 +23,6 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -39,7 +38,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mango.data.MealStatus
 import com.mango.data.Recipe
@@ -48,7 +49,7 @@ import kotlin.math.ceil
 
 /** Pre-grocery loop: review the 7-day menu, swap/dislike, and watch the shopping list update live. */
 @Composable
-fun GroceryScreen(onOpenRecipe: (Long) -> Unit) {
+fun GroceryScreen(onOpenRecipe: (id: Long, portions: Double) -> Unit) {
     val vm = mangoViewModel { MealPlanViewModel(it) }
     val s by vm.state.collectAsStateWithLifecycle()
     val message by vm.message.collectAsStateWithLifecycle()
@@ -70,32 +71,32 @@ fun GroceryScreen(onOpenRecipe: (Long) -> Unit) {
     }
 
     Box(Modifier.fillMaxSize()) {
-        LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             item {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Column(Modifier.weight(1f)) {
-                        Text("Menu review", style = MaterialTheme.typography.headlineSmall)
-                        Text(
-                            if (s.isGroceryDay) "Grocery day – finalise before you shop" else "Next grocery day: ${java.time.DayOfWeek.of(profile.groceryDay)}",
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                    }
-                    IconButton(onClick = vm::regenerate) { Icon(Icons.Filled.Refresh, contentDescription = "Regenerate week") }
+                val eyebrow = if (s.isGroceryDay) {
+                    "Grocery day – finalise before you shop"
+                } else {
+                    "Next shop: " + java.time.DayOfWeek.of(profile.groceryDay).getDisplayName(java.time.format.TextStyle.FULL, java.util.Locale.getDefault())
+                }
+                ScreenHeader("Grocery", eyebrow = eyebrow) {
+                    RoundIconButton(Icons.Filled.Refresh, "Regenerate week", onClick = vm::regenerate)
                 }
             }
             item {
                 Text(
-                    "Tap ⇄ to swap a meal, 👎 to never see a recipe again or to add one of its ingredients to your dislikes. Macros and the shopping list are recalculated instantly.",
-                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    "Swap a meal, or tap the thumb to hide a recipe or dislike one of its ingredients. Macros and the shopping list update instantly.",
+                    fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
+            item { SectionLabel("Menu · next 7 days") }
             items(s.days) { day ->
                 SectionCard {
-                    Text(if (day == s.today) "Today" else day.asDate(), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
+                    SectionLabel(if (day == s.today) "Today" else day.asDate(), color = MangoOrange)
                     s.meals[day].orEmpty().forEach { m ->
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Column(Modifier.weight(1f).clickable { m.recipe?.let { onOpenRecipe(it.id) } }) {
-                                Text("${m.slot.mealType.label} · ${m.recipe?.name ?: "—"}", style = MaterialTheme.typography.bodyLarge)
+                            Column(Modifier.weight(1f).clickable { m.recipe?.let { onOpenRecipe(it.id, m.slot.portions) } }) {
+                                Text(m.slot.mealType.label, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text(m.recipe?.name ?: "—", fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
                                 Text(
                                     "${m.nutrients.kcal.fmt()} kcal · P ${m.nutrients.protein.fmt()} g" + when (m.slot.status) {
                                         MealStatus.COOKED -> " · cooked"
@@ -127,15 +128,14 @@ fun GroceryScreen(onOpenRecipe: (Long) -> Unit) {
                 }
             }
             item {
-                HorizontalDivider(Modifier.padding(vertical = 8.dp))
-                Text("Shopping list", style = MaterialTheme.typography.headlineSmall)
+                SectionLabel("Shopping list", Modifier.padding(top = 8.dp))
                 Text(
                     "Covers meals until ${s.shoppingUntil.asDate()}. Pantry stock (including food left over from skipped meals) is already subtracted. Tick an item to add it to your pantry.",
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
             if (s.shopping.isEmpty()) {
-                item { Text("Nothing to buy – your pantry covers the plan. Zero waste! 🥭", color = Leaf) }
+                item { Text("Nothing to buy – your pantry covers the plan. Zero waste!", color = Leaf) }
             }
             items(s.shopping, key = { it.food.id }) { item -> ShoppingRow(item) { vm.markBought(item) } }
         }

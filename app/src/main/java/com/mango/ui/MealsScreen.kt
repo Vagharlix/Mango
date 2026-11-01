@@ -1,5 +1,6 @@
 package com.mango.ui
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,13 +11,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -28,11 +28,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.mango.data.MealSlot
@@ -137,7 +140,7 @@ class MealPlanViewModel(repo: Repository) : MangoViewModel(repo) {
 
 @Composable
 fun MealsScreen(
-    onOpenRecipe: (Long) -> Unit,
+    onOpenRecipe: (id: Long, portions: Double) -> Unit,
     onOpenRecipes: () -> Unit,
     onOpenGrocery: () -> Unit,
     onSetupProfile: () -> Unit,
@@ -166,32 +169,34 @@ fun MealsScreen(
     val target = s.targets[selected]
 
     Box(Modifier.fillMaxSize()) {
-        LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             item {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("Meals", style = MaterialTheme.typography.headlineSmall, modifier = Modifier.weight(1f))
-                    TextButton(onClick = onOpenRecipes) {
-                        Icon(Icons.AutoMirrored.Filled.MenuBook, contentDescription = null)
-                        Text("  Recipes")
-                    }
+                ScreenHeader("Meals", eyebrow = s.today.asDate("EEEE d MMM")) {
+                    RoundIconButton(Icons.AutoMirrored.Filled.MenuBook, "Recipes", onClick = onOpenRecipes)
                 }
             }
             if (s.isGroceryDay) {
                 item {
-                    SectionCard {
-                        Text("🛒 It's grocery day", style = MaterialTheme.typography.titleMedium, color = Warn)
-                        Text("Review the 7-day menu and swap anything you don't fancy before the shopping list is final.")
-                        Button(onClick = onOpenGrocery) { Text("Review menu & shopping list") }
+                    HeroCard("GROCERY DAY", "Review the menu before you shop", "Swap anything you don't fancy – the shopping list updates instantly.", labelColor = Warn) {
+                        PrimaryButton("Review menu & list", onOpenGrocery, icon = null)
                     }
                 }
             }
             item {
-                LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    items(s.days) { d ->
-                        FilterChip(
+                Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    s.days.forEach { d ->
+                        val dayMeals = s.meals[d].orEmpty()
+                        DayTile(
+                            dow = if (d == s.today) "Today" else d.asDate("EEE"),
+                            num = d.asDate("d"),
                             selected = d == selected,
+                            dot = when {
+                                dayMeals.isNotEmpty() && dayMeals.all { it.slot.status != MealStatus.PLANNED } -> Leaf
+                                dayMeals.any { it.slot.status == MealStatus.SKIPPED } -> Sky
+                                else -> Faint
+                            },
                             onClick = { selected = d },
-                            label = { Text(if (d == s.today) "Today" else d.asDate("EEE d")) },
+                            modifier = Modifier.weight(1f),
                         )
                     }
                 }
@@ -208,7 +213,7 @@ fun MealsScreen(
             items(meals, key = { "${it.slot.epochDay}-${it.slot.mealType}" }) { m ->
                 MealCard(
                     meal = m,
-                    onOpen = { m.recipe?.let { onOpenRecipe(it.id) } },
+                    onOpen = { m.recipe?.let { onOpenRecipe(it.id, m.slot.portions) } },
                     onCook = { vm.cook(m.slot) },
                     onSkip = { vm.skip(m.slot) },
                     onUnskip = { vm.unskip(m.slot) },
@@ -219,18 +224,27 @@ fun MealsScreen(
     }
 }
 
+/** Energy and protein at a glance; the full nutrient breakdown only on demand. */
 @Composable
 private fun DayTotals(meals: List<PlannedMeal>, t: DailyTargets) {
     val eaten = meals.filter { it.slot.status != MealStatus.SKIPPED }.fold(Nutrients()) { acc, m -> acc + m.nutrients }
-    SectionCard {
-        Text("Planned vs target", style = MaterialTheme.typography.titleMedium)
+    var open by remember { mutableStateOf(false) }
+    SectionCard(Modifier.clickable { open = !open }) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            SectionLabel("Planned vs target", Modifier.weight(1f))
+            Text(if (open) "Less" else "All nutrients", fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = MangoOrange)
+        }
         TargetBar("Energy", eaten.kcal, t.kcal, "kcal")
         TargetBar("Protein (${t.proteinPerKg.fmt(1)} g/kg)", eaten.protein, t.proteinG, "g", Leaf)
-        TargetBar("Carbohydrate", eaten.carbs, t.carbsG, "g", Sky)
-        TargetBar("Fat", eaten.fat, t.fatG, "g", Warn)
-        TargetBar("Fibre", eaten.fiber, t.fiberG, "g", Leaf)
-        TargetBar("Vitamin C", eaten.vitaminC, t.vitaminCMg, "mg", MangoOrange)
-        TargetBar("Omega-3", eaten.omega3, t.omega3G, "g", Sky)
+        AnimatedVisibility(open) {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                TargetBar("Carbohydrate", eaten.carbs, t.carbsG, "g", Sky)
+                TargetBar("Fat", eaten.fat, t.fatG, "g", Warn)
+                TargetBar("Fibre", eaten.fiber, t.fiberG, "g", Leaf)
+                TargetBar("Vitamin C", eaten.vitaminC, t.vitaminCMg, "mg", MangoOrange)
+                TargetBar("Omega-3", eaten.omega3, t.omega3G, "g", Sky)
+            }
+        }
         if (meals.any { it.slot.status == MealStatus.SKIPPED }) {
             Text(
                 "Meals out are just meals – no calorie compensation applied.",
@@ -245,19 +259,22 @@ private fun MealCard(meal: PlannedMeal, onOpen: () -> Unit, onCook: () -> Unit, 
     val r = meal.recipe
     SectionCard {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(meal.slot.mealType.label.uppercase(), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary, modifier = Modifier.weight(1f))
+            SectionLabel(meal.slot.mealType.label, Modifier.weight(1f), color = MangoOrange)
             when (meal.slot.status) {
-                MealStatus.COOKED -> Pill("COOKED", Leaf)
-                MealStatus.SKIPPED -> Pill("DINING OUT", Sky)
+                MealStatus.COOKED -> Pill("Cooked", Leaf)
+                MealStatus.SKIPPED -> Pill("Dining out", Sky)
                 MealStatus.PLANNED -> {}
             }
         }
-        Column(Modifier.fillMaxWidth().clickable(onClick = onOpen)) {
-            Text(r?.name ?: "Recipe removed", style = MaterialTheme.typography.titleMedium)
-            if (r != null) {
-                Text("${meal.slot.portions.fmt(2)} serving(s) · ${r.cuisine} · ${r.prepMinutes} min", style = MaterialTheme.typography.bodySmall)
-                MacroLine(r.perServing, meal.slot.portions)
+        Row(Modifier.fillMaxWidth().clickable(onClick = onOpen), verticalAlignment = Alignment.CenterVertically) {
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                Text(r?.name ?: "Recipe removed", fontSize = 17.sp, fontWeight = FontWeight.Bold)
+                if (r != null) {
+                    Text("${servingsText(meal.slot.portions)} · ${r.prepMinutes} min · ${r.cuisine}", fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    MacroLine(r.perServing, meal.slot.portions)
+                }
             }
+            Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null, tint = Faint)
         }
         when (meal.slot.status) {
             MealStatus.PLANNED -> Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -268,4 +285,9 @@ private fun MealCard(meal: PlannedMeal, onOpen: () -> Unit, onCook: () -> Unit, 
             MealStatus.COOKED -> {}
         }
     }
+}
+
+fun servingsText(servings: Double): String {
+    val n = if (servings % 1.0 == 0.0) servings.fmt() else servings.fmt(2).trimEnd('0').trimEnd('.')
+    return "$n serving" + if (servings == 1.0) "" else "s"
 }

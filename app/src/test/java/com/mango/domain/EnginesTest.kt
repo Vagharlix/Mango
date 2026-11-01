@@ -67,6 +67,35 @@ class EnginesTest {
         }
     }
 
+    /** Guards against over-generous recipes: per-serving energy and typical single-adult portion caps. */
+    @Test fun recipePortionsAreReasonableForOnePerson() {
+        val energy = mapOf(
+            MealType.BREAKFAST to 350.0..650.0, MealType.LUNCH to 450.0..750.0,
+            MealType.DINNER to 450.0..800.0, MealType.SNACK to 150.0..380.0,
+        )
+        fun cap(food: Food): Double = when {
+            food.name.endsWith("broth") -> 400.0
+            food.category == FoodCategory.FAT_OIL -> 10.0
+            food.name in setOf("parmesan", "cheddar") -> 30.0
+            food.name in setOf("feta", "mozzarella") -> 60.0
+            food.category == FoodCategory.NUT_SEED -> 35.0
+            food.name == "eggs" -> 150.0
+            food.category == FoodCategory.PROTEIN -> 180.0
+            food.name in setOf("lentils", "red lentils") -> 90.0
+            food.category == FoodCategory.GRAIN && "bread" !in food.name && "tortilla" !in food.name -> 90.0
+            food.category == FoodCategory.SPICE -> 5.0
+            else -> 250.0
+        }
+        recipes.forEach { r ->
+            assertTrue("${r.name}: ${r.perServing.kcal} kcal", r.perServing.kcal in energy.getValue(r.mealType))
+            r.ingredients.forEach { i ->
+                val perServing = i.grams / r.servings
+                val food = foodsByName.getValue(i.food)
+                assertTrue("${r.name}: ${i.food} $perServing g per serving", perServing <= cap(food))
+            }
+        }
+    }
+
     // ---------- Periodization ----------
 
     @Test fun phaseRatios() {
@@ -128,6 +157,19 @@ class EnginesTest {
         assertEquals(Phase.BASE, weeks[16].phase)
         assertEquals(Phase.POWER_ENDURANCE, weeks[8].phase)
         assertEquals(Phase.PEAK, weeks[12].phase)
+    }
+
+    @Test fun guidedSessionChainsExercisesWithSetUpBreaks() {
+        val day = weeksWith(Equipment.DEFAULT)[5].days[0] // Max Strength, day 1
+        val all = Periodization.sessionIntervals(day.items)
+        val timed = day.items.filter { it.isTimed }
+        assertEquals(1, all.count { it.label == "GET READY" })
+        assertEquals(timed.size - 1, all.count { it.label == "SET UP" && it.seconds == 60 })
+        assertEquals(timed.sumOf { p -> Periodization.intervals(p).count { it.isWork } }, all.count { it.isWork })
+        val hang = day.items.first { it.exercise.id == "fb_max_hangs_10s" }
+        assertEquals("HANG", Periodization.intervals(hang)[1].label)
+        assertEquals("+6.5 kg", hang.load) // 85 % of (70 + 20) - 70
+        assertTrue(Periodization.estimateMinutes(day.items) in 30..120)
     }
 
     // ---------- Equipment ----------
@@ -258,9 +300,9 @@ class EnginesTest {
         val byId = mapOf(r.id to r)
         val planned = MealSlot(today, MealType.DINNER, r.id, r.servings.toDouble())
         val full = MealPlanner.shoppingList(listOf(planned), byId, foodsByName, emptyList(), today)
-        assertTrue(full.any { it.food.name == "turkey mince" && it.grams == 400.0 })
+        assertTrue(full.any { it.food.name == "turkey mince" && it.grams == 320.0 })
         // Turkey bought for a meal that was skipped stays in the pantry and is no longer needed.
-        val pantry = listOf(StockItem("turkey mince", 400.0, today + 2, false))
+        val pantry = listOf(StockItem("turkey mince", 320.0, today + 2, false))
         val next = MealPlanner.shoppingList(listOf(planned), byId, foodsByName, pantry, today)
         assertTrue(next.none { it.food.name == "turkey mince" })
         assertTrue(MealPlanner.shoppingList(listOf(planned.copy(status = MealStatus.SKIPPED)), byId, foodsByName, emptyList(), today).isEmpty())
