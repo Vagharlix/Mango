@@ -33,7 +33,7 @@ data class MangoBackup(
 )
 
 @Serializable
-data class BackupPantryItem(val food: String, val grams: Double, val expiresOnEpochDay: Long, val addedOnEpochDay: Long)
+data class BackupPantryItem(val food: String, val grams: Double, val expiresOnEpochDay: Long, val addedOnEpochDay: Long, val frozen: Boolean = false)
 
 @Serializable
 data class BackupBarcode(val barcode: String, val productName: String, val food: String)
@@ -79,7 +79,7 @@ object BackupCodec {
             recipes = recipes.filter { it.isCustom || it.isUserModified },
             removedRecipes = recipes.filter { it.isHidden && !it.isCustom }.map { it.name },
             recipeNames = referenced.distinct().mapNotNull { id -> recipeById[id]?.let { id to it.name } }.toMap(),
-            pantry = pantry.mapNotNull { p -> foodName[p.foodId]?.let { BackupPantryItem(it, p.grams, p.expiresOnEpochDay, p.addedOnEpochDay) } },
+            pantry = pantry.mapNotNull { p -> foodName[p.foodId]?.let { BackupPantryItem(it, p.grams, p.expiresOnEpochDay, p.addedOnEpochDay, p.frozen) } },
             barcodes = barcodes.mapNotNull { b -> foodName[b.foodId]?.let { BackupBarcode(b.barcode, b.productName, it) } },
             benchmarks = benchmarks,
             meals = meals,

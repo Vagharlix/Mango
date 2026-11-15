@@ -40,6 +40,7 @@ object Routes {
     const val DISLIKES = "options/dislikes"
     const val ABOUT = "options/about"
     const val BACKUP = "options/backup"
+    const val KITCHEN = "options/kitchen"
     const val TIMER = "timer"
     const val SCANNER = "scanner"
     const val RECIPES = "recipes"
@@ -170,6 +171,7 @@ fun MangoNavHost(openTimer: Boolean, onTimerOpened: () -> Unit) {
                     onOpenStaples = { nav.navigate(Routes.STAPLES) },
                     onOpenAbout = { nav.navigate(Routes.ABOUT) },
                     onOpenBackup = { nav.navigate(Routes.BACKUP) },
+                    onOpenKitchen = { nav.navigate(Routes.KITCHEN) },
                 )
             }
             composable(Routes.BODY) { BodyScreen(onBack = { nav.popBackStack() }, onRestore = { nav.navigate(Routes.BACKUP) }) }
@@ -177,6 +179,7 @@ fun MangoNavHost(openTimer: Boolean, onTimerOpened: () -> Unit) {
             composable(Routes.DISLIKES) { DislikesScreen(onBack = { nav.popBackStack() }) }
             composable(Routes.ABOUT) { AboutScreen(onBack = { nav.popBackStack() }) }
             composable(Routes.BACKUP) { BackupScreen(onBack = { nav.popBackStack() }) }
+            composable(Routes.KITCHEN) { KitchenScreen(onBack = { nav.popBackStack() }) }
             composable(Routes.FOOD_PREFS) { FoodPreferencesScreen(onBack = { nav.popBackStack() }) }
             composable(Routes.TIMER) { TimerScreen(onClose = { nav.popBackStack() }) }
             composable(Routes.SCANNER) { ScannerScreen(onDone = { nav.popBackStack() }) }

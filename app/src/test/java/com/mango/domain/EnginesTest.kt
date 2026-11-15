@@ -83,6 +83,8 @@ class EnginesTest {
             food.name in setOf("feta", "mozzarella") -> 60.0
             food.category == FoodCategory.NUT_SEED -> 35.0
             food.name == "eggs" -> 150.0
+            // Drumsticks and wings are weighed with the bone (~30-40 % of their weight).
+            food.name in setOf("chicken drumstick", "chicken wings") -> 250.0
             food.category == FoodCategory.PROTEIN -> 180.0
             food.name in setOf("lentils", "red lentils") -> 90.0
             food.category == FoodCategory.GRAIN && "bread" !in food.name && "tortilla" !in food.name && "gnocchi" !in food.name -> 90.0

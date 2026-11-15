@@ -12,6 +12,8 @@ import com.mango.domain.Periodization
 import com.mango.domain.PlanRequest
 import com.mango.domain.ShoppingItem
 import com.mango.domain.StockItem
+import com.mango.domain.KitchenPrep
+import com.mango.domain.WholeChicken
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -276,10 +278,12 @@ class Repository(private val context: Context, private val db: MangoDatabase) {
         val existing = mealDao.getRange(today - MealPlanner.ANTI_REPEAT_DAYS, today + 14)
             .filterNot { (it.epochDay to it.mealType) in keys }
         val byName = foods.associateBy { it.name }
+        val base = stock(foods, p)
+        val recipes = adaptedRecipes(p, byName)
         val req = PlanRequest(
-            recipes = adaptedRecipes(p, byName),
+            recipes = recipes,
             foods = byName,
-            pantry = stock(foods, p),
+            pantry = base,
             today = today,
             dislikes = p.dislikedIngredients,
             southernHemisphere = p.southernHemisphere,
@@ -288,10 +292,44 @@ class Repository(private val context: Context, private val db: MangoDatabase) {
             breakfastPicks = p.breakfastPicks.toSet(),
             existing = existing,
             exclude = exclude,
+            kitchen = p.kitchen.toSet(),
             targetsFor = { targetsFor(p, it) },
         )
-        mealDao.upsertAll(MealPlanner.plan(toFill, req))
+        mealDao.upsertAll(planWithBird(p, toFill, req, existing, recipes, byName))
         consolidateLocked(p)
+    }
+
+    /**
+     * Whole chicken: plan the week around a bird that isn't bought yet (its parts count as stock, used fresh
+     * or frozen). "When it fits" keeps that plan only if it uses at least half the bird's meat.
+     */
+    private suspend fun planWithBird(
+        p: UserProfile,
+        toFill: List<Pair<Long, MealType>>,
+        req: PlanRequest,
+        existing: List<MealSlot>,
+        recipes: List<Recipe>,
+        foods: Map<String, Food>,
+    ): List<MealSlot> {
+        val today = req.today
+        val lots = pantryDao.getAll()
+        val byId = foods.values.associateBy { it.id }
+        val partsInStock = lots.mapNotNull { l -> byId[l.foodId]?.name?.takeIf { it in WholeChicken.PART_FOODS }?.let { it to l.grams } }
+            .groupBy({ it.first }, { it.second }).mapValues { it.value.sum() }
+        val boughtThisWeek = lots.any { l -> byId[l.foodId]?.name in WholeChicken.PART_FOODS && l.addedOnEpochDay >= lastGroceryDay(p) }
+        val noChicken = "chicken" in p.proteinOff || p.dislikedIngredients.any { MealPlanner.matchesDislike(foods[WholeChicken.BREAST], WholeChicken.BREAST, it) }
+        if (noChicken || !WholeChicken.wantsVirtualBird(p.wholeChicken, boughtThisWeek, partsInStock, p.chickenKg)) return MealPlanner.plan(toFill, req)
+        val withBird = MealPlanner.plan(toFill, req.copy(pantry = req.pantry + WholeChicken.virtualStock(p.chickenKg, today, today + 6), scarce = WholeChicken.PART_FOODS))
+        if (p.wholeChicken == WholeChickenMode.ALWAYS) return withBird
+        val week = (existing + withBird).filter { it.epochDay in today..today + 6 }
+        val used = WholeChicken.meatUsed(week, recipes.associateBy { it.id }, foods, today..today + 6)
+        return if (WholeChicken.fits(used, p.chickenKg)) withBird else MealPlanner.plan(toFill, req)
+    }
+
+    /** The most recent grocery day (today if it is one). */
+    private fun lastGroceryDay(p: UserProfile, today: Long = today()): Long {
+        val dow = LocalDate.ofEpochDay(today).dayOfWeek.value
+        return today - (dow - p.groceryDay + 7) % 7
     }
 
     /** One member per interchangeable group (beans, berries…) across the week's planned meals. */
@@ -351,7 +389,15 @@ class Repository(private val context: Context, private val db: MangoDatabase) {
     private suspend fun stock(foods: List<Food>, p: UserProfile? = null): List<StockItem> {
         val byId = foods.associateBy { it.id }
         val real = pantryDao.getAll().mapNotNull { item ->
-            byId[item.foodId]?.let { StockItem(it.name, item.grams, item.expiresOnEpochDay, it.category == FoodCategory.PRODUCE) }
+            byId[item.foodId]?.let {
+                // Frozen food needs a night in the fridge before it can be cooked.
+                StockItem(
+                    it.name, item.grams, item.expiresOnEpochDay, it.category == FoodCategory.PRODUCE,
+                    availableFrom = if (item.frozen) today() + 1 else Long.MIN_VALUE,
+                    // Pieces of a bird and homemade stock waiting in the freezer get used up first.
+                    priority = item.frozen && (it.name in WholeChicken.PART_FOODS || it.name == WholeChicken.STOCK),
+                )
+            }
         }
         // The spice rack is always considered stocked, so staples never count as missing.
         val rack = if (p == null) emptyList() else keptStaples(foods, p).map { StockItem(it, 100_000.0, today() + 3650, false) }
@@ -373,14 +419,16 @@ class Repository(private val context: Context, private val db: MangoDatabase) {
         slots(window.first - MealPlanner.BATCH_WINDOW_DAYS, window.last), recipes, foods, pantryDao.observeAll(),
     ) { slots, recipes, foods, pantry ->
         val byId = foods.associateBy { it.id }
-        MealPlanner.shoppingList(
+        val byName = foods.associateBy { it.name }
+        val items = MealPlanner.shoppingList(
             slots = slots,
             recipes = recipes.associateBy { it.id },
-            foods = foods.associateBy { it.name },
+            foods = byName,
             pantry = pantry.mapNotNull { i -> byId[i.foodId]?.let { StockItem(it.name, i.grams, i.expiresOnEpochDay, false) } },
             today = window.first,
             alwaysStocked = keptStaples(foods, p),
         )
+        WholeChicken.toBirds(items, p.wholeChicken, p.chickenKg, byName[WholeChicken.WHOLE])
     }
 
     // ---------------- Pantry ----------------
@@ -391,7 +439,112 @@ class Repository(private val context: Context, private val db: MangoDatabase) {
     }
 
     suspend fun markBought(item: ShoppingItem) =
-        addToPantry(item.food.id, item.grams, today() + item.food.shelfLifeDays)
+        if (item.food.name == WholeChicken.WHOLE) {
+            buyBirds(maxOf(1, Math.round(item.grams / (item.food.unitGrams ?: 1600.0)).toInt()))
+        } else {
+            addToPantry(item.food.id, item.grams, today() + item.food.shelfLifeDays)
+        }
+
+    /**
+     * Whole birds bought: their pieces go straight into the pantry – those the plan eats today or tomorrow in
+     * the fridge, the rest in the freezer – and a breakdown task appears.
+     */
+    private suspend fun buyBirds(birds: Int) = planLock.withLock {
+        val p = profileDao.get() ?: throw IllegalStateException("Create your profile first")
+        val today = today()
+        val foods = foodDao.getAll()
+        val byName = foods.associateBy { it.name }
+        val byId = foods.associateBy { it.id }
+        val slots = mealDao.getRange(today - MealPlanner.BATCH_WINDOW_DAYS, today + 13)
+        val demand = WholeChicken.demand(slots, recipeDao.getAll().associateBy { it.id }, byName, today..today + 13).toMutableMap()
+        // Fresh pieces already in the fridge cover the earliest needs.
+        pantryDao.getAll().filter { !it.frozen }.forEach { lot ->
+            val name = byId[lot.foodId]?.name ?: return@forEach
+            var left = lot.grams
+            demand[name] = demand[name].orEmpty().map { (d, g) -> val t = minOf(g, left); left -= t; d to g - t }.filter { it.second > 0.5 }
+        }
+        WholeChicken.allocate(birds, p.chickenKg, today, demand).forEach { lot ->
+            val food = byName[lot.food] ?: return@forEach
+            val expires = if (lot.frozen) today + WholeChicken.freezerDays(food) else today + food.shelfLifeDays
+            pantryDao.insert(PantryItem(foodId = food.id, grams = lot.grams, expiresOnEpochDay = expires, addedOnEpochDay = today, frozen = lot.frozen))
+        }
+        profileDao.upsert(p.copy(breakdownOn = today))
+    }
+
+    suspend fun breakdownDone() {
+        val p = profileDao.get() ?: return
+        profileDao.upsert(p.copy(breakdownOn = 0))
+    }
+
+    /** Moves [grams] of a lot into the freezer (the rest stays in the fridge). */
+    suspend fun freeze(lotId: Long, grams: Double = Double.MAX_VALUE) = moveLot(lotId, grams, toFreezer = true)
+
+    /** Moves [grams] of a frozen lot to the fridge to thaw. */
+    suspend fun thaw(lotId: Long, grams: Double = Double.MAX_VALUE) = moveLot(lotId, grams, toFreezer = false)
+
+    private suspend fun moveLot(lotId: Long, grams: Double, toFreezer: Boolean) {
+        val lot = pantryDao.getAll().firstOrNull { it.id == lotId } ?: return
+        val food = foodDao.getById(lot.foodId) ?: return
+        val today = today()
+        val moved = minOf(grams, lot.grams)
+        // Frozen: months for quality. Thawed in the fridge: raw meat 1-2 days, stock 3-4 days (FoodSafety.gov).
+        val expires = if (toFreezer) today + WholeChicken.freezerDays(food) else today + food.shelfLifeDays
+        if (moved >= lot.grams - 0.5) {
+            pantryDao.update(lot.copy(frozen = toFreezer, expiresOnEpochDay = expires))
+        } else {
+            pantryDao.update(lot.copy(grams = lot.grams - moved))
+            pantryDao.insert(PantryItem(foodId = lot.foodId, grams = moved, expiresOnEpochDay = expires, addedOnEpochDay = lot.addedOnEpochDay, frozen = toFreezer))
+        }
+    }
+
+    /**
+     * Stock made from the frames: they leave the pantry and homemade stock arrives – what the plan uses in the
+     * next 3 days in the fridge, the rest frozen in boxes.
+     */
+    suspend fun makeStock(lotIds: List<Long>, frameGrams: Double, ml: Double) = planLock.withLock {
+        val today = today()
+        val foods = foodDao.getAll()
+        val byName = foods.associateBy { it.name }
+        val stockFood = byName[WholeChicken.STOCK] ?: return@withLock
+        var left = frameGrams
+        pantryDao.getAll().filter { it.id in lotIds }.forEach { lot ->
+            val t = minOf(lot.grams, left)
+            left -= t
+            if (lot.grams - t <= 0.5) pantryDao.delete(lot.id) else pantryDao.update(lot.copy(grams = lot.grams - t))
+        }
+        val slots = mealDao.getRange(today - MealPlanner.BATCH_WINDOW_DAYS, today + 13)
+        val demand = WholeChicken.demand(slots, recipeDao.getAll().associateBy { it.id }, byName, today..today + 3)
+        val soon = MealPlanner.ALIASES.filterValues { WholeChicken.STOCK in it }.keys.plus(WholeChicken.STOCK)
+            .sumOf { n -> demand[n].orEmpty().sumOf { it.second } }
+        val fresh = minOf(ml, soon)
+        if (fresh > 1) pantryDao.insert(PantryItem(foodId = stockFood.id, grams = fresh, expiresOnEpochDay = today + stockFood.shelfLifeDays, addedOnEpochDay = today))
+        if (ml - fresh > 1) pantryDao.insert(PantryItem(foodId = stockFood.id, grams = ml - fresh, expiresOnEpochDay = today + WholeChicken.freezerDays(stockFood), addedOnEpochDay = today, frozen = true))
+    }
+
+    /** Today's kitchen jobs: break down a new bird, make stock, thaw, freeze. */
+    fun prepTasks(p: UserProfile): Flow<List<KitchenPrep.Task>> = combine(
+        slots(today() - MealPlanner.BATCH_WINDOW_DAYS, today() + 6), recipes, foods, pantryDao.observeAll(),
+    ) { slots, recipes, foods, pantry ->
+        val today = today()
+        val byId = foods.associateBy { it.id }
+        val lots = pantry.mapNotNull { i -> byId[i.foodId]?.let { KitchenPrep.PantryLot(i.id, it, i.grams, i.expiresOnEpochDay, i.frozen, i.addedOnEpochDay) } }
+        KitchenPrep.tasks(
+            today = today,
+            lots = lots,
+            demand = WholeChicken.demand(slots, recipes.associateBy { it.id }, foods.associateBy { it.name }, today..today + 6),
+            breakdownOn = p.breakdownOn,
+            kg = p.chickenKg,
+            kitchen = p.kitchen,
+            mealLabel = { d -> if (d == today + 1) "tomorrow" else LocalDate.ofEpochDay(d).dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, java.util.Locale.getDefault()) },
+        )
+    }
+
+    /** Whole chicken mode, bird size and appliances; the week is re-planned around them. */
+    suspend fun updateKitchen(mode: WholeChickenMode, chickenKg: Double, kitchen: Collection<KitchenTool>) {
+        val p = profileDao.get() ?: throw IllegalStateException("Create your profile first")
+        profileDao.upsert(p.copy(wholeChicken = mode, chickenKg = chickenKg.coerceIn(0.8, 3.0), kitchen = KitchenTool.entries.filter { it in kitchen }))
+        regenerateWeek()
+    }
 
     suspend fun updatePantry(item: PantryItem) =
         if (item.grams <= 0.5) pantryDao.delete(item.id) else pantryDao.update(item)
@@ -537,7 +690,7 @@ class Repository(private val context: Context, private val db: MangoDatabase) {
 
                 pantryDao.clear()
                 pantryDao.insertAll(b.pantry.mapNotNull { p ->
-                    foodByName[p.food]?.let { PantryItem(foodId = it.id, grams = p.grams, expiresOnEpochDay = p.expiresOnEpochDay, addedOnEpochDay = p.addedOnEpochDay) }
+                    foodByName[p.food]?.let { PantryItem(foodId = it.id, grams = p.grams, expiresOnEpochDay = p.expiresOnEpochDay, addedOnEpochDay = p.addedOnEpochDay, frozen = p.frozen) }
                 })
                 b.barcodes.forEach { bc -> foodByName[bc.food]?.let { db.barcodeDao().upsert(BarcodeProduct(bc.barcode, bc.productName, it.id)) } }
                 db.benchmarkDao().clear()

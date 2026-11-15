@@ -46,6 +46,7 @@ import com.mango.data.Recipe
 import com.mango.data.Repository
 import com.mango.data.UserProfile
 import com.mango.domain.DailyTargets
+import com.mango.domain.KitchenPrep
 import com.mango.domain.MealPlanner
 import com.mango.domain.ShoppingItem
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -158,7 +159,33 @@ class MealPlanViewModel(repo: Repository) : MangoViewModel(repo) {
         repo.regenerateWeek()
     }
 
-    fun markBought(item: ShoppingItem) = launchSafe { repo.markBought(item) }
+    fun markBought(item: ShoppingItem) = launchSafe {
+        repo.markBought(item)
+        if (item.food.name == com.mango.domain.WholeChicken.WHOLE) toast("Bird added – see Kitchen prep in Meals for where each piece goes")
+    }
+
+    /** Today's kitchen jobs (break down, stock, thaw, freeze). */
+    val prep = repo.profile.flatMapLatest { p -> if (p == null) flowOf(emptyList<KitchenPrep.Task>()) else repo.prepTasks(p) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
+    fun breakdownDone() = launchSafe { repo.breakdownDone() }
+
+    fun stockMade(task: KitchenPrep.MakeStock) = launchSafe {
+        repo.makeStock(task.lotIds, task.frameGrams, task.yieldMl.toDouble())
+        toast("${task.yieldMl} ml of homemade stock added – used before any carton")
+    }
+
+    fun freezeFrames(task: KitchenPrep.MakeStock) = launchSafe {
+        task.lotIds.forEach { repo.freeze(it) }
+        toast("Frame frozen – keeps 9 months; stock it with the next ones")
+    }
+
+    fun thawed(move: KitchenPrep.Move) = launchSafe { repo.thaw(move.lotId, move.grams) }
+
+    fun frozen(move: KitchenPrep.Move) = launchSafe {
+        repo.freeze(move.lotId, move.grams)
+        toast("${move.label.replaceFirstChar { it.uppercase() }} frozen")
+    }
 
     fun replace(food: String, replacement: String) = launchSafe {
         repo.replaceIngredient(food, replacement)
@@ -199,6 +226,7 @@ fun MealsScreen(
     var selected by rememberSaveable { mutableLongStateOf(s.today) }
     val meals = s.meals[selected].orEmpty()
     val target = s.targets[selected]
+    val prep by vm.prep.collectAsStateWithLifecycle()
 
     Box(Modifier.fillMaxSize()) {
         LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
@@ -231,6 +259,11 @@ fun MealsScreen(
                             modifier = Modifier.weight(1f),
                         )
                     }
+                }
+            }
+            if (selected == s.today && prep.isNotEmpty()) {
+                item {
+                    KitchenPrepCard(prep, vm::breakdownDone, vm::stockMade, vm::freezeFrames, vm::thawed, vm::frozen)
                 }
             }
             if (target != null) item { DayTotals(meals, target) }

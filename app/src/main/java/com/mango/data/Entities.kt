@@ -67,6 +67,20 @@ enum class Equipment(val label: String) {
     }
 }
 
+/** Kitchen appliances some recipes or prep methods need (the user ticks what they have). */
+enum class KitchenTool(val label: String) {
+    PRESSURE_COOKER("Pressure cooker / Instant Pot"),
+    DEEP_FRYER("Deep fryer"),
+    AIR_FRYER("Air fryer"),
+}
+
+/** Whether the planner buys whole chickens and breaks them down instead of buying parts. */
+enum class WholeChickenMode(val label: String, val description: String) {
+    OFF("Off", "Buy chicken parts as needed"),
+    WHEN_IT_FITS("When it fits", "Buy a whole bird when the week uses at least half of it"),
+    ALWAYS("Always", "Buy a whole bird whenever chicken is on the menu – the rest goes in the freezer"),
+}
+
 /** How a prescription's load is derived. 1RM bases are percentages of total system load (bodyweight + added). */
 enum class LoadBasis { FINGER_1RM, PULL_1RM, BODYWEIGHT, RPE, NONE }
 
@@ -106,6 +120,14 @@ data class UserProfile(
     /** Temporary replacements for items that can't be found (food → replacement) until [manualSwapsUntil]. */
     val manualSwaps: Map<String, String> = emptyMap(),
     val manualSwapsUntil: Long = 0,
+    /** Whole chickens instead of parts: off, when the week uses most of the bird, or always. */
+    val wholeChicken: WholeChickenMode = WholeChickenMode.WHEN_IT_FITS,
+    /** Usual size of the whole chicken bought (kg); parts are counted as pieces, weights are only estimates. */
+    val chickenKg: Double = 1.6,
+    /** Appliances the user has (recipes and stock methods adapt). */
+    val kitchen: List<KitchenTool> = emptyList(),
+    /** Day a whole chicken was bought and still needs breaking down (0 = nothing to do). */
+    val breakdownOn: Long = 0,
 )
 
 /** Nutrients per 100 g. Values from USDA FoodData Central. */
@@ -158,6 +180,8 @@ data class PantryItem(
     val grams: Double,
     val expiresOnEpochDay: Long,
     val addedOnEpochDay: Long,
+    /** In the freezer: keeps for months (quality), needs a night in the fridge before use. */
+    val frozen: Boolean = false,
 )
 
 @Serializable
@@ -203,6 +227,8 @@ data class Recipe(
     val batchMeals: Int = 1,
     /** Reference the recipe was written from (e.g. a Guardian or GialloZafferano classic); empty = Mango original. */
     val source: String = "",
+    /** Appliances this recipe needs – any one of them (e.g. deep fryer or air fryer); empty = none. */
+    val needsAny: List<KitchenTool> = emptyList(),
 )
 
 /** One planned meal. Composite key keeps exactly one slot per day and meal type. */

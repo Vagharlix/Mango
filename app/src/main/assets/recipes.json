@@ -4142,57 +4142,71 @@
   "name": "Chicken Cacciatore",
   "mealType": "DINNER",
   "cuisine": "Italian",
-  "servings": 2,
-  "prepMinutes": 50,
+  "servings": 4,
+  "prepMinutes": 60,
   "ingredients": [
    {
+    "food": "chicken breast",
+    "grams": 370.0
+   },
+   {
     "food": "chicken thigh",
-    "grams": 350.0
-   },
-   {
-    "food": "canned tomatoes",
-    "grams": 400.0
-   },
-   {
-    "food": "bell pepper",
     "grams": 200.0
    },
    {
-    "food": "onion",
-    "grams": 100.0
+    "food": "chicken drumstick",
+    "grams": 200.0
    },
    {
-    "food": "mushrooms",
-    "grams": 150.0
-   },
-   {
-    "food": "olives",
-    "grams": 40.0
-   },
-   {
-    "food": "garlic",
-    "grams": 8.0
-   },
-   {
-    "food": "olive oil",
-    "grams": 10.0
-   },
-   {
-    "food": "whole wheat pasta",
+    "food": "chicken wings",
     "grams": 160.0
    },
    {
+    "food": "canned tomatoes",
+    "grams": 800.0
+   },
+   {
+    "food": "bell pepper",
+    "grams": 400.0
+   },
+   {
+    "food": "onion",
+    "grams": 200.0
+   },
+   {
+    "food": "mushrooms",
+    "grams": 300.0
+   },
+   {
+    "food": "olives",
+    "grams": 80.0
+   },
+   {
+    "food": "garlic",
+    "grams": 16.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 20.0
+   },
+   {
+    "food": "whole wheat pasta",
+    "grams": 320.0
+   },
+   {
     "food": "basil",
-    "grams": 10.0
+    "grams": 20.0
    }
   ],
   "steps": [
-   "Brown chicken in oil",
+   "Joint the chicken into 8-10 pieces",
+   "Brown the pieces in oil, skin side first, and set aside",
    "Saute onion, pepper, mushrooms and garlic",
-   "Add tomatoes, olives and chicken and simmer 30 minutes",
-   "Serve over pasta with basil"
+   "Add tomatoes, olives and the legs, wings and thighs and simmer 20 minutes, then add the breast pieces for 15 more",
+   "Serve over pasta with basil",
+   "Keep or freeze the rest in portions"
   ],
-  "batchMeals": 3
+  "batchMeals": 4
  },
  {
   "name": "Grilled Mackerel with Lentils & Leeks",
@@ -5315,8 +5329,20 @@
   "prepMinutes": 60,
   "ingredients": [
    {
+    "food": "chicken breast",
+    "grams": 370.0
+   },
+   {
     "food": "chicken thigh",
-    "grams": 600.0
+    "grams": 200.0
+   },
+   {
+    "food": "chicken drumstick",
+    "grams": 200.0
+   },
+   {
+    "food": "chicken wings",
+    "grams": 160.0
    },
    {
     "food": "bell pepper",
@@ -5356,13 +5382,15 @@
    }
   ],
   "steps": [
-   "Brown the chicken pieces in olive oil and set aside",
+   "Joint the chicken into 8-10 pieces (or use the pieces from your broken-down bird)",
+   "Brown the pieces in olive oil, skin side first, and set aside",
    "Soften sliced onion and peppers 10 minutes, add garlic",
    "Add chopped tomatoes, wine, chili (Espelette pepper if you have it) and thyme",
-   "Return the chicken, cover and simmer 35 minutes",
-   "Cook the rice and serve together"
+   "Return the chicken, cover and simmer 35 minutes - the breast pieces for the last 15 only",
+   "Cook the rice and serve together",
+   "Cool the rest quickly and keep or freeze in portions"
   ],
-  "batchMeals": 3,
+  "batchMeals": 4,
   "source": "Marmiton - top-rated poulet basquaise"
  },
  {
@@ -7948,50 +7976,328 @@
   "name": "Filipino Chicken Adobo",
   "mealType": "DINNER",
   "cuisine": "Filipino",
-  "servings": 3,
-  "prepMinutes": 45,
+  "servings": 4,
+  "prepMinutes": 50,
   "ingredients": [
    {
+    "food": "chicken breast",
+    "grams": 370.0
+   },
+   {
     "food": "chicken thigh",
-    "grams": 480.0
+    "grams": 200.0
+   },
+   {
+    "food": "chicken drumstick",
+    "grams": 200.0
+   },
+   {
+    "food": "chicken wings",
+    "grams": 160.0
    },
    {
     "food": "soy sauce",
-    "grams": 60.0
+    "grams": 80.0
    },
    {
     "food": "rice vinegar",
+    "grams": 80.0
+   },
+   {
+    "food": "garlic",
+    "grams": 25.0
+   },
+   {
+    "food": "brown sugar",
+    "grams": 8.0
+   },
+   {
+    "food": "rapeseed oil",
+    "grams": 10.0
+   },
+   {
+    "food": "white rice",
+    "grams": 320.0
+   },
+   {
+    "food": "green beans",
+    "grams": 400.0
+   }
+  ],
+  "steps": [
+   "Joint the chicken into 8-10 pieces and marinate with soy and crushed garlic 30 minutes",
+   "Brown the pieces in oil",
+   "Add the marinade, vinegar and 150 ml water and do not stir until it boils",
+   "Simmer covered 25 minutes (breast pieces for the last 12), then uncovered until the sauce reduces and the chicken is glossy",
+   "Serve with rice and steamed green beans",
+   "Adobo keeps and reheats very well"
+  ],
+  "batchMeals": 4,
+  "source": "Kawaling Pinoy - chicken adobo"
+ },
+ {
+  "name": "Spicy Peanut Chicken Noodle Soup",
+  "mealType": "LUNCH",
+  "cuisine": "Thai",
+  "servings": 2,
+  "prepMinutes": 70,
+  "ingredients": [
+   {
+    "food": "chicken frame",
+    "grams": 400.0
+   },
+   {
+    "food": "chicken wings",
+    "grams": 160.0
+   },
+   {
+    "food": "peanut butter",
+    "grams": 40.0
+   },
+   {
+    "food": "onion",
     "grams": 60.0
    },
    {
     "food": "garlic",
-    "grams": 20.0
-   },
-   {
-    "food": "brown sugar",
     "grams": 6.0
    },
    {
-    "food": "rapeseed oil",
+    "food": "ginger",
+    "grams": 10.0
+   },
+   {
+    "food": "chili pepper",
+    "grams": 5.0
+   },
+   {
+    "food": "fish sauce",
+    "grams": 15.0
+   },
+   {
+    "food": "brown sugar",
     "grams": 8.0
    },
    {
-    "food": "white rice",
-    "grams": 240.0
+    "food": "lime",
+    "grams": 20.0
    },
    {
-    "food": "green beans",
-    "grams": 300.0
+    "food": "egg noodles",
+    "grams": 140.0
+   },
+   {
+    "food": "bok choy",
+    "grams": 250.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 20.0
    }
   ],
   "steps": [
-   "Marinate the chicken with soy and crushed garlic 30 minutes",
-   "Brown the chicken in oil",
-   "Add the marinade, vinegar and 150 ml water and do not stir until it boils",
-   "Simmer covered 25 minutes, then uncovered until the sauce reduces and the chicken is glossy",
-   "Serve with rice and steamed green beans"
+   "Put the chicken frame and wings in a saucepan with just enough water to cover, bring to the boil and simmer 25 minutes",
+   "Lift out the bones, pick off all the meat from the frame and wings and set aside",
+   "Return the bones and simmer 30 minutes more, then strain - you should have about 800 ml of stock",
+   "Soften sliced onion, garlic, ginger and chili in a little oil, stir in the peanut butter with a ladle of stock, then the fish sauce, sugar and the rest of the stock",
+   "Simmer 10 minutes, stir in the picked meat and lime juice",
+   "Blanch the noodles and bok choy and pour the hot soup over, topped with spring onion"
   ],
-  "batchMeals": 3,
-  "source": "Kawaling Pinoy - chicken adobo"
+  "source": "Andy Cooks (andy-cooks.com) - chicken noodle soup"
+ },
+ {
+  "name": "Soy-Braised Chicken Drumsticks",
+  "mealType": "DINNER",
+  "cuisine": "Chinese",
+  "servings": 1,
+  "prepMinutes": 40,
+  "ingredients": [
+   {
+    "food": "chicken drumstick",
+    "grams": 200.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 20.0
+   },
+   {
+    "food": "honey",
+    "grams": 8.0
+   },
+   {
+    "food": "ginger",
+    "grams": 6.0
+   },
+   {
+    "food": "garlic",
+    "grams": 4.0
+   },
+   {
+    "food": "star anise",
+    "grams": 1.0
+   },
+   {
+    "food": "white rice",
+    "grams": 75.0
+   },
+   {
+    "food": "bok choy",
+    "grams": 200.0
+   },
+   {
+    "food": "sesame oil",
+    "grams": 3.0
+   }
+  ],
+  "steps": [
+   "Cook the rice",
+   "Brown the drumsticks in a small pan",
+   "Add soy, honey, sliced ginger, garlic, star anise and 150 ml water",
+   "Cover and braise gently 25 minutes, turning twice, until the meat pulls from the bone (74 C at the bone)",
+   "Uncover and reduce the sauce until sticky",
+   "Steam the bok choy, dress with sesame oil and serve with the rice"
+  ],
+  "source": "The Woks of Life soy sauce chicken"
+ },
+ {
+  "name": "Salt & Pepper Chicken Wings",
+  "mealType": "SNACK",
+  "cuisine": "Chinese",
+  "servings": 1,
+  "prepMinutes": 40,
+  "ingredients": [
+   {
+    "food": "chicken wings",
+    "grams": 160.0
+   },
+   {
+    "food": "cornstarch",
+    "grams": 10.0
+   },
+   {
+    "food": "rapeseed oil",
+    "grams": 5.0
+   },
+   {
+    "food": "chili flakes",
+    "grams": 0.5
+   },
+   {
+    "food": "garlic",
+    "grams": 3.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 10.0
+   },
+   {
+    "food": "lime",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Pat the wings dry, cut into flats and drumettes (wing tips go in the stock bag) and toss with cornstarch, salt and pepper",
+   "Oven: roast on a rack at 220 C for 35-40 minutes, turning once",
+   "Air fryer: 200 C for 20-22 minutes, shaking halfway",
+   "Toss with the oil fried briefly with garlic, chili and spring onion",
+   "Serve with lime"
+  ]
+ },
+ {
+  "name": "Ayam Goreng (Indonesian Fried Chicken)",
+  "mealType": "DINNER",
+  "cuisine": "Indonesian",
+  "servings": 4,
+  "prepMinutes": 100,
+  "ingredients": [
+   {
+    "food": "chicken breast",
+    "grams": 370.0
+   },
+   {
+    "food": "chicken thigh",
+    "grams": 200.0
+   },
+   {
+    "food": "chicken drumstick",
+    "grams": 200.0
+   },
+   {
+    "food": "chicken wings",
+    "grams": 160.0
+   },
+   {
+    "food": "onion",
+    "grams": 100.0
+   },
+   {
+    "food": "garlic",
+    "grams": 15.0
+   },
+   {
+    "food": "ginger",
+    "grams": 15.0
+   },
+   {
+    "food": "lemongrass",
+    "grams": 25.0
+   },
+   {
+    "food": "turmeric",
+    "grams": 4.0
+   },
+   {
+    "food": "ground cumin",
+    "grams": 3.0
+   },
+   {
+    "food": "chili pepper",
+    "grams": 10.0
+   },
+   {
+    "food": "cornstarch",
+    "grams": 60.0
+   },
+   {
+    "food": "eggs",
+    "grams": 50.0
+   },
+   {
+    "food": "rapeseed oil",
+    "grams": 40.0
+   },
+   {
+    "food": "white rice",
+    "grams": 280.0
+   },
+   {
+    "food": "cucumber",
+    "grams": 300.0
+   },
+   {
+    "food": "tomato",
+    "grams": 200.0
+   },
+   {
+    "food": "lime",
+    "grams": 30.0
+   }
+  ],
+  "steps": [
+   "Break the chicken into 10 pieces: legs off and split into thighs and drumsticks, wings off, breasts off and halved",
+   "Blend onion, garlic, ginger, lemongrass, turmeric, cumin and chili with a splash of water into a paste",
+   "Rub the paste all over the chicken with salt and marinate at least 1 hour",
+   "Mix the egg through, then toss each piece in cornstarch",
+   "Deep fryer: fry at 180 C in batches 10-12 minutes until golden and 74 C inside",
+   "Air fryer: spray with the oil and cook at 200 C for 20-25 minutes, turning halfway",
+   "Serve with rice, cucumber, tomato and lime",
+   "Reheat leftovers in the air fryer or oven to keep them crisp"
+  ],
+  "batchMeals": 4,
+  "needsAny": [
+   "DEEP_FRYER",
+   "AIR_FRYER"
+  ],
+  "source": "Andy Cooks (andy-cooks.com) - Indonesian fried chicken (ayam goreng)"
  }
 ]

@@ -2,6 +2,7 @@ package com.mango.domain
 
 import com.mango.data.Food
 import com.mango.data.FoodCategory
+import com.mango.data.KitchenTool
 import com.mango.data.MealSlot
 import com.mango.data.MealStatus
 import com.mango.data.MealType
@@ -14,10 +15,21 @@ import kotlin.math.ceil
 import kotlin.math.min
 import kotlin.math.roundToInt
 
-/** A pantry lot expressed by food name, as the planner sees it. */
-data class StockItem(val food: String, val grams: Double, val expiresOn: Long, val isProduce: Boolean)
+/**
+ * A pantry lot expressed by food name, as the planner sees it. Frozen lots (and birds not bought yet) only
+ * become usable from [availableFrom].
+ */
+data class StockItem(
+    val food: String,
+    val grams: Double,
+    val expiresOn: Long,
+    val isProduce: Boolean,
+    val availableFrom: Long = Long.MIN_VALUE,
+    /** Counts as "use it up" like expiring food (the pieces of a whole bird, homemade stock in the freezer). */
+    val priority: Boolean = false,
+)
 
-data class ShoppingItem(val food: Food, val grams: Double)
+data class ShoppingItem(val food: Food, val grams: Double, val note: String? = null)
 
 data class ScoreBreakdown(
     val pantry: Double,
@@ -49,6 +61,13 @@ data class PlanRequest(
     val breakfastPicks: Set<Long> = emptySet(),
     /** Batch cooking: long recipes cover extra main meals in the following days as leftovers. */
     val batchCooking: Boolean = true,
+    /** Appliances available: recipes needing one the user lacks are left out. */
+    val kitchen: Set<KitchenTool> = emptySet(),
+    /**
+     * Foods in limited supply this week (the pieces of one bird): recipes needing more than what's left are
+     * penalised, so the week's chicken matches the bird instead of calling for a second one.
+     */
+    val scarce: Set<String> = emptySet(),
     val targetsFor: (Long) -> DailyTargets,
 )
 
@@ -69,6 +88,7 @@ object MealPlanner {
     const val BOOST_EXPIRY_WINDOW_DAYS = 5
     const val REUSE_WEIGHT = 50.0
     const val EASE_WEIGHT = 25.0
+    const val SCARCE_WEIGHT = 70.0
     /** Leftovers from the fridge are eaten 2 days after cooking (never the next day; USDA: 3-4 days max). */
     const val FRIDGE_LEFTOVER_DAY = 2
     /** Freezable batches (3-meal recipes: soups, stews, curries, sauces) can serve a frozen portion later in the week. */
@@ -76,6 +96,12 @@ object MealPlanner {
     /** Longest span between cooking a batch and eating its last portion. */
     const val BATCH_WINDOW_DAYS = 6
     private val MAINS = setOf(MealType.LUNCH, MealType.DINNER)
+
+    /** Foods that can stand in for a recipe ingredient and are used first: homemade stock instead of broth. */
+    val ALIASES: Map<String, List<String>> = mapOf("chicken broth" to listOf(WholeChicken.STOCK))
+
+    fun hasTools(recipe: Recipe, kitchen: Set<KitchenTool>): Boolean =
+        recipe.needsAny.isEmpty() || recipe.needsAny.any { it in kitchen }
 
     // ---------- Dislikes ----------
 
@@ -138,18 +164,33 @@ object MealPlanner {
         var need = 0.0
         var covered = 0.0
         var expiring = 0.0
+        var priorityHit = false
         var seasonal = 0
         var inSeason = 0
         var counted = 0
         var reused = 0
         val month = seasonMonth(day, req.southernHemisphere)
+        // A breakfast is repeated through the week's rotation: its limited ingredients are needed every time.
+        val repeats = if (recipe.mealType == MealType.BREAKFAST) ceil(7.0 / req.breakfastVariety.coerceAtLeast(1)) else 1.0
+        var scarceNeed = 0.0
+        var scarceMissing = 0.0
         for (ing in recipe.ingredients) {
             val g = ing.grams * factor
             need += g
-            covered += min(g, stock.available(ing.food, day))
+            val avail = stock.available(ing.food, day)
+            covered += min(g, avail)
+            if (ing.food in req.scarce) {
+                scarceNeed += g * repeats
+                scarceMissing += (g * repeats - avail).coerceAtLeast(0.0)
+            }
             val food = req.foods[ing.food]
+            // Food to use up: expiring soon, or priority stock (a bird's pieces) covering at least half the need.
             if (stock.hasExpiring(ing.food, day, req.today + window)) {
                 expiring += if (req.produceBoost && food?.category == FoodCategory.PRODUCE) 2.0 else 1.0
+            } else if (!priorityHit && stock.priorityAvailable(ing.food, day) >= 0.5 * g * repeats) {
+                // Priority stock (a bird's pieces) counts once per recipe, so one-pot and single-piece dishes compete evenly.
+                priorityHit = true
+                expiring += 1.0
             }
             // Spices last for months and are bought once, so they don't count towards basket variety.
             if (food?.category != FoodCategory.SPICE) {
@@ -169,7 +210,8 @@ object MealPlanner {
         val expWeight = if (req.produceBoost) 60.0 else 30.0
         val minutesPerMeal = recipe.prepMinutes.toDouble() / mealsCovered.coerceAtLeast(1)
         val ease = 1 - ((minutesPerMeal - 15) / 45).coerceIn(0.0, 1.0)
-        val total = pantry * 40 + exp * expWeight + season * 20 + macro * 10 + reuse * req.reuseWeight + ease * EASE_WEIGHT
+        val scarcity = if (scarceNeed > 0) scarceMissing / scarceNeed else 0.0
+        val total = pantry * 40 + exp * expWeight + season * 20 + macro * 10 + reuse * req.reuseWeight + ease * EASE_WEIGHT - scarcity * SCARCE_WEIGHT
         return ScoreBreakdown(pantry, exp, season, macro, total, reuse, ease)
     }
 
@@ -229,7 +271,7 @@ object MealPlanner {
             }
 
         val allowed = req.recipes.filter {
-            !it.isHidden && it.id !in req.exclude && it.perServing.kcal > 0 && isAllowed(it, req.dislikes, req.foods)
+            !it.isHidden && it.id !in req.exclude && it.perServing.kcal > 0 && hasTools(it, req.kitchen) && isAllowed(it, req.dislikes, req.foods)
         }
         val allowedIds = allowed.map { it.id }.toSet()
         val queue = toFill.distinct().sortedWith(compareBy({ it.first }, { it.second.ordinal }))
@@ -254,6 +296,16 @@ object MealPlanner {
             free -= day to type
             result += slot
             return slot
+        }
+
+        /**
+         * Meals one batch covers. A dish built on a limited supply (a whole bird) covers only as many meals as
+         * the bird serves at this person's portion; other batch recipes scale freely.
+         */
+        fun batchSize(r: Recipe, type: MealType, targets: DailyTargets): Int {
+            if (req.scarce.isEmpty() || r.ingredients.none { it.food in req.scarce }) return r.batchMeals
+            val portion = portionsFor(r, type, targets)
+            return (r.servings / portion + 0.25).toInt().coerceIn(1, r.batchMeals)
         }
 
         /** Same recipe on the given day or a neighbouring one: forbidden (no repeats on consecutive days). */
@@ -298,11 +350,11 @@ object MealPlanner {
                 .ifEmpty { pool }
             if (candidates.isEmpty()) continue
             val best = candidates.map { r ->
-                val covered = if (req.batchCooking && type in MAINS && r.batchMeals > 1) 1 + leftoverSlots(r, day, type, r.batchMeals - 1).size else 1
+                val covered = if (req.batchCooking && type in MAINS && r.batchMeals > 1) 1 + leftoverSlots(r, day, type, batchSize(r, type, targets) - 1).size else 1
                 val portions = portionsFor(r, type, targets)
                 r to score(r, portions, day, stock, req, targets, basket, covered).total + variety(r.id, day)
             }.maxWith(compareBy<Pair<Recipe, Double>> { it.second }.thenByDescending { it.first.id }).first
-            val extra = if (req.batchCooking && type in MAINS && best.batchMeals > 1) leftoverSlots(best, day, type, best.batchMeals - 1) else emptyList()
+            val extra = if (req.batchCooking && type in MAINS && best.batchMeals > 1) leftoverSlots(best, day, type, batchSize(best, type, targets) - 1) else emptyList()
             val batchId = if (extra.isEmpty()) 0L else day * 10 + type.ordinal + 1
             take(best, day, type, batchId)
             extra.forEach { (d, t) -> take(best, d, t, batchId, leftover = true) }
@@ -372,7 +424,7 @@ object MealPlanner {
         }
         val have = pantry.filter { it.expiresOn >= today }.groupBy { it.food }.mapValues { (_, v) -> v.sumOf { it.grams } }
         return need.mapNotNull { (name, grams) ->
-            val missing = grams - (have[name] ?: 0.0)
+            val missing = grams - (listOf(name) + ALIASES[name].orEmpty()).sumOf { have[it] ?: 0.0 }
             val food = foods[name]
             if (missing > 0.5 && food != null && name !in alwaysStocked) ShoppingItem(food, ceil(missing / 10) * 10) else null
         }.sortedWith(compareBy({ it.food.category.ordinal }, { it.food.name }))
@@ -394,9 +446,12 @@ object MealPlanner {
         val lots = items.sortedBy { it.expiresOnEpochDay }.associateBy { it.id }.toMutableMap()
         val changed = mutableSetOf<Long>()
         for (ing in effectiveIngredients(recipe, swaps, foods)) {
-            val foodId = foodIdByName[ing.food] ?: continue
+            // Stand-ins first (homemade stock before shop-bought broth), then the food itself.
+            val ids = (ALIASES[ing.food].orEmpty() + ing.food).mapNotNull { foodIdByName[it] }
+            if (ids.isEmpty()) continue
             var remaining = ing.grams * factor
-            for (lot in lots.values.filter { it.foodId == foodId && it.grams > 0 }.sortedBy { it.expiresOnEpochDay }) {
+            val candidates = ids.flatMap { id -> lots.values.filter { it.foodId == id && it.grams > 0 }.sortedBy { it.expiresOnEpochDay } }
+            for (lot in candidates) {
                 if (remaining <= 0) break
                 val take = min(lot.grams, remaining)
                 lots[lot.id] = lot.copy(grams = lot.grams - take)
@@ -410,24 +465,32 @@ object MealPlanner {
 
     /** Mutable FEFO stock used while simulating a week of meals. */
     class Stock(items: List<StockItem>) {
-        private class Lot(var grams: Double, val expiresOn: Long)
+        private class Lot(var grams: Double, val expiresOn: Long, val availableFrom: Long, val priority: Boolean) {
+            fun usable(day: Long) = expiresOn >= day && availableFrom <= day
+        }
 
         private val lots: Map<String, MutableList<Lot>> =
-            items.groupBy { it.food }.mapValues { (_, v) -> v.sortedBy { it.expiresOn }.map { Lot(it.grams, it.expiresOn) }.toMutableList() }
+            items.groupBy { it.food }.mapValues { (_, v) -> v.sortedBy { it.expiresOn }.map { Lot(it.grams, it.expiresOn, it.availableFrom, it.priority) }.toMutableList() }
+
+        /** The food's own lots and its stand-ins (stand-ins first). */
+        private fun lotsFor(food: String): List<Lot> = ALIASES[food].orEmpty().flatMap { lots[it].orEmpty() } + lots[food].orEmpty()
 
         fun available(food: String, day: Long): Double =
-            lots[food].orEmpty().filter { it.expiresOn >= day }.sumOf { it.grams }
+            lotsFor(food).filter { it.usable(day) }.sumOf { it.grams }
 
         fun hasExpiring(food: String, day: Long, until: Long): Boolean =
-            lots[food].orEmpty().any { it.grams > 0 && it.expiresOn in day..until }
+            lotsFor(food).any { it.grams > 0 && it.usable(day) && !it.priority && it.expiresOn in day..until }
+
+        fun priorityAvailable(food: String, day: Long): Double =
+            lotsFor(food).filter { it.priority && it.usable(day) }.sumOf { it.grams }
 
         fun reserve(recipe: Recipe, portions: Double, day: Long, swaps: Map<String, String> = emptyMap()) {
             val factor = portions / recipe.servings.coerceAtLeast(1)
             for (ing in effectiveIngredients(recipe, swaps)) {
                 var remaining = ing.grams * factor
-                for (lot in lots[ing.food].orEmpty()) {
+                for (lot in lotsFor(ing.food)) {
                     if (remaining <= 0) break
-                    if (lot.expiresOn < day) continue
+                    if (!lot.usable(day)) continue
                     val take = min(lot.grams, remaining)
                     lot.grams -= take
                     remaining -= take

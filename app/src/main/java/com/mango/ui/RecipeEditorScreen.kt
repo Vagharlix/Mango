@@ -136,7 +136,7 @@ fun RecipeEditorScreen(id: Long, onDone: () -> Unit) {
                     if (r.mealType == MealType.LUNCH || r.mealType == MealType.DINNER) {
                         Text("Batch cooking: one cooking session covers", style = MaterialTheme.typography.bodyMedium)
                         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                            listOf(1 to "1 meal", 2 to "2 meals", 3 to "3 meals").forEach { (n, label) ->
+                            listOf(1 to "1 meal", 2 to "2 meals", 3 to "3 meals", 4 to "4 meals").forEach { (n, label) ->
                                 FilterChip(selected = r.batchMeals == n, onClick = { vm.edit { it.copy(batchMeals = n) } }, label = { Text(label) })
                             }
                         }

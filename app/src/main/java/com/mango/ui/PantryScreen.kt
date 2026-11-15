@@ -104,6 +104,13 @@ class PantryViewModel(repo: Repository) : MangoViewModel(repo) {
     }
 
     fun update(item: PantryItem) = launchSafe { repo.updatePantry(item) }
+
+    /** Fridge ↔ freezer: the date follows (months frozen, a day or two once thawed). */
+    fun setFrozen(item: PantryItem, frozen: Boolean) = launchSafe {
+        repo.updatePantry(item.copy(frozen = !frozen))
+        if (frozen) repo.freeze(item.id) else repo.thaw(item.id)
+        toast(if (frozen) "Moved to the freezer" else "Moved to the fridge to thaw")
+    }
     fun delete(id: Long) = launchSafe { repo.deletePantry(id) }
 }
 
@@ -126,7 +133,7 @@ fun PantryScreen(onScan: () -> Unit, onOpenStaples: () -> Unit) {
     Box(Modifier.fillMaxSize()) {
         LazyColumn(contentPadding = PaddingValues(16.dp, 16.dp, 16.dp, 96.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             item {
-                val expiring = entries.count { it.item.expiresOnEpochDay - vm.today <= 3 }
+                val expiring = entries.count { !it.item.frozen && it.item.expiresOnEpochDay - vm.today <= 3 }
                 ScreenHeader("Pantry", eyebrow = "${entries.size} items" + if (expiring > 0) " · $expiring expiring soon" else "") {
                     RoundIconButton(Icons.Filled.Add, "Add item", onClick = { adding = true })
                 }
@@ -163,7 +170,10 @@ fun PantryScreen(onScan: () -> Unit, onOpenStaples: () -> Unit) {
             e,
             vm.today,
             onDismiss = { editing = null },
-            onSave = { vm.update(it); editing = null },
+            onSave = { item ->
+                if (item.frozen != e.item.frozen) vm.setFrozen(item, item.frozen) else vm.update(item)
+                editing = null
+            },
             onDelete = { vm.delete(e.item.id); editing = null },
         )
     }
@@ -173,6 +183,7 @@ fun PantryScreen(onScan: () -> Unit, onOpenStaples: () -> Unit) {
 private fun PantryRow(e: PantryEntry, today: Long, onClick: () -> Unit) {
     val days = e.item.expiresOnEpochDay - today
     val (label, color) = when {
+        e.item.frozen -> "❄ Frozen · ${maxOf(1L, days / 30)} mo" to Sky
         days < 0 -> "Expired" to Danger
         days == 0L -> "Expires today" to Danger
         days <= 3 -> "$days d left" to Warn
@@ -245,6 +256,7 @@ fun AddFoodDialog(foods: List<Food>, onDismiss: () -> Unit, onAdd: (Food, Double
 private fun EditPantryDialog(e: PantryEntry, today: Long, onDismiss: () -> Unit, onSave: (PantryItem) -> Unit, onDelete: () -> Unit) {
     var grams by remember { mutableStateOf(e.item.grams) }
     var days by remember { mutableStateOf((e.item.expiresOnEpochDay - today).toDouble()) }
+    var frozen by remember { mutableStateOf(e.item.frozen) }
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(e.food.name.replaceFirstChar { it.uppercase() }) },
@@ -252,10 +264,17 @@ private fun EditPantryDialog(e: PantryEntry, today: Long, onDismiss: () -> Unit,
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 NumberField("Quantity", grams, { grams = it }, suffix = "g")
                 NumberField("Expires in", days, { days = it }, allowNegative = true, suffix = "days")
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Column(Modifier.weight(1f)) {
+                        Text("In the freezer", fontWeight = FontWeight.SemiBold)
+                        Text(if (frozen) "Thaw it in the fridge the night before" else "Keeps months frozen", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                    Switch(checked = frozen, onCheckedChange = { frozen = it })
+                }
             }
         },
         confirmButton = {
-            TextButton(onClick = { onSave(e.item.copy(grams = grams, expiresOnEpochDay = today + days.toLong())) }) { Text("Save") }
+            TextButton(onClick = { onSave(e.item.copy(grams = grams, expiresOnEpochDay = today + days.toLong(), frozen = frozen)) }) { Text("Save") }
         },
         dismissButton = {
             Row {

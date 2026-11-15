@@ -192,6 +192,7 @@ fun RecipeDetailScreen(id: Long, initialServings: Double, swaps: Map<String, Str
                     if (r.isCustom) Pill("Custom", Leaf)
                     if (r.isUserModified) Pill("Edited", Sky)
                     if (r.isHidden) Pill("Removed", Danger)
+                    if (r.needsAny.isNotEmpty()) Pill(r.needsAny.joinToString(" or ") { it.label.substringBefore(" /").lowercase() }, Warn)
                 }
             }
         }

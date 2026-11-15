@@ -187,6 +187,8 @@ class Converters {
     @TypeConverter fun toLongs(v: String): List<Long> = json.decodeFromString(v)
     @TypeConverter fun fromSwaps(v: Map<String, String>): String = json.encodeToString(v)
     @TypeConverter fun toSwaps(v: String): Map<String, String> = json.decodeFromString(v)
+    @TypeConverter fun fromTools(v: List<KitchenTool>): String = json.encodeToString(v)
+    @TypeConverter fun toTools(v: String): List<KitchenTool> = json.decodeFromString(v)
     @TypeConverter fun fromIngredients(v: List<RecipeIngredient>): String = json.encodeToString(v)
     @TypeConverter fun toIngredients(v: String): List<RecipeIngredient> = json.decodeFromString(v)
 }
@@ -196,7 +198,7 @@ class Converters {
         UserProfile::class, Food::class, BarcodeProduct::class, PantryItem::class,
         Recipe::class, MealSlot::class, Exercise::class, Benchmark::class,
     ],
-    version = 6,
+    version = 7,
     exportSchema = false,
 )
 @TypeConverters(Converters::class)
@@ -259,9 +261,21 @@ abstract class MangoDatabase : RoomDatabase() {
             }
         }
 
+        /** v7 adds whole-chicken planning, the kitchen appliances and the freezer. */
+        private val MIGRATION_6_7 = object : Migration(6, 7) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE user_profile ADD COLUMN wholeChicken TEXT NOT NULL DEFAULT 'WHEN_IT_FITS'")
+                db.execSQL("ALTER TABLE user_profile ADD COLUMN chickenKg REAL NOT NULL DEFAULT 1.6")
+                db.execSQL("ALTER TABLE user_profile ADD COLUMN kitchen TEXT NOT NULL DEFAULT '[]'")
+                db.execSQL("ALTER TABLE user_profile ADD COLUMN breakdownOn INTEGER NOT NULL DEFAULT 0")
+                db.execSQL("ALTER TABLE pantry ADD COLUMN frozen INTEGER NOT NULL DEFAULT 0")
+                db.execSQL("ALTER TABLE recipes ADD COLUMN needsAny TEXT NOT NULL DEFAULT '[]'")
+            }
+        }
+
         fun create(context: Context): MangoDatabase =
             Room.databaseBuilder(context, MangoDatabase::class.java, "mango.db")
-                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7)
                 .fallbackToDestructiveMigration()
                 .build()
     }

@@ -164,6 +164,7 @@ fun OptionsScreen(
     onOpenStaples: () -> Unit,
     onOpenAbout: () -> Unit,
     onOpenBackup: () -> Unit,
+    onOpenKitchen: () -> Unit,
 ) {
     val vm = mangoViewModel { OptionsViewModel(it) }
     val backup by (LocalContext.current.applicationContext as MangoApp).backups.status.collectAsStateWithLifecycle()
@@ -216,6 +217,7 @@ fun OptionsScreen(
                     OptionRow("Dislikes & allergies", p.dislikedIngredients.joinToString(", ").ifEmpty { "None" }, Leaf, onClick = onOpenDislikes)
                     OptionRow("Grocery day", DayOfWeek.of(p.groceryDay).getDisplayName(TextStyle.FULL, Locale.getDefault()), Leaf) { pickDay = true }
                     OptionRow("Spice rack", "${s.staplesKept} staples kept stocked", Leaf, onClick = onOpenStaples)
+                    OptionRow("Kitchen & whole chicken", kitchenSummary(p), Leaf, onClick = onOpenKitchen)
                 }
             }
             item {
@@ -238,7 +240,7 @@ fun OptionsScreen(
                         if (backup.error != null) Danger else Sky,
                         onClick = onOpenBackup,
                     )
-                    OptionRow("About & sources", "Science references · version 0.8 beta", Sky, onClick = onOpenAbout)
+                    OptionRow("About & sources", "Science references · version 0.9 beta", Sky, onClick = onOpenAbout)
                 }
             }
         }
@@ -511,6 +513,8 @@ fun AboutScreen(onBack: () -> Unit) {
         "Micronutrients" to "Institute of Medicine Dietary Reference Intakes – fibre, vitamin C, ALA omega-3.",
         "Food data" to "USDA FoodData Central (SR Legacy / Foundation), per 100 g.",
         "Leftovers" to "USDA Food Safety: cooked leftovers keep 3-4 days refrigerated.",
+        "Fridge & freezer" to "FoodSafety.gov cold storage chart: raw poultry and mince 1-2 days in the fridge, poultry pieces 9 months frozen, soups & stocks 3-4 days / 2-3 months; freezer times are for quality (safe indefinitely at -18 °C). Cook poultry to 74 °C.",
+        "Whole chicken" to "Yields: Univ. of Wisconsin Extension (Bird Breakdown) and broiler carcass studies; 10-piece breakdown and frame stocks after Andy Cooks (andy-cooks.com); stock ratio after Serious Eats testing.",
         "Deload & taper" to "Pritchard et al. (2015) Strength Cond J 37:72; Bosquet et al. (2007) Med Sci Sports Exerc 39:1358; Magnusson, Langberg & Kjaer (2010) Nat Rev Rheumatol 6:262.",
         "Finger training" to "López-Rivera & González-Badillo (2012) Sports Technology 5:100; Medernach et al. (2015) J Strength Cond Res 29:3093; Lattice Training; Hörst, Training for Climbing (2016).",
         "Strength & mobility" to "ACSM Progression Models in Resistance Training (2009); Vagy, Climb Injury-Free (2016); Kurz, Stretching Scientifically (2003).",
@@ -519,7 +523,7 @@ fun AboutScreen(onBack: () -> Unit) {
         item { BackHeader("About & sources", onBack) }
         item {
             Text(
-                "Mango 0.8 beta · works fully offline · no account, no AI service, no tracking. Every calculation runs on this device.",
+                "Mango 0.9 beta · works fully offline · no account, no AI service, no tracking. Every calculation runs on this device.",
                 fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }

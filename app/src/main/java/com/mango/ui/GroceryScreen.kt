@@ -210,6 +210,7 @@ private fun ShoppingRow(item: ShoppingItem, canReplace: Boolean, onReplace: () -
         Column(Modifier.weight(1f)) {
             Text(item.food.name.replaceFirstChar { it.uppercase() })
             Text(quantityText(item.grams, item.food.unitGrams, item.food.unitName), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            item.note?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = Leaf) }
         }
         if (canReplace) TextButton(onClick = onReplace) { Text("Can't find it?", fontSize = 12.sp) }
     }
@@ -217,7 +218,8 @@ private fun ShoppingRow(item: ShoppingItem, canReplace: Boolean, onReplace: () -
 
 fun quantityText(grams: Double, unitGrams: Double?, unitName: String?): String {
     val base = if (grams >= 1000) "${(grams / 1000).fmt(2)} kg" else "${grams.fmt()} g"
-    return if (unitGrams != null && unitName != null) "$base (≈ ${ceil(grams / unitGrams).toInt()} $unitName)" else base
+    // A little over a whole unit still counts as one (370 g of fillets is 2 breasts, not 3).
+    return if (unitGrams != null && unitName != null) "$base (≈ ${maxOf(1, ceil(grams / unitGrams - 0.15).toInt())} $unitName)" else base
 }
 
 @OptIn(ExperimentalLayoutApi::class)
