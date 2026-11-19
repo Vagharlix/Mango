@@ -147,9 +147,17 @@ class Repository(private val context: Context, private val db: MangoDatabase) {
         profileDao.upsert(p.copy(equipment = Equipment.entries.filter { it in equipment }))
     }
 
-    suspend fun addBenchmark(fingerAddedKg: Double, pullUpAddedKg: Double) {
+    /** Test-day results (by test key); the program adapts from tomorrow. Same-day entries are merged. */
+    suspend fun addBenchmark(results: Map<String, Double>) {
         val p = profileDao.get() ?: throw IllegalStateException("Create your profile first")
-        db.benchmarkDao().insert(Benchmark(epochDay = today(), fingerMaxAddedKg = fingerAddedKg, pullUpMaxAddedKg = pullUpAddedKg, bodyWeightKg = p.weightKg))
+        require(results.isNotEmpty()) { "Enter at least one result" }
+        val today = today()
+        val sameDay = db.benchmarkDao().getAll().lastOrNull { it.epochDay == today }
+        if (sameDay != null) {
+            db.benchmarkDao().update(sameDay.copy(results = sameDay.results + results, bodyWeightKg = p.weightKg))
+        } else {
+            db.benchmarkDao().insert(Benchmark(epochDay = today, bodyWeightKg = p.weightKg, results = results))
+        }
     }
 
     // ---------------- Meal planning ----------------

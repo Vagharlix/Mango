@@ -240,7 +240,7 @@ fun OptionsScreen(
                         if (backup.error != null) Danger else Sky,
                         onClick = onOpenBackup,
                     )
-                    OptionRow("About & sources", "Science references · version 0.9 beta", Sky, onClick = onOpenAbout)
+                    OptionRow("About & sources", "Science references · version 0.10 beta", Sky, onClick = onOpenAbout)
                 }
             }
         }
@@ -444,7 +444,8 @@ fun TrainingSettingsScreen(onBack: () -> Unit) {
             NumberField("Pull-up", p.pullUpMaxAddedKg, { v -> vm.update { it.copy(pullUpMaxAddedKg = v) } }, Modifier.weight(1f), allowNegative = true, suffix = "kg")
         }
         Text(
-            "Negative = assisted. Loads are a % of total system load (bodyweight + added). Each block's benchmark day updates the next block automatically.",
+            "Starting estimates – negative = assisted. Loads are a % of total system load (bodyweight + added). " +
+                "Test days at the end of every deload week (and in week 1 for anything never tested) measure these plus dips, press, push-ups, pull-ups and the front lever; the program adapts from the next day.",
             fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
@@ -523,7 +524,7 @@ fun AboutScreen(onBack: () -> Unit) {
         item { BackHeader("About & sources", onBack) }
         item {
             Text(
-                "Mango 0.9 beta · works fully offline · no account, no AI service, no tracking. Every calculation runs on this device.",
+                "Mango 0.10 beta · works fully offline · no account, no AI service, no tracking. Every calculation runs on this device.",
                 fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }

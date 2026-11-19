@@ -37,8 +37,12 @@ app/src/main/
 | Evergreen mode | Endless 16-week cycle of four 4-week blocks | — |
 | Deload | Every 4th week: −40 % sets, intensity held at week-3 level | Pritchard 2015; Magnusson 2010 |
 | Taper | −50 % volume, intensity maintained | Bosquet 2007 meta-analysis |
-| Benchmark | Week 4, Day 7 of every block: 5 s max hang and weighted pull-up 1RM; results set the loads for the next block | Lattice Training |
+| Max tests | End of every deload week: day 5 tuck front lever hold, max pull-ups, dips and overhead press rep-max (1RM estimated with Epley), max push-ups; day 7 5 s max hang and weighted pull-up 1RM. Week 1 calibrates anything never tested. Results set loads (% 1RM), reps (% of max reps) and holds (% of max hold) from the next day | Lattice Training; Epley (1985); LeSuer et al. (1997) J Strength Cond Res 11:211 |
 | Loads | added kg = %1RM × (bodyweight + 1RM added) − bodyweight, rounded to 0.5 kg; negative means pulley assistance | Lattice / Hörst |
+
+### Antagonists
+
+Every training week has push work twice (deficit push-ups / overhead press, dips / pike push-ups depending on the phase), reverse wrist curls, finger extensions with a rubber band, and shoulder health work (band external rotations, YTW, wall slides, scapular push-ups, pec stretch).
 
 ### Training equipment
 
@@ -53,7 +57,8 @@ Pick the equipment you can use right now in **Profile**, or tap **Change** on th
   * …and so on.
 * The app shows which exercise each substitute replaces. Day titles are built from what the session actually contains.
 * Hangs that call for added weight when you have no weights say to use a smaller edge instead.
-* Benchmark day only asks for the tests you can do. With no equipment at all you still get a full bodyweight and mobility plan.
+* Test days only include the tests you can do with your equipment.
+* Weights are split in two: *weight belt / plates* (weighted pull-ups, dips, hangs) and *dumbbells / barbell* (overhead press and its test, wrist curls). Without dumbbells or a barbell the press becomes pike push-ups. With no equipment at all you still get a full bodyweight and mobility plan.
 
 The protocols (7:3 repeaters, 10 s max hangs, weighted pulls, antagonist push, front-lever and compression core work, loaded mobility, shoulder prehab) and their citations are in `exercises.json`.
 

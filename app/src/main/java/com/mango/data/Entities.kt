@@ -56,7 +56,8 @@ enum class Equipment(val label: String) {
     PULL_UP_BAR("Pull-up bar / hangboard jugs"),
     RINGS("Gymnastic rings"),
     DIP_BARS("Dip bars / parallettes"),
-    WEIGHTS("Free weights / weight belt"),
+    WEIGHTS("Weight belt / plates (weighted pull-ups, dips, hangs)"),
+    DUMBBELLS("Dumbbells / barbell (overhead press, wrist curls)"),
     BENCH("Flat bench"),
     RESISTANCE_BAND("Resistance bands"),
     ;
@@ -81,8 +82,12 @@ enum class WholeChickenMode(val label: String, val description: String) {
     ALWAYS("Always", "Buy a whole bird whenever chicken is on the menu – the rest goes in the freezer"),
 }
 
-/** How a prescription's load is derived. 1RM bases are percentages of total system load (bodyweight + added). */
-enum class LoadBasis { FINGER_1RM, PULL_1RM, BODYWEIGHT, RPE, NONE }
+/**
+ * How a prescription's load is derived from the athlete's tested maxes. FINGER/PULL/DIP 1RM are percentages of
+ * total system load (bodyweight + added); PRESS_1RM of the lifted weight; PULLUP_REPS / PUSHUP_REPS a share of
+ * the max reps; FL_HOLD a share of the max front lever hold.
+ */
+enum class LoadBasis { FINGER_1RM, PULL_1RM, DIP_1RM, PRESS_1RM, PULLUP_REPS, PUSHUP_REPS, FL_HOLD, BODYWEIGHT, RPE, NONE }
 
 @Serializable
 @Entity(tableName = "user_profile")
@@ -276,7 +281,7 @@ data class Exercise(
 data class Benchmark(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val epochDay: Long,
-    val fingerMaxAddedKg: Double,
-    val pullUpMaxAddedKg: Double,
     val bodyWeightKg: Double,
+    /** Results of the tests done that day, by [com.mango.domain.MaxTest] key (kg added, kg, reps or seconds). */
+    val results: Map<String, Double> = emptyMap(),
 )

@@ -38,10 +38,15 @@ data class Prescription(
 ) {
     val isTimed: Boolean get() = workSec > 0 || setRestSec > 0
 
+    val isTest: Boolean get() = exercise.category == ExerciseCategory.BENCHMARK
+
     val summary: String
         get() = buildString {
             append(
                 when {
+                    isTest && sets == 1 -> "1 all-out set"
+                    isTest && exercise.id == MaxTest.FRONT_LEVER.testId -> "Best of $sets attempts"
+                    isTest -> "Up to $sets attempts"
                     workSec > 0 && reps > 1 -> "$sets × $reps × ${formatDuration(workSec)}"
                     workSec > 0 -> "$sets × ${formatDuration(workSec)}"
                     else -> "$sets × $reps reps"
@@ -71,7 +76,20 @@ data class TrainingWeek(
     val days: List<TrainingDay>,
 )
 
-data class StrengthBaseline(val fingerAddedKg: Double, val pullAddedKg: Double, val bodyWeightKg: Double)
+data class StrengthBaseline(
+    val fingerAddedKg: Double,
+    val pullAddedKg: Double,
+    val bodyWeightKg: Double,
+    /** Tested maxes (all tests, including fingers and pull-ups once tested). */
+    val maxes: Map<MaxTest, Double> = emptyMap(),
+) {
+    fun max(test: MaxTest?): Double? = when (test) {
+        null -> null
+        MaxTest.FINGER -> fingerAddedKg
+        MaxTest.PULL -> pullAddedKg
+        else -> maxes[test]
+    }
+}
 
 @Serializable
 data class TimerInterval(
@@ -95,7 +113,9 @@ fun formatDuration(sec: Int): String =
  *  - Every 4th week is a deload: -40 % volume, intensity held (Pritchard et al. 2015 Strength Cond J 37:72;
  *    tendon collagen remodelling – Magnusson, Langberg & Kjaer 2010 Nat Rev Rheumatol 6:262).
  *  - Taper volume -50 % with intensity maintained (Bosquet et al. 2007 Med Sci Sports Exerc 39:1358).
- *  - Week 4 / Day 7 of every block is a benchmark day; new results drive the next block's loads.
+ *  - Test days at the end of every deload week (day 5: front lever, pull-ups, dips, press, push-ups; day 7:
+ *    max hang and weighted pull-up), plus a calibration in week 1 for any max never tested before the program
+ *    started. Results drive loads, reps and hold times from the next day on.
  */
 object Periodization {
     const val BLOCK_WEEKS = 4
@@ -164,31 +184,41 @@ object Periodization {
         }
     }
 
-    /** Most recent benchmark recorded on or before the block start, else the profile's baseline. */
-    fun baselineFor(profile: UserProfile, benchmarks: List<Benchmark>, blockStartDay: Long): StrengthBaseline =
-        benchmarks.filter { it.epochDay <= blockStartDay }.maxByOrNull { it.epochDay }
-            ?.let { StrengthBaseline(it.fingerMaxAddedKg, it.pullUpMaxAddedKg, it.bodyWeightKg) }
-            ?: StrengthBaseline(profile.fingerMaxAddedKg, profile.pullUpMaxAddedKg, profile.weightKg)
+    /** Maxes recorded on or before [day], else the profile's estimates. */
+    fun baselineFor(profile: UserProfile, benchmarks: List<Benchmark>, day: Long): StrengthBaseline =
+        MaxTests.baselineOn(profile, benchmarks, day + 1)
 
     fun build(
         profile: UserProfile,
         exercises: Map<String, Exercise>,
         benchmarks: List<Benchmark>,
         today: Long,
-    ): List<TrainingWeek> = (0 until weeksToShow(profile, today)).map { w ->
+    ): List<TrainingWeek> {
+        val calibrate = MaxTests.untestedAt(benchmarks, profile.programStartEpochDay)
+        return (0 until weeksToShow(profile, today)).map { w -> buildWeek(profile, w, exercises, benchmarks, if (w == 0) calibrate else emptySet()) }
+    }
+
+    private fun buildWeek(
+        profile: UserProfile,
+        w: Int,
+        exercises: Map<String, Exercise>,
+        benchmarks: List<Benchmark>,
+        calibrate: Set<MaxTest>,
+    ): TrainingWeek {
         val phase = phaseForWeek(profile, w) ?: Phase.PEAK
         val weekInBlock = w % BLOCK_WEEKS + 1
         val start = profile.programStartEpochDay + w * 7L
-        val blockStart = profile.programStartEpochDay + (w - w % BLOCK_WEEKS) * 7L
-        val baseline = baselineFor(profile, benchmarks, blockStart)
-        TrainingWeek(
+        return TrainingWeek(
             index = w,
             cycle = w / EVERGREEN_WEEKS,
             weekInBlock = weekInBlock,
             phase = phase,
             isDeload = isDeload(w),
             startEpochDay = start,
-            days = buildDays(phase, profile.goal, weekInBlock, start, baseline, exercises, profile.equipment.toSet()),
+            days = buildDays(
+                phase, profile.goal, weekInBlock, start, { day -> MaxTests.baselineOn(profile, benchmarks, day) },
+                exercises, profile.equipment.toSet(), calibrate,
+            ),
         )
     }
 
@@ -208,10 +238,29 @@ object Periodization {
             }
         }
         LoadBasis.PULL_1RM -> addedLoadText(intensity ?: 0.0, baseline.bodyWeightKg, baseline.pullAddedKg)
+        LoadBasis.DIP_1RM -> baseline.max(MaxTest.DIP)?.let { max ->
+            val pct = intensity ?: 0.0
+            if (Equipment.WEIGHTS !in equipment && targetAddedKg(pct, baseline.bodyWeightKg, max) > 0) {
+                "Bodyweight · ${(pct * 100).roundToInt()}% – no weights: slow 3 s lowering, pause at the bottom"
+            } else {
+                addedLoadText(pct, baseline.bodyWeightKg, max)
+            }
+        } ?: UNTESTED
+        LoadBasis.PRESS_1RM -> baseline.max(MaxTest.PRESS)?.let { max ->
+            "≈ ${fmtKg(pressKg(intensity ?: 0.0, max))} kg (barbell, or both dumbbells together) · ${((intensity ?: 0.0) * 100).roundToInt()}%"
+        } ?: UNTESTED
+        LoadBasis.PULLUP_REPS -> baseline.max(MaxTest.PULLUP_REPS)?.let { "Bodyweight · ${((intensity ?: 0.0) * 100).roundToInt()}% of your ${it.roundToInt()} max reps" } ?: "Bodyweight"
+        LoadBasis.PUSHUP_REPS -> baseline.max(MaxTest.PUSHUP_REPS)?.let { "Bodyweight · ${((intensity ?: 0.0) * 100).roundToInt()}% of your ${it.roundToInt()} max push-ups" } ?: "Bodyweight"
+        LoadBasis.FL_HOLD -> baseline.max(MaxTest.FRONT_LEVER)?.let { "Bodyweight · ${((intensity ?: 0.0) * 100).roundToInt()}% of your ${it.roundToInt()} s tuck hold" } ?: "Bodyweight"
         LoadBasis.BODYWEIGHT -> "Bodyweight"
         LoadBasis.RPE -> "RPE 7-8 (2-3 reps in reserve)"
         LoadBasis.NONE -> ""
     }
+
+    private const val UNTESTED = "RPE 7-8 (2-3 reps in reserve) – exact load after your next test day"
+
+    /** Press load = %1RM of the lifted weight, rounded to 1 kg (dumbbell steps). */
+    fun pressKg(intensity: Double, oneRm: Double): Double = (intensity * oneRm).roundToInt().toDouble()
 
     /** Target added load = %1RM × (bodyweight + 1RM added) − bodyweight, rounded to 0.5 kg. */
     fun targetAddedKg(intensity: Double, bodyWeightKg: Double, maxAddedKg: Double): Double =
@@ -233,6 +282,12 @@ object Periodization {
             if (Equipment.WEIGHTS !in equipment && added > 0) "BW" else signedKg(added)
         }
         LoadBasis.PULL_1RM -> signedKg(targetAddedKg(intensity ?: 0.0, baseline.bodyWeightKg, baseline.pullAddedKg))
+        LoadBasis.DIP_1RM -> baseline.max(MaxTest.DIP)?.let { max ->
+            val added = targetAddedKg(intensity ?: 0.0, baseline.bodyWeightKg, max)
+            if (Equipment.WEIGHTS !in equipment && added > 0) "BW" else signedKg(added)
+        } ?: "RPE 7-8"
+        LoadBasis.PRESS_1RM -> baseline.max(MaxTest.PRESS)?.let { "${fmtKg(pressKg(intensity ?: 0.0, it))} kg" } ?: "RPE 7-8"
+        LoadBasis.PULLUP_REPS, LoadBasis.PUSHUP_REPS, LoadBasis.FL_HOLD -> "BW"
         LoadBasis.BODYWEIGHT -> "BW"
         LoadBasis.RPE -> "RPE 7-8"
         LoadBasis.NONE -> ""
@@ -376,9 +431,10 @@ object Periodization {
         goal: Goal,
         weekInBlock: Int,
         weekStart: Long,
-        baseline: StrengthBaseline,
+        baselineOn: (Long) -> StrengthBaseline,
         exercises: Map<String, Exercise>,
         equipment: Set<Equipment>,
+        calibrate: Set<MaxTest> = emptySet(),
     ): List<TrainingDay> {
         val plan = phasePlan(phase, goal)
         val deload = weekInBlock == BLOCK_WEEKS
@@ -387,36 +443,75 @@ object Periodization {
         // Linear intensity wave across the block; deload holds week-3 intensity.
         val intensityOffset = (minOf(weekInBlock, 3) - 2) * WEEKLY_INTENSITY_STEP
 
-        fun rx(vararg ids: String): List<Prescription> = ids
-            .mapNotNull { id -> resolve(id, exercises, equipment)?.let { ex -> ex to exercises[id]?.takeIf { it.id != ex.id } } }
-            .distinctBy { it.first.id }
-            .map { (ex, planned) ->
-                val sets = if (ex.category.isMobility || ex.category == ExerciseCategory.BENCHMARK) ex.sets
-                else max(1, (ex.sets * volume).roundToInt())
-                val intensity = ex.intensity?.let { (it + intensityOffset).coerceIn(0.4, 0.95) }
-                Prescription(
-                    ex, sets, ex.reps, ex.workSec, ex.repRestSec, ex.setRestSec, intensity,
-                    loadText(ex, intensity, baseline, equipment), substitutedFor = planned?.name,
-                    load = shortLoad(ex, intensity, baseline, equipment),
-                )
-            }
-
-        fun day(offset: Int, items: List<Prescription>) = TrainingDay(weekStart + offset, offset + 1, titleFor(items), items)
-
-        val benchmarks = if (deload) rx("bench_max_hang_5s", "bench_pullup_1rm") else emptyList()
-        val day7 = if (benchmarks.isNotEmpty()) {
-            TrainingDay(weekStart + 6, 7, "Benchmark Day", benchmarks, isBenchmark = true)
-        } else {
-            TrainingDay(weekStart + 6, 7, "Rest", emptyList(), isRest = true)
+        fun rx(offset: Int, vararg ids: String): List<Prescription> {
+            val baseline = baselineOn(weekStart + offset)
+            return ids
+                .mapNotNull { id -> resolve(id, exercises, equipment)?.let { ex -> ex to exercises[id]?.takeIf { it.id != ex.id } } }
+                .distinctBy { it.first.id }
+                .map { (ex, planned) -> prescribe(ex, planned, volume, intensityOffset, baseline, equipment) }
         }
+
+        fun day(offset: Int, vararg ids: String): TrainingDay {
+            val items = rx(offset, *ids)
+            return TrainingDay(weekStart + offset, offset + 1, titleFor(items), items)
+        }
+
+        /** A test day with the [tests] the equipment allows, or [otherwise] when none is possible. */
+        fun testDay(offset: Int, title: String, tests: List<MaxTest>, warmDown: List<String>, otherwise: () -> TrainingDay): TrainingDay {
+            val items = rx(offset, *tests.map { it.testId }.toTypedArray())
+            return if (items.isEmpty()) otherwise() else TrainingDay(weekStart + offset, offset + 1, title, items + rx(offset, *warmDown.toTypedArray()), isBenchmark = true)
+        }
+
+        val upperTests = MaxTest.UPPER_BODY.filter { !weekIsCalibration(calibrate) || it in calibrate }
+        val fingerTests = MaxTest.FINGERS_AND_PULL.filter { !weekIsCalibration(calibrate) || it in calibrate }
+        val rest = TrainingDay(weekStart + 6, 7, "Rest", emptyList(), isRest = true)
+
+        val day1 = { day(0, plan.hang, plan.pull, plan.coreA, "mob_scap_pullups") }
+        val day4 = { day(3, plan.hang2, plan.coreB, "core_hollow_body", "push_finger_extensions", "mob_wall_slides", "mob_ytw") }
+        val day5 = { day(4, plan.climbB, plan.pushB, "mob_german_hang", "mob_doorway_pec") }
         return listOf(
-            day(0, rx(plan.hang, plan.pull, plan.coreA, "mob_scap_pullups")),
-            day(1, rx(plan.climbA, plan.pushA, "push_reverse_wrist_curl", "mob_cossack_squat", "mob_90_90")),
-            day(2, rx("mob_jefferson_curl", "mob_frog_stretch", "mob_middle_split", "mob_thoracic_rotation", "mob_band_external_rotation")),
-            day(3, rx(plan.hang2, plan.coreB, "core_hollow_body", "mob_wall_slides", "mob_ytw")),
-            day(4, rx(plan.climbB, plan.pushB, "mob_german_hang", "mob_doorway_pec")),
-            day(5, rx("mob_couch_stretch", "mob_pancake", "core_pike_compression")),
-            day7,
+            // Calibration week: anything never tested is measured first, and the loads follow from the next day.
+            if (fingerTests.isNotEmpty() && weekIsCalibration(calibrate)) testDay(0, "Test Day – Fingers & Pull-up", fingerTests, listOf("mob_scap_pullups"), day1) else day1(),
+            day(1, plan.climbA, plan.pushA, "push_reverse_wrist_curl", "mob_cossack_squat", "mob_90_90"),
+            day(2, "mob_jefferson_curl", "mob_frog_stretch", "mob_middle_split", "mob_thoracic_rotation", "mob_band_external_rotation"),
+            if (upperTests.isNotEmpty() && weekIsCalibration(calibrate)) testDay(3, "Test Day – Upper Body", upperTests, listOf("mob_doorway_pec"), day4) else day4(),
+            // Deload week: low volume, so the maxes are tested fresh at its end for the next block.
+            if (deload) testDay(4, "Test Day – Upper Body", MaxTest.UPPER_BODY, listOf("mob_doorway_pec"), day5) else day5(),
+            day(5, "mob_couch_stretch", "mob_pancake", "core_pike_compression"),
+            if (deload) testDay(6, "Test Day – Fingers & Pull-up", MaxTest.FINGERS_AND_PULL, emptyList()) { rest } else rest,
+        )
+    }
+
+    private fun weekIsCalibration(calibrate: Set<MaxTest>) = calibrate.isNotEmpty()
+
+    /** One exercise of a session: sets from the week's volume, load / reps / hold time from the athlete's maxes. */
+    private fun prescribe(
+        ex: Exercise,
+        planned: Exercise?,
+        volume: Double,
+        intensityOffset: Double,
+        baseline: StrengthBaseline,
+        equipment: Set<Equipment>,
+    ): Prescription {
+        val sets = if (ex.category.isMobility || ex.category == ExerciseCategory.BENCHMARK) ex.sets
+        else max(1, (ex.sets * volume).roundToInt())
+        val share = ex.loadBasis in setOf(LoadBasis.PULLUP_REPS, LoadBasis.PUSHUP_REPS, LoadBasis.FL_HOLD)
+        val intensity = ex.intensity?.let { (it + intensityOffset).coerceIn(if (share) 0.2 else 0.4, if (share) 0.9 else 0.95) }
+        val max = baseline.max(MaxTest.forBasis(ex.loadBasis))
+        var reps = ex.reps
+        var workSec = ex.workSec
+        if (max != null && intensity != null) {
+            when (ex.loadBasis) {
+                LoadBasis.PULLUP_REPS -> reps = (max * intensity).roundToInt().coerceIn(2, 12)
+                LoadBasis.PUSHUP_REPS -> reps = (max * intensity).roundToInt().coerceIn(3, 30)
+                LoadBasis.FL_HOLD -> workSec = (max * intensity).roundToInt().coerceIn(4, 20)
+                else -> {}
+            }
+        }
+        return Prescription(
+            ex, sets, reps, workSec, ex.repRestSec, ex.setRestSec, intensity,
+            loadText(ex, intensity, baseline, equipment), substitutedFor = planned?.name,
+            load = shortLoad(ex, intensity, baseline, equipment),
         )
     }
 }

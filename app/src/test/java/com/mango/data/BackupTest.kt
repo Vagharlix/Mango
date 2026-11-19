@@ -21,7 +21,7 @@ class BackupTest {
         recipes = listOf(bowl, edited, removed, mine),
         pantry = listOf(PantryItem(id = 5, foodId = 2, grams = 120.0, expiresOnEpochDay = 20_400, addedOnEpochDay = 20_390)),
         barcodes = listOf(BarcodeProduct("3017620422003", "Bar", 2)),
-        benchmarks = listOf(Benchmark(id = 3, epochDay = 20_000, fingerMaxAddedKg = 12.0, pullUpMaxAddedKg = 25.0, bodyWeightKg = 68.0)),
+        benchmarks = listOf(Benchmark(id = 3, epochDay = 20_000, bodyWeightKg = 68.0, results = mapOf("FINGER" to 12.0, "PULL" to 25.0, "DIP" to 15.0))),
         meals = listOf(
             MealSlot(20_400, MealType.LUNCH, recipeId = 10, portions = 1.2),
             MealSlot(20_400, MealType.DINNER, recipeId = 40, portions = 1.0, status = MealStatus.COOKED),
@@ -67,6 +67,24 @@ class BackupTest {
         assertEquals(listOf(4L, 7L), p.breakfastPicks)
         assertEquals(listOf("pork"), p.proteinOff)
         assertEquals(68.0, p.weightKg, 0.0)
+    }
+
+    @Test
+    fun oldBackupsKeepTheirFingerAndPullUpResults() {
+        val legacy = """{"app":"Mango","format":1,"benchmarks":[{"id":3,"epochDay":20000,"fingerMaxAddedKg":12.0,"pullUpMaxAddedKg":25.5,"bodyWeightKg":68.0}]}"""
+        val b = BackupCodec.decode(legacy).benchmarks.single()
+        assertEquals(mapOf("FINGER" to 12.0, "PULL" to 25.5), b.results)
+        assertEquals(68.0, b.bodyWeightKg, 0.0)
+    }
+
+    @Test
+    fun oldBackupsWithFreeWeightsKeepThePress() {
+        val legacy = """{"app":"Mango","format":1,"profile":{"equipment":["PULL_UP_BAR","WEIGHTS"]}}"""
+        val p = BackupCodec.restoredProfile(BackupCodec.decode(legacy)) { it }!!
+        assertEquals(listOf(Equipment.PULL_UP_BAR, Equipment.WEIGHTS, Equipment.DUMBBELLS), p.equipment)
+        // A current backup keeps exactly what was ticked.
+        val current = BackupCodec.decode(BackupCodec.encode(sample().copy(profile = profile.copy(equipment = listOf(Equipment.WEIGHTS)))))
+        assertEquals(listOf(Equipment.WEIGHTS), BackupCodec.restoredProfile(current) { it }!!.equipment)
     }
 
     @Test

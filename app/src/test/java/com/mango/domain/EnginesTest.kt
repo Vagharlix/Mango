@@ -144,12 +144,14 @@ class EnginesTest {
 
     @Test fun benchmarkUpdatesNextBlockOnly() {
         val start = profile.programStartEpochDay
-        val bench = Benchmark(epochDay = start + 27, fingerMaxAddedKg = 30.0, pullUpMaxAddedKg = 40.0, bodyWeightKg = 70.0)
+        val bench = Benchmark(epochDay = start + 27, bodyWeightKg = 70.0, results = mapOf("FINGER" to 30.0, "PULL" to 40.0))
         val weeks = Periodization.build(profile, exercises, listOf(bench), start)
         fun load(w: Int) = weeks[w].days[0].items.first { it.exercise.category.name == "FINGERBOARD" }.loadText
-        // Week 1: 62.5 % of (70 + 20) - 70 = -13.75 kg -> rounded to 0.5 kg
         assertEquals(-13.5, Periodization.targetAddedKg(0.625, 70.0, 20.0), 0.0)
-        assertTrue(load(0), load(0).startsWith("BW − 13.5"))
+        // Nothing was tested before the program started: week 1 opens with the calibration tests.
+        assertTrue(weeks[0].days[0].isBenchmark)
+        // Week 2: 65 % of (70 + 20) - 70 = -11.5 kg (profile estimate)
+        assertTrue(load(1), load(1).startsWith("BW − 11.5"))
         // Deload week 4 of block 1 still uses the old baseline: 67.5 % of 90 - 70 = -9.25 -> -9
         assertTrue(load(3), load(3).startsWith("BW − 9 "))
         // Block 2 (Max Strength, max hangs at 82.5 %) uses the new 30 kg benchmark: 0.825 * 100 - 70 = 12.5
@@ -222,7 +224,7 @@ class EnginesTest {
     }
 
     @Test fun dayTitlesReflectActualContent() {
-        assertEquals("Fingers + Pull + Core", weeksWith(Equipment.DEFAULT)[0].days[0].title)
+        assertEquals("Fingers + Pull + Core", weeksWith(Equipment.DEFAULT)[1].days[0].title)
         assertEquals("Mobility & Flexibility", weeksWith(Equipment.DEFAULT)[0].days[2].title)
         assertTrue(weeksWith(Equipment.DEFAULT - Equipment.BOULDER_WALL - Equipment.ROPE_WALL)[0].days.none { it.title.contains("Climbing") })
     }

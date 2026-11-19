@@ -295,7 +295,7 @@
   "id": "push_ohp",
   "name": "Overhead Press",
   "category": "PUSH",
-  "description": "Standing barbell or dumbbell press. Antagonist work to balance the pulling-dominant shoulder of climbers.",
+  "description": "Standing barbell or dumbbell press at ~75 % of the 1RM estimated on your test day. Antagonist work to balance the pulling-dominant shoulder of climbers.",
   "cues": [
    "Ribs down, glutes squeezed",
    "Bar path close to the face",
@@ -306,19 +306,20 @@
   "workSec": 0,
   "repRestSec": 0,
   "setRestSec": 150,
-  "loadBasis": "RPE",
+  "loadBasis": "PRESS_1RM",
   "requires": [
    [
-    "WEIGHTS"
+    "DUMBBELLS"
    ]
   ],
-  "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor; ACSM Position Stand: Progression Models in Resistance Training (Med Sci Sports Exerc 2009;41:687-708)"
+  "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor; ACSM Position Stand: Progression Models in Resistance Training (Med Sci Sports Exerc 2009;41:687-708)",
+  "intensity": 0.75
  },
  {
   "id": "push_dips",
-  "name": "Weighted Dips",
+  "name": "Dips",
   "category": "PUSH",
-  "description": "Parallel-bar dips with added load as tolerated. Strengthens triceps and anterior shoulder for mantles and press moves.",
+  "description": "Parallel-bar dips at ~75 % of the total load (bodyweight + added) of your tested max: added weight, bodyweight or band-assisted. Strengthens triceps and anterior shoulder for mantles and press moves.",
   "cues": [
    "Shoulders depressed, not shrugged",
    "Descend to ~90 degrees elbow",
@@ -329,14 +330,15 @@
   "workSec": 0,
   "repRestSec": 0,
   "setRestSec": 150,
-  "loadBasis": "RPE",
+  "loadBasis": "DIP_1RM",
   "requires": [
    [
     "DIP_BARS",
     "RINGS"
    ]
   ],
-  "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor"
+  "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor; ACSM Position Stand: Progression Models in Resistance Training (Med Sci Sports Exerc 2009;41:687-708)",
+  "intensity": 0.75
  },
  {
   "id": "push_deficit_pushups",
@@ -353,9 +355,10 @@
   "workSec": 0,
   "repRestSec": 0,
   "setRestSec": 90,
-  "loadBasis": "BODYWEIGHT",
+  "loadBasis": "PUSHUP_REPS",
   "requires": [],
-  "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor"
+  "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor",
+  "intensity": 0.5
  },
  {
   "id": "push_reverse_wrist_curl",
@@ -375,7 +378,7 @@
   "loadBasis": "RPE",
   "requires": [
    [
-    "WEIGHTS",
+    "DUMBBELLS",
     "RESISTANCE_BAND"
    ]
   ],
@@ -396,14 +399,15 @@
   "workSec": 10,
   "repRestSec": 0,
   "setRestSec": 120,
-  "loadBasis": "BODYWEIGHT",
+  "loadBasis": "FL_HOLD",
   "requires": [
    [
     "PULL_UP_BAR",
     "RINGS"
    ]
   ],
-  "source": "Hörst (2016); progressive calisthenics"
+  "source": "Hörst (2016); progressive calisthenics",
+  "intensity": 0.6
  },
  {
   "id": "core_front_lever_adv",
@@ -420,14 +424,15 @@
   "workSec": 8,
   "repRestSec": 0,
   "setRestSec": 150,
-  "loadBasis": "BODYWEIGHT",
+  "loadBasis": "FL_HOLD",
   "requires": [
    [
     "PULL_UP_BAR",
     "RINGS"
    ]
   ],
-  "source": "Hörst (2016)"
+  "source": "Hörst (2016)",
+  "intensity": 0.35
  },
  {
   "id": "core_front_lever_raises",
@@ -556,6 +561,7 @@
   "loadBasis": "BODYWEIGHT",
   "requires": [
    [
+    "DUMBBELLS",
     "WEIGHTS"
    ]
   ],
@@ -826,7 +832,7 @@
   "id": "bench_max_hang_5s",
   "name": "5 s Max Hang Test (20 mm)",
   "category": "BENCHMARK",
-  "description": "After a thorough warm-up, work up in load to the heaviest clean 5 s hang on a 20 mm edge (half-crimp). Record the added weight (negative if assisted).",
+  "description": "After a thorough warm-up, work up in load to the heaviest clean 5 s hang on a 20 mm edge (half-crimp). Record the added weight (negative if assisted). Do it first in the session, when fresh.",
   "cues": [
    "Warm up progressively",
    "3 min between attempts",
@@ -871,6 +877,139 @@
    ]
   ],
   "source": "ACSM Position Stand: Progression Models in Resistance Training (Med Sci Sports Exerc 2009;41:687-708)"
+ },
+ {
+  "id": "bench_pullup_max",
+  "name": "Max Strict Pull-ups Test",
+  "category": "BENCHMARK",
+  "description": "One all-out set of strict bodyweight pull-ups from a dead hang, chin over the bar each rep. Record the reps. Sets the reps of bodyweight pull-up work.",
+  "cues": [
+   "Full dead hang between reps",
+   "No kip or swing",
+   "Stop when a rep is not clean"
+  ],
+  "sets": 1,
+  "reps": 1,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 0,
+  "loadBasis": "NONE",
+  "requires": [
+   [
+    "PULL_UP_BAR",
+    "RINGS"
+   ]
+  ],
+  "source": "ACSM Position Stand: Progression Models in Resistance Training (Med Sci Sports Exerc 2009;41:687-708)"
+ },
+ {
+  "id": "bench_front_lever_hold",
+  "name": "Tuck Front Lever Max Hold Test",
+  "category": "BENCHMARK",
+  "description": "Hold a tuck front lever (back flat, hips level with the shoulders, arms straight) as long as form holds. Best of 2 attempts, 3 min apart. Record the seconds. Sets your front lever hold times.",
+  "cues": [
+   "Start the clock when the back is flat",
+   "Stop when the hips drop",
+   "Best of 2"
+  ],
+  "sets": 2,
+  "reps": 1,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 180,
+  "loadBasis": "NONE",
+  "requires": [
+   [
+    "PULL_UP_BAR",
+    "RINGS"
+   ]
+  ],
+  "source": "Hörst (2016); progressive calisthenics"
+ },
+ {
+  "id": "bench_dip_rm",
+  "name": "Dips Rep-Max Test",
+  "category": "BENCHMARK",
+  "description": "After warming up, pick a load you can dip 3-8 times (bodyweight, added weight or band assistance) and do one all-out set with full range. Record the added load and the reps: Mango estimates your 1RM from them (Epley).",
+  "cues": [
+   "Elbows to ~90 degrees every rep",
+   "Shoulders down, no bouncing",
+   "Stop at the first rep that is not clean"
+  ],
+  "sets": 1,
+  "reps": 1,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 0,
+  "loadBasis": "NONE",
+  "requires": [
+   [
+    "DIP_BARS",
+    "RINGS"
+   ]
+  ],
+  "source": "Epley B. (1985) Poundage Chart; LeSuer, McCormick & Mayhew (1997) J Strength Cond Res 11:211-213 (rep-max prediction)"
+ },
+ {
+  "id": "bench_press_rm",
+  "name": "Overhead Press Rep-Max Test",
+  "category": "BENCHMARK",
+  "description": "After warming up, pick a weight you can press 3-8 times (barbell or the two dumbbells together) and do one all-out set. Record the weight and the reps: Mango estimates your 1RM from them (Epley).",
+  "cues": [
+   "Ribs down, no back arch",
+   "Full lockout each rep",
+   "Stop at the first rep that is not clean"
+  ],
+  "sets": 1,
+  "reps": 1,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 0,
+  "loadBasis": "NONE",
+  "requires": [
+   [
+    "DUMBBELLS"
+   ]
+  ],
+  "source": "Epley B. (1985) Poundage Chart; LeSuer, McCormick & Mayhew (1997) J Strength Cond Res 11:211-213 (rep-max prediction)"
+ },
+ {
+  "id": "bench_pushup_max",
+  "name": "Max Push-ups Test",
+  "category": "BENCHMARK",
+  "description": "One set of as many strict push-ups as possible: chest to fist height, full lockout, no rest longer than 2 s at the top. Record the reps. Sets the reps of push-up work.",
+  "cues": [
+   "Body in one straight line",
+   "Chest to fist height",
+   "Stop when form breaks"
+  ],
+  "sets": 1,
+  "reps": 1,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 0,
+  "loadBasis": "NONE",
+  "requires": [],
+  "source": "ACSM Position Stand: Progression Models in Resistance Training (Med Sci Sports Exerc 2009;41:687-708)"
+ },
+ {
+  "id": "push_finger_extensions",
+  "name": "Finger Extensions (Rubber Band)",
+  "category": "PUSH",
+  "description": "Open the fingers against a thick rubber band or extensor band looped around the fingertips. Trains the finger extensors, the antagonists of all the gripping, to balance the forearm.",
+  "cues": [
+   "Spread the fingers fully",
+   "Slow 2 s return",
+   "Light: 20-30 reps, no burn in the elbow"
+  ],
+  "sets": 3,
+  "reps": 20,
+  "workSec": 0,
+  "repRestSec": 0,
+  "setRestSec": 45,
+  "loadBasis": "NONE",
+  "requires": [],
+  "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor"
  },
  {
   "id": "fb_edge_lift_max",
@@ -939,14 +1078,15 @@
   "workSec": 0,
   "repRestSec": 0,
   "setRestSec": 150,
-  "loadBasis": "BODYWEIGHT",
+  "loadBasis": "PULLUP_REPS",
   "requires": [
    [
     "PULL_UP_BAR",
     "RINGS"
    ]
   ],
-  "source": "ACSM Position Stand: Progression Models in Resistance Training (Med Sci Sports Exerc 2009;41:687-708); Schoenfeld et al. (2015) Sports Med 45:577 (tempo)"
+  "source": "ACSM Position Stand: Progression Models in Resistance Training (Med Sci Sports Exerc 2009;41:687-708); Schoenfeld et al. (2015) Sports Med 45:577 (tempo)",
+  "intensity": 0.5
  },
  {
   "id": "pull_band_rows",
@@ -1005,9 +1145,10 @@
   "workSec": 0,
   "repRestSec": 0,
   "setRestSec": 120,
-  "loadBasis": "BODYWEIGHT",
+  "loadBasis": "PUSHUP_REPS",
   "requires": [],
-  "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor; ACSM Position Stand: Progression Models in Resistance Training (Med Sci Sports Exerc 2009;41:687-708)"
+  "source": "Vagy J. Climb Injury-Free (2016), The Climbing Doctor; ACSM Position Stand: Progression Models in Resistance Training (Med Sci Sports Exerc 2009;41:687-708)",
+  "intensity": 0.3
  },
  {
   "id": "mob_seated_pike",

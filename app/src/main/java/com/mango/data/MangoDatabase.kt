@@ -162,6 +162,9 @@ interface BenchmarkDao {
     @Query("SELECT * FROM benchmarks ORDER BY epochDay")
     suspend fun getAll(): List<Benchmark>
 
+    @Update
+    suspend fun update(benchmark: Benchmark)
+
     @Query("DELETE FROM benchmarks")
     suspend fun clear()
 
@@ -187,6 +190,8 @@ class Converters {
     @TypeConverter fun toLongs(v: String): List<Long> = json.decodeFromString(v)
     @TypeConverter fun fromSwaps(v: Map<String, String>): String = json.encodeToString(v)
     @TypeConverter fun toSwaps(v: String): Map<String, String> = json.decodeFromString(v)
+    @TypeConverter fun fromResults(v: Map<String, Double>): String = json.encodeToString(v)
+    @TypeConverter fun toResults(v: String): Map<String, Double> = json.decodeFromString(v)
     @TypeConverter fun fromTools(v: List<KitchenTool>): String = json.encodeToString(v)
     @TypeConverter fun toTools(v: String): List<KitchenTool> = json.decodeFromString(v)
     @TypeConverter fun fromIngredients(v: List<RecipeIngredient>): String = json.encodeToString(v)
@@ -198,7 +203,7 @@ class Converters {
         UserProfile::class, Food::class, BarcodeProduct::class, PantryItem::class,
         Recipe::class, MealSlot::class, Exercise::class, Benchmark::class,
     ],
-    version = 7,
+    version = 8,
     exportSchema = false,
 )
 @TypeConverters(Converters::class)
@@ -273,9 +278,30 @@ abstract class MangoDatabase : RoomDatabase() {
             }
         }
 
+        /**
+         * v8: a test day stores one result per test (dips, press, push-ups, front lever… besides fingers and
+         * pull-ups). Existing benchmarks keep their finger and pull-up results.
+         */
+        private val MIGRATION_7_8 = object : Migration(7, 8) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("CREATE TABLE benchmarks_new (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, epochDay INTEGER NOT NULL, bodyWeightKg REAL NOT NULL, results TEXT NOT NULL)")
+                db.execSQL(
+                    "INSERT INTO benchmarks_new (id, epochDay, bodyWeightKg, results) SELECT id, epochDay, bodyWeightKg, " +
+                        "'{\"FINGER\":' || CAST(fingerMaxAddedKg AS REAL) || ',\"PULL\":' || CAST(pullUpMaxAddedKg AS REAL) || '}' FROM benchmarks",
+                )
+                db.execSQL("DROP TABLE benchmarks")
+                db.execSQL("ALTER TABLE benchmarks_new RENAME TO benchmarks")
+                // "Free weights" used to cover the press too: keep it for everyone who had weights.
+                db.execSQL(
+                    "UPDATE user_profile SET equipment = replace(equipment, '\"WEIGHTS\"', '\"WEIGHTS\",\"DUMBBELLS\"') " +
+                        "WHERE equipment LIKE '%\"WEIGHTS\"%' AND equipment NOT LIKE '%DUMBBELLS%'",
+                )
+            }
+        }
+
         fun create(context: Context): MangoDatabase =
             Room.databaseBuilder(context, MangoDatabase::class.java, "mango.db")
-                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7)
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8)
                 .fallbackToDestructiveMigration()
                 .build()
     }

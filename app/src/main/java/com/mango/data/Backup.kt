@@ -2,6 +2,11 @@ package com.mango.data
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.jsonObject
 
 /**
  * A complete, human-readable save of everything the user created or changed: profile and options,
@@ -52,7 +57,8 @@ data class BackupSummary(
 )
 
 object BackupCodec {
-    const val FORMAT = 1
+    /** 2: per-test benchmark results; dumbbells split from weights. */
+    const val FORMAT = 2
     const val MIME = "application/json"
 
     private val json = Json { ignoreUnknownKeys = true; encodeDefaults = true; prettyPrint = true }
@@ -91,13 +97,29 @@ object BackupCodec {
     /** Parses a backup file; throws [IllegalArgumentException] with a readable message when it isn't one. */
     fun decode(text: String): MangoBackup {
         val backup = try {
-            json.decodeFromString(MangoBackup.serializer(), text)
+            json.decodeFromJsonElement(MangoBackup.serializer(), upgradeLegacy(json.parseToJsonElement(text)))
         } catch (e: Exception) {
             throw IllegalArgumentException("This file is not a Mango backup.")
         }
         require(backup.app == "Mango") { "This file is not a Mango backup." }
         require(backup.format <= FORMAT) { "This backup comes from a newer Mango – update the app first." }
         return backup
+    }
+
+    /** Backups made before per-test results stored fingers and pull-ups in their own fields. */
+    private fun upgradeLegacy(root: JsonElement): JsonElement {
+        val obj = root as? JsonObject ?: return root
+        val benchmarks = obj["benchmarks"] as? JsonArray ?: return root
+        val upgraded = JsonArray(benchmarks.map { b ->
+            val o = b.jsonObject
+            if ("results" in o) return@map o
+            val results = buildMap {
+                (o["fingerMaxAddedKg"] as? JsonPrimitive)?.let { put("FINGER", it) }
+                (o["pullUpMaxAddedKg"] as? JsonPrimitive)?.let { put("PULL", it) }
+            }
+            JsonObject(o - "fingerMaxAddedKg" - "pullUpMaxAddedKg" + ("results" to JsonObject(results)))
+        })
+        return JsonObject(obj + ("benchmarks" to upgraded))
     }
 
     fun summary(b: MangoBackup) = BackupSummary(
@@ -125,5 +147,13 @@ object BackupCodec {
         b.meals.mapNotNull { m -> resolve(m.recipeId)?.let { m.copy(recipeId = it) } }
 
     fun restoredProfile(b: MangoBackup, resolve: (Long) -> Long?): UserProfile? =
-        b.profile?.let { p -> p.copy(breakfastPicks = p.breakfastPicks.mapNotNull(resolve)) }
+        b.profile?.let { p ->
+            // Before format 2, "free weights" also meant dumbbells for the press.
+            val equipment = if (b.format < 2 && Equipment.WEIGHTS in p.equipment && Equipment.DUMBBELLS !in p.equipment) {
+                Equipment.entries.filter { it in p.equipment || it == Equipment.DUMBBELLS }
+            } else {
+                p.equipment
+            }
+            p.copy(breakfastPicks = p.breakfastPicks.mapNotNull(resolve), equipment = equipment)
+        }
 }
