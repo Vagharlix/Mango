@@ -28,3 +28,7 @@ local.properties
 .DS_Store
 *.swp
 *.swo
+# Release signing (the key lives in GitHub secrets, never in the repository)
+keystore.properties
+*.jks
+*.keystore

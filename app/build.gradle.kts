@@ -6,6 +6,11 @@ plugins {
     id("com.google.devtools.ksp")
 }
 
+// Release signing: keystore.properties (written by the Release workflow from GitHub secrets) points at the key.
+val releaseSigning = rootProject.file("keystore.properties").takeIf { it.exists() }?.let { file ->
+    java.util.Properties().apply { file.inputStream().use { load(it) } }
+}
+
 android {
     namespace = "com.mango"
     compileSdk = 35
@@ -18,10 +23,22 @@ android {
         versionName = "0.10.0-beta"
     }
 
+    signingConfigs {
+        if (releaseSigning != null) {
+            create("release") {
+                storeFile = rootProject.file(releaseSigning.getProperty("storeFile"))
+                storePassword = releaseSigning.getProperty("storePassword")
+                keyAlias = releaseSigning.getProperty("keyAlias")
+                keyPassword = releaseSigning.getProperty("keyPassword")
+            }
+        }
+    }
+
     buildTypes {
         release {
-            isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            // No code shrinking: the release runs exactly the code the tests and the debug builds run.
+            isMinifyEnabled = false
+            signingConfig = signingConfigs.findByName("release")
         }
     }
     compileOptions {

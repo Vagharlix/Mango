@@ -135,14 +135,6 @@ class ReadmeScreenshots {
         compose.onNodeWithText("Test Day – Upper Body").performClick()
         waitForText("Enter test results")
         shot("test-day")
-        // The results dialog, partly filled in.
-        compose.onNodeWithText("Enter test results").performClick()
-        waitForText("Test results")
-        val fields = compose.onAllNodes(hasSetTextAction())
-        listOf("19", "13", "17.5", "4").forEachIndexed { i, v -> fields[i].performTextInput(v) }
-        shot("test-results")
-        compose.onNodeWithText("Cancel").performClick()
-        compose.waitForIdle()
         back()
 
         // Grocery: the menu, then the shopping list with the whole bird.
