@@ -218,8 +218,18 @@ private fun ShoppingRow(item: ShoppingItem, canReplace: Boolean, onReplace: () -
 
 fun quantityText(grams: Double, unitGrams: Double?, unitName: String?): String {
     val base = if (grams >= 1000) "${(grams / 1000).fmt(2)} kg" else "${grams.fmt()} g"
+    if (unitGrams == null || unitName == null) return base
     // A little over a whole unit still counts as one (370 g of fillets is 2 breasts, not 3).
-    return if (unitGrams != null && unitName != null) "$base (≈ ${maxOf(1, ceil(grams / unitGrams - 0.15).toInt())} $unitName)" else base
+    val n = maxOf(1, ceil(grams / unitGrams - 0.15).toInt())
+    return "$base (≈ $n ${if (n == 1) unitName else plural(unitName)})"
+}
+
+/** "2 thighs", "3 tomatoes", "2 boxes"; units that are already a measure ("kg in shell") stay as they are. */
+fun plural(unit: String): String = when {
+    " in " in unit -> unit
+    unit == "avocado" -> "avocados"
+    unit.endsWith("o") || unit.endsWith("x") || unit.endsWith("s") || unit.endsWith("ch") || unit.endsWith("sh") -> unit + "es"
+    else -> unit + "s"
 }
 
 @OptIn(ExperimentalLayoutApi::class)

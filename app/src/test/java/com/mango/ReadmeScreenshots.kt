@@ -142,8 +142,8 @@ class ReadmeScreenshots {
         waitForText("Menu · next 7 days")
         shot("grocery-menu")
         // The shopping list sits below the menu: lazy rows only exist once scrolled into view.
-        compose.onAllNodes(hasScrollToNodeAction())[0].performScrollToNode(hasText("SHOPPING LIST"))
-        compose.onAllNodes(hasScrollToNodeAction())[0].performTouchInput { swipeUp(startY = bottom * 0.85f, endY = bottom * 0.2f) }
+        compose.onAllNodes(hasScrollToNodeAction())[0].performScrollToNode(hasText("Whole chicken"))
+        compose.onAllNodes(hasScrollToNodeAction())[0].performTouchInput { swipeUp(startY = bottom * 0.8f, endY = bottom * 0.4f) }
         compose.waitForIdle()
         shot("grocery")
 
@@ -169,7 +169,8 @@ class ReadmeScreenshots {
         compose.onNode(hasSetTextAction()).performTextInput("Bourguignon")
         compose.waitForIdle()
         compose.onNodeWithText("Boeuf Bourguignon").performClick()
-        waitForText("Based on")
+        // The "Based on" card is further down: the page top (title, servings, macros) is what matters.
+        waitForText("Quantities for")
         shot("recipes")
         back()
         back()

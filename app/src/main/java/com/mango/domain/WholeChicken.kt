@@ -134,7 +134,7 @@ object WholeChicken {
             items.firstOrNull { it.food.name == food }?.let { ShoppingItem(it.food, n * pieceGrams(part, kg), note = "on top of the bird: " + part.name(n)) }
         }
         val bird = ShoppingItem(
-            food = whole.copy(unitGrams = kg * 1000, unitName = if (birds == 1) "bird" else "birds"),
+            food = whole.copy(unitGrams = kg * 1000, unitName = "bird"),
             grams = birds * kg * 1000,
             note = "~${kg.fmtKg()} each · breaks down into " + describe(birds),
         )
