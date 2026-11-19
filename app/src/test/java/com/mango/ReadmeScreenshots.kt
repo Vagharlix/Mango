@@ -2,6 +2,8 @@ package com.mango
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
+import android.view.View
 import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasText
@@ -76,13 +78,31 @@ class ReadmeScreenshots {
         )
     }
 
+    /** Every window on screen (the activity plus any dialog), from the framework's window list. */
+    @Suppress("UNCHECKED_CAST")
+    private fun windows(): List<View> {
+        val global = Class.forName("android.view.WindowManagerGlobal")
+        val instance = global.getMethod("getInstance").invoke(null)
+        val views = global.getDeclaredField("mViews").apply { isAccessible = true }.get(instance) as List<View>
+        return views.toList()
+    }
+
     private fun shot(name: String) {
         compose.waitForIdle()
         compose.mainClock.advanceTimeBy(1_000)
         compose.waitForIdle()
-        val view = compose.activity.window.decorView
-        val bmp = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
-        view.draw(Canvas(bmp))
+        val base = compose.activity.window.decorView
+        val bmp = Bitmap.createBitmap(base.width, base.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bmp)
+        base.draw(canvas)
+        // Dialogs live in their own windows: dim the screen and draw them centred on top, as on a phone.
+        windows().filter { it !== base && it.isShown && it.width > 0 }.forEach { dialog ->
+            canvas.drawColor(Color.argb(150, 0, 0, 0))
+            canvas.save()
+            canvas.translate((base.width - dialog.width) / 2f, (base.height - dialog.height) / 2f)
+            dialog.draw(canvas)
+            canvas.restore()
+        }
         File(out, "$name.png").outputStream().use { bmp.compress(Bitmap.CompressFormat.PNG, 100, it) }
     }
 
@@ -115,13 +135,24 @@ class ReadmeScreenshots {
         compose.onNodeWithText("Test Day – Upper Body").performClick()
         waitForText("Enter test results")
         shot("test-day")
+        // The results dialog, partly filled in.
+        compose.onNodeWithText("Enter test results").performClick()
+        waitForText("Test results")
+        val fields = compose.onAllNodes(hasSetTextAction())
+        listOf("19", "13", "17.5", "4").forEachIndexed { i, v -> fields[i].performTextInput(v) }
+        shot("test-results")
+        compose.onNodeWithText("Cancel").performClick()
+        compose.waitForIdle()
         back()
 
         // Grocery: the menu, then the shopping list with the whole bird.
         tab("Grocery")
-        waitForText("Whole chicken")
+        waitForText("Menu · next 7 days")
+        shot("grocery-menu")
+        // The shopping list sits below the menu: lazy rows only exist once scrolled into view.
         compose.onAllNodes(hasScrollToNodeAction())[0].performScrollToNode(hasText("SHOPPING LIST"))
-        compose.onAllNodes(hasScrollToNodeAction())[0].performTouchInput { swipeUp(startY = bottom * 0.9f, endY = bottom * 0.3f) }
+        compose.onAllNodes(hasScrollToNodeAction())[0].performTouchInput { swipeUp(startY = bottom * 0.85f, endY = bottom * 0.2f) }
+        compose.waitForIdle()
         shot("grocery")
 
         // Buy the bird: the kitchen prep card appears in Meals.
@@ -133,6 +164,12 @@ class ReadmeScreenshots {
         tab("Meals")
         waitForText("Kitchen prep today")
         shot("meals")
+
+        // The pieces in the pantry: fridge for today and tomorrow, the rest frozen.
+        tab("Pantry")
+        waitForText("Frozen")
+        shot("pantry")
+        tab("Meals")
 
         // A classic from the recipe book.
         compose.onNodeWithContentDescription("Recipes").performClick()

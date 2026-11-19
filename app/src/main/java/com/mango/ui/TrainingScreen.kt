@@ -786,7 +786,7 @@ fun maxText(t: MaxTest, v: Double): String {
     return when (t.input) {
         MaxTest.Input.ADDED_KG, MaxTest.Input.BODYWEIGHT_RM -> (if (v >= 0) "+" else "") + "$n kg"
         MaxTest.Input.WEIGHT_RM -> "$n kg"
-        MaxTest.Input.REPS -> "$n reps"
+        MaxTest.Input.REPS -> if (v == 1.0) "1 rep" else "$n reps"
         MaxTest.Input.SECONDS -> "$n s"
     }
 }

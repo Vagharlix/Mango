@@ -44,7 +44,7 @@ enum class ExerciseCategory(val label: String) {
     CORE("Core"),
     MOBILITY_LOWER("Lower-Body Mobility"),
     MOBILITY_UPPER("Shoulder Health"),
-    BENCHMARK("Benchmark"),
+    BENCHMARK("Test"),
 }
 
 enum class Equipment(val label: String) {
