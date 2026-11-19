@@ -1,7 +1,10 @@
 name: Release
 
-# Push a tag like v1.0.0 (or run it from the Actions tab with a tag name) to build a signed APK
-# and publish it in a GitHub Release.
+# Publishes a signed APK in a GitHub Release, when:
+#  - a push changes .github/release-notes.md (or this file): the version is "v" + versionName from
+#    app/build.gradle.kts, and nothing happens if that version is already released;
+#  - a tag like v1.0.0 is pushed;
+#  - it is run from the Actions tab with a tag name.
 on:
   workflow_dispatch:
     inputs:
@@ -11,6 +14,10 @@ on:
         required: true
   push:
     tags: ['v*']
+    branches: ['**']
+    paths:
+      - .github/release-notes.md
+      - .github/workflows/release.yml
 
 permissions:
   contents: write
@@ -22,15 +29,32 @@ concurrency:
 jobs:
   release:
     runs-on: ubuntu-latest
-    env:
-      TAG: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || inputs.release }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Version to publish
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            TAG="${{ inputs.release }}"
+          elif [ "${{ github.ref_type }}" = "tag" ]; then
+            TAG="${{ github.ref_name }}"
+          else
+            TAG="v$(sed -n 's/.*versionName = "\(.*\)".*/\1/p' app/build.gradle.kts)"
+            if git ls-remote --exit-code --tags origin "refs/tags/$TAG" > /dev/null; then
+              echo "$TAG is already released: nothing to do."
+              echo "skip=true" >> "$GITHUB_OUTPUT"
+            fi
+          fi
+          echo "TAG=$TAG" >> "$GITHUB_ENV"
+          echo "Publishing $TAG"
       - uses: actions/setup-java@v4
+        if: steps.version.outputs.skip != 'true'
         with:
           distribution: temurin
           java-version: 17
       - uses: gradle/actions/setup-gradle@v4
+        if: steps.version.outputs.skip != 'true'
 
       # The signing key lives in repository secrets (Settings > Secrets and variables > Actions):
       #   MANGO_KEYSTORE_BASE64   = base64 of mango-release.jks
@@ -38,6 +62,7 @@ jobs:
       # Every release must be signed with this same key, or it can't update the installed app:
       # without the secrets the release stops here instead of publishing a wrongly signed APK.
       - name: Signing key
+        if: steps.version.outputs.skip != 'true'
         env:
           KEYSTORE_B64: ${{ secrets.MANGO_KEYSTORE_BASE64 }}
           KEYSTORE_PASSWORD: ${{ secrets.MANGO_KEYSTORE_PASSWORD }}
@@ -52,18 +77,22 @@ jobs:
           printf "storeFile=mango-release.jks\nstorePassword=%s\nkeyAlias=mango\nkeyPassword=%s\n" "$PASS" "$PASS" > keystore.properties
 
       - name: Unit tests
+        if: steps.version.outputs.skip != 'true'
         run: ./gradlew testDebugUnitTest
 
       - name: Build the signed APK
+        if: steps.version.outputs.skip != 'true'
         run: ./gradlew assembleRelease
 
       - name: Name the APK
+        if: steps.version.outputs.skip != 'true'
         run: |
           mkdir -p dist
           cp app/build/outputs/apk/release/app-release.apk "dist/Mango-$TAG.apk"
           ls -la dist
 
       - uses: softprops/action-gh-release@v2
+        if: steps.version.outputs.skip != 'true'
         with:
           tag_name: ${{ env.TAG }}
           target_commitish: ${{ github.sha }}

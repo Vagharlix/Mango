@@ -34,7 +34,11 @@ The unit tests cover the pure Kotlin engines in `domain/` (planning, nutrition, 
 
 ## Releases
 
-Push a tag such as `v1.0.0` (or run the *Release* workflow from the Actions tab): `.github/workflows/release.yml` runs the tests, builds the release APK signed with the key stored in the repository secrets `MANGO_KEYSTORE_BASE64` and `MANGO_KEYSTORE_PASSWORD`, names it `Mango-<tag>.apk` and publishes it in a GitHub Release with the notes from `.github/release-notes.md`. Keep `versionCode` / `versionName` in `app/build.gradle.kts` in step with the tag.
+1. Bump `versionCode` and `versionName` in `app/build.gradle.kts`.
+2. Write the notes of the new version in `.github/release-notes.md`.
+3. Push. The *Release* workflow (`.github/workflows/release.yml`) sees the notes change, runs the tests, builds the release APK signed with the key stored in the repository secrets `MANGO_KEYSTORE_BASE64` and `MANGO_KEYSTORE_PASSWORD`, and publishes `Mango-v<versionName>.apk` in a GitHub Release tagged `v<versionName>`. A version that is already released is skipped; without the secrets the workflow stops instead of publishing an APK that couldn't update the installed app.
+
+A pushed `v*` tag, or a manual run from the Actions tab, publishes a release the same way.
 
 ## README screenshots
 
