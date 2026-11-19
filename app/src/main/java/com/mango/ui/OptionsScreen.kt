@@ -240,7 +240,7 @@ fun OptionsScreen(
                         if (backup.error != null) Danger else Sky,
                         onClick = onOpenBackup,
                     )
-                    OptionRow("About & sources", "Science references · version 0.10 beta", Sky, onClick = onOpenAbout)
+                    OptionRow("About & sources", "Science references · version 1.0", Sky, onClick = onOpenAbout)
                 }
             }
         }
@@ -524,7 +524,7 @@ fun AboutScreen(onBack: () -> Unit) {
         item { BackHeader("About & sources", onBack) }
         item {
             Text(
-                "Mango 0.10 beta · works fully offline · no account, no AI service, no tracking. Every calculation runs on this device.",
+                "Mango 1.0 · works fully offline · no account, no AI service, no tracking. Every calculation runs on this device.",
                 fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }

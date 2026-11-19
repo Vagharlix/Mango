@@ -1,12 +1,12 @@
 name: Release
 
-# Push a tag like v0.10.0 (or run it from the Actions tab with a tag name) to build a signed APK
+# Push a tag like v1.0.0 (or run it from the Actions tab with a tag name) to build a signed APK
 # and publish it in a GitHub Release.
 on:
   workflow_dispatch:
     inputs:
       release:
-        description: Tag to publish (ex. v0.10.0)
+        description: Tag to publish (ex. v1.0.0)
         type: string
         required: true
   push:
@@ -35,22 +35,20 @@ jobs:
       # The signing key lives in repository secrets (Settings > Secrets and variables > Actions):
       #   MANGO_KEYSTORE_BASE64   = base64 of mango-release.jks
       #   MANGO_KEYSTORE_PASSWORD = its password (alias: mango)
-      # Without them a throw-away key is used: that APK installs, but cannot update a version
-      # signed with another key (uninstalling erases the app's data).
+      # Every release must be signed with this same key, or it can't update the installed app:
+      # without the secrets the release stops here instead of publishing a wrongly signed APK.
       - name: Signing key
         env:
           KEYSTORE_B64: ${{ secrets.MANGO_KEYSTORE_BASE64 }}
           KEYSTORE_PASSWORD: ${{ secrets.MANGO_KEYSTORE_PASSWORD }}
         run: |
-          if [ -n "$KEYSTORE_B64" ] && [ -n "$KEYSTORE_PASSWORD" ]; then
-            echo "$KEYSTORE_B64" | base64 -d > mango-release.jks
-            PASS="$KEYSTORE_PASSWORD"
-          else
-            echo "::warning::MANGO_KEYSTORE_BASE64 / MANGO_KEYSTORE_PASSWORD secrets not set: signing with a temporary key."
-            PASS=$(openssl rand -hex 16)
-            keytool -genkeypair -keystore mango-release.jks -alias mango -keyalg RSA -keysize 2048 -validity 36500 \
-              -storepass "$PASS" -keypass "$PASS" -dname "CN=Mango"
+          if [ -z "$KEYSTORE_B64" ] || [ -z "$KEYSTORE_PASSWORD" ]; then
+            echo "::error::MANGO_KEYSTORE_BASE64 / MANGO_KEYSTORE_PASSWORD secrets are not set: add them, then run the release again."
+            exit 1
           fi
+          echo "$KEYSTORE_B64" | base64 -d > mango-release.jks
+          PASS="$KEYSTORE_PASSWORD"
+          keytool -list -keystore mango-release.jks -storepass "$PASS" -alias mango > /dev/null
           printf "storeFile=mango-release.jks\nstorePassword=%s\nkeyAlias=mango\nkeyPassword=%s\n" "$PASS" "$PASS" > keystore.properties
 
       - name: Unit tests
@@ -70,6 +68,5 @@ jobs:
           tag_name: ${{ env.TAG }}
           target_commitish: ${{ github.sha }}
           name: Mango ${{ env.TAG }}
-          prerelease: true
           files: dist/*.apk
           body_path: .github/release-notes.md
