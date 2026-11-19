@@ -45,11 +45,11 @@ interface FoodDao {
     @Query("SELECT COUNT(*) FROM foods WHERE name = :name")
     suspend fun countByName(name: String): Int
 
-    @Query("SELECT COUNT(*) FROM foods")
-    suspend fun count(): Int
-
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(foods: List<Food>)
+
+    @Update
+    suspend fun updateAll(foods: List<Food>)
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insert(food: Food): Long
@@ -62,6 +62,9 @@ interface BarcodeDao {
 
     @Upsert
     suspend fun upsert(product: BarcodeProduct)
+
+    @Query("SELECT * FROM barcode_products")
+    suspend fun getAll(): List<BarcodeProduct>
 }
 
 @Dao
@@ -80,6 +83,12 @@ interface PantryDao {
 
     @Query("DELETE FROM pantry WHERE id = :id")
     suspend fun delete(id: Long)
+
+    @Query("DELETE FROM pantry")
+    suspend fun clear()
+
+    @Insert
+    suspend fun insertAll(items: List<PantryItem>)
 }
 
 @Dao
@@ -107,6 +116,9 @@ interface RecipeDao {
 
     @Query("DELETE FROM recipes WHERE id = :id AND isCustom = 1")
     suspend fun deleteCustom(id: Long)
+
+    @Query("DELETE FROM recipes WHERE isCustom = 1")
+    suspend fun deleteAllCustom()
 }
 
 @Dao
@@ -125,6 +137,12 @@ interface MealSlotDao {
 
     @Query("DELETE FROM meal_slots WHERE status = 'PLANNED' AND recipeId = :recipeId AND epochDay >= :from")
     suspend fun deletePlannedForRecipe(recipeId: Long, from: Long)
+
+    @Query("SELECT * FROM meal_slots")
+    suspend fun getAll(): List<MealSlot>
+
+    @Query("DELETE FROM meal_slots")
+    suspend fun clear()
 }
 
 @Dao
@@ -141,6 +159,18 @@ interface BenchmarkDao {
     @Query("SELECT * FROM benchmarks ORDER BY epochDay")
     fun observeAll(): Flow<List<Benchmark>>
 
+    @Query("SELECT * FROM benchmarks ORDER BY epochDay")
+    suspend fun getAll(): List<Benchmark>
+
+    @Update
+    suspend fun update(benchmark: Benchmark)
+
+    @Query("DELETE FROM benchmarks")
+    suspend fun clear()
+
+    @Insert
+    suspend fun insertAll(benchmarks: List<Benchmark>)
+
     @Insert
     suspend fun insert(benchmark: Benchmark)
 }
@@ -156,6 +186,14 @@ class Converters {
     @TypeConverter fun toEquipment(v: String): List<Equipment> = json.decodeFromString(v)
     @TypeConverter fun fromRequirements(v: List<List<Equipment>>): String = json.encodeToString(v)
     @TypeConverter fun toRequirements(v: String): List<List<Equipment>> = json.decodeFromString(v)
+    @TypeConverter fun fromLongs(v: List<Long>): String = json.encodeToString(v)
+    @TypeConverter fun toLongs(v: String): List<Long> = json.decodeFromString(v)
+    @TypeConverter fun fromSwaps(v: Map<String, String>): String = json.encodeToString(v)
+    @TypeConverter fun toSwaps(v: String): Map<String, String> = json.decodeFromString(v)
+    @TypeConverter fun fromResults(v: Map<String, Double>): String = json.encodeToString(v)
+    @TypeConverter fun toResults(v: String): Map<String, Double> = json.decodeFromString(v)
+    @TypeConverter fun fromTools(v: List<KitchenTool>): String = json.encodeToString(v)
+    @TypeConverter fun toTools(v: String): List<KitchenTool> = json.decodeFromString(v)
     @TypeConverter fun fromIngredients(v: List<RecipeIngredient>): String = json.encodeToString(v)
     @TypeConverter fun toIngredients(v: String): List<RecipeIngredient> = json.decodeFromString(v)
 }
@@ -165,7 +203,7 @@ class Converters {
         UserProfile::class, Food::class, BarcodeProduct::class, PantryItem::class,
         Recipe::class, MealSlot::class, Exercise::class, Benchmark::class,
     ],
-    version = 2,
+    version = 8,
     exportSchema = false,
 )
 @TypeConverters(Converters::class)
@@ -189,9 +227,81 @@ abstract class MangoDatabase : RoomDatabase() {
             }
         }
 
+        /** v3 adds interchangeable-ingredient groups and per-meal substitutions. */
+        private val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE foods ADD COLUMN swapGroup TEXT")
+                db.execSQL("ALTER TABLE meal_slots ADD COLUMN swaps TEXT NOT NULL DEFAULT '{}'")
+            }
+        }
+
+        /** v4 adds batch cooking, breakfast rotation and the spice rack. */
+        private val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE user_profile ADD COLUMN breakfastVariety INTEGER NOT NULL DEFAULT 2")
+                db.execSQL("ALTER TABLE user_profile ADD COLUMN stapleOptOut TEXT NOT NULL DEFAULT '[]'")
+                db.execSQL("ALTER TABLE foods ADD COLUMN isStaple INTEGER NOT NULL DEFAULT 0")
+                db.execSQL("ALTER TABLE recipes ADD COLUMN batchMeals INTEGER NOT NULL DEFAULT 1")
+                db.execSQL("ALTER TABLE meal_slots ADD COLUMN batchId INTEGER NOT NULL DEFAULT 0")
+                db.execSQL("ALTER TABLE meal_slots ADD COLUMN isLeftover INTEGER NOT NULL DEFAULT 0")
+            }
+        }
+
+        /** v5 adds breakfast picks, carb/protein preferences and "can't find it" replacements. */
+        private val MIGRATION_4_5 = object : Migration(4, 5) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                listOf("breakfastPicks", "carbOff", "proteinOff").forEach {
+                    db.execSQL("ALTER TABLE user_profile ADD COLUMN $it TEXT NOT NULL DEFAULT '[]'")
+                }
+                db.execSQL("ALTER TABLE user_profile ADD COLUMN manualSwaps TEXT NOT NULL DEFAULT '{}'")
+                db.execSQL("ALTER TABLE user_profile ADD COLUMN manualSwapsUntil INTEGER NOT NULL DEFAULT 0")
+                listOf("carbType", "proteinType", "family").forEach { db.execSQL("ALTER TABLE foods ADD COLUMN $it TEXT") }
+            }
+        }
+
+        /** v6 adds the recipe source (French & Italian classics). */
+        private val MIGRATION_5_6 = object : Migration(5, 6) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE recipes ADD COLUMN source TEXT NOT NULL DEFAULT ''")
+            }
+        }
+
+        /** v7 adds whole-chicken planning, the kitchen appliances and the freezer. */
+        private val MIGRATION_6_7 = object : Migration(6, 7) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE user_profile ADD COLUMN wholeChicken TEXT NOT NULL DEFAULT 'WHEN_IT_FITS'")
+                db.execSQL("ALTER TABLE user_profile ADD COLUMN chickenKg REAL NOT NULL DEFAULT 1.6")
+                db.execSQL("ALTER TABLE user_profile ADD COLUMN kitchen TEXT NOT NULL DEFAULT '[]'")
+                db.execSQL("ALTER TABLE user_profile ADD COLUMN breakdownOn INTEGER NOT NULL DEFAULT 0")
+                db.execSQL("ALTER TABLE pantry ADD COLUMN frozen INTEGER NOT NULL DEFAULT 0")
+                db.execSQL("ALTER TABLE recipes ADD COLUMN needsAny TEXT NOT NULL DEFAULT '[]'")
+            }
+        }
+
+        /**
+         * v8: a test day stores one result per test (dips, press, push-ups, front lever… besides fingers and
+         * pull-ups). Existing benchmarks keep their finger and pull-up results.
+         */
+        private val MIGRATION_7_8 = object : Migration(7, 8) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("CREATE TABLE benchmarks_new (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, epochDay INTEGER NOT NULL, bodyWeightKg REAL NOT NULL, results TEXT NOT NULL)")
+                db.execSQL(
+                    "INSERT INTO benchmarks_new (id, epochDay, bodyWeightKg, results) SELECT id, epochDay, bodyWeightKg, " +
+                        "'{\"FINGER\":' || CAST(fingerMaxAddedKg AS REAL) || ',\"PULL\":' || CAST(pullUpMaxAddedKg AS REAL) || '}' FROM benchmarks",
+                )
+                db.execSQL("DROP TABLE benchmarks")
+                db.execSQL("ALTER TABLE benchmarks_new RENAME TO benchmarks")
+                // "Free weights" used to cover the press too: keep it for everyone who had weights.
+                db.execSQL(
+                    "UPDATE user_profile SET equipment = replace(equipment, '\"WEIGHTS\"', '\"WEIGHTS\",\"DUMBBELLS\"') " +
+                        "WHERE equipment LIKE '%\"WEIGHTS\"%' AND equipment NOT LIKE '%DUMBBELLS%'",
+                )
+            }
+        }
+
         fun create(context: Context): MangoDatabase =
             Room.databaseBuilder(context, MangoDatabase::class.java, "mango.db")
-                .addMigrations(MIGRATION_1_2)
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8)
                 .fallbackToDestructiveMigration()
                 .build()
     }

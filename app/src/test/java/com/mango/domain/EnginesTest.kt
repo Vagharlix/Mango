@@ -60,7 +60,10 @@ class EnginesTest {
     }
 
     @Test fun allRecipeIngredientsExistInCatalog() {
-        assertTrue(recipes.size >= 100)
+        assertTrue(recipes.size >= 155)
+        assertTrue(recipes.count { it.source.isNotEmpty() && it.cuisine in setOf("French", "Italian") } >= 20)
+        val asian = setOf("Japanese", "Chinese", "Thai", "Vietnamese", "Indonesian", "Malaysian", "Filipino")
+        assertTrue(recipes.count { it.source.isNotEmpty() && it.cuisine in asian } >= 25)
         recipes.forEach { r ->
             r.ingredients.forEach { assertNotNull("${r.name}: ${it.food}", foodsByName[it.food]) }
             assertTrue(r.name, r.perServing.kcal > 100)
@@ -76,13 +79,15 @@ class EnginesTest {
         fun cap(food: Food): Double = when {
             food.name.endsWith("broth") -> 400.0
             food.category == FoodCategory.FAT_OIL -> 10.0
-            food.name in setOf("parmesan", "cheddar") -> 30.0
+            food.name in setOf("parmesan", "cheddar", "emmental") -> 30.0
             food.name in setOf("feta", "mozzarella") -> 60.0
             food.category == FoodCategory.NUT_SEED -> 35.0
             food.name == "eggs" -> 150.0
+            // Drumsticks and wings are weighed with the bone (~30-40 % of their weight).
+            food.name in setOf("chicken drumstick", "chicken wings") -> 250.0
             food.category == FoodCategory.PROTEIN -> 180.0
             food.name in setOf("lentils", "red lentils") -> 90.0
-            food.category == FoodCategory.GRAIN && "bread" !in food.name && "tortilla" !in food.name -> 90.0
+            food.category == FoodCategory.GRAIN && "bread" !in food.name && "tortilla" !in food.name && "gnocchi" !in food.name -> 90.0
             food.category == FoodCategory.SPICE -> 5.0
             else -> 250.0
         }
@@ -139,12 +144,14 @@ class EnginesTest {
 
     @Test fun benchmarkUpdatesNextBlockOnly() {
         val start = profile.programStartEpochDay
-        val bench = Benchmark(epochDay = start + 27, fingerMaxAddedKg = 30.0, pullUpMaxAddedKg = 40.0, bodyWeightKg = 70.0)
+        val bench = Benchmark(epochDay = start + 27, bodyWeightKg = 70.0, results = mapOf("FINGER" to 30.0, "PULL" to 40.0))
         val weeks = Periodization.build(profile, exercises, listOf(bench), start)
         fun load(w: Int) = weeks[w].days[0].items.first { it.exercise.category.name == "FINGERBOARD" }.loadText
-        // Week 1: 62.5 % of (70 + 20) - 70 = -13.75 kg -> rounded to 0.5 kg
         assertEquals(-13.5, Periodization.targetAddedKg(0.625, 70.0, 20.0), 0.0)
-        assertTrue(load(0), load(0).startsWith("BW − 13.5"))
+        // Nothing was tested before the program started: week 1 opens with the calibration tests.
+        assertTrue(weeks[0].days[0].isBenchmark)
+        // Week 2: 65 % of (70 + 20) - 70 = -11.5 kg (profile estimate)
+        assertTrue(load(1), load(1).startsWith("BW − 11.5"))
         // Deload week 4 of block 1 still uses the old baseline: 67.5 % of 90 - 70 = -9.25 -> -9
         assertTrue(load(3), load(3).startsWith("BW − 9 "))
         // Block 2 (Max Strength, max hangs at 82.5 %) uses the new 30 kg benchmark: 0.825 * 100 - 70 = 12.5
@@ -217,7 +224,7 @@ class EnginesTest {
     }
 
     @Test fun dayTitlesReflectActualContent() {
-        assertEquals("Fingers + Pull + Core", weeksWith(Equipment.DEFAULT)[0].days[0].title)
+        assertEquals("Fingers + Pull + Core", weeksWith(Equipment.DEFAULT)[1].days[0].title)
         assertEquals("Mobility & Flexibility", weeksWith(Equipment.DEFAULT)[0].days[2].title)
         assertTrue(weeksWith(Equipment.DEFAULT - Equipment.BOULDER_WALL - Equipment.ROPE_WALL)[0].days.none { it.title.contains("Climbing") })
     }
@@ -250,6 +257,19 @@ class EnginesTest {
         }
     }
 
+    @Test fun dislikeSuggestionsOfferGroupsAndFoods() {
+        assertEquals(DislikeSuggestions.COMMON.take(8), DislikeSuggestions.suggest("", foods, emptyList()).map { it.term })
+        val nuts = DislikeSuggestions.suggest("nu", foods, emptyList())
+        assertEquals("nuts", nuts.first().term)
+        assertTrue(nuts.first().isGroup && nuts.first().foodCount == 5) // walnuts, almonds, cashews, almond butter, pine nuts
+        val beans = DislikeSuggestions.suggest("bea", foods, listOf("black beans")).map { it.term }
+        assertTrue(beans.containsAll(listOf("kidney beans", "white beans")) && "black beans" !in beans)
+        // Every suggestion actually filters something when added.
+        DislikeSuggestions.suggest("mush", foods, emptyList()).forEach { sug ->
+            assertTrue(sug.term, recipes.any { !MealPlanner.isAllowed(it, listOf(sug.term), foodsByName) })
+        }
+    }
+
     @Test fun wholeWordDislikeMatching() {
         val peanut = foodsByName.getValue("peanut butter")
         assertFalse(MealPlanner.matchesDislike(peanut, peanut.name, "peas"))
@@ -259,13 +279,129 @@ class EnginesTest {
         assertFalse(MealPlanner.matchesDislike(foodsByName["coconut milk"], "coconut milk", "nuts"))
     }
 
-    @Test fun antiRepetitionWithinThreeDays() {
+    @Test fun freshlyCookedMainsDontRepeatWithinThreeDays() {
         val req = request()
-        val plan = MealPlanner.plan(week(req.today), req)
+        // Leftovers and the breakfast rotation repeat on purpose; freshly cooked main meals must not.
+        val plan = MealPlanner.plan(week(req.today), req).filter { !it.isLeftover && it.mealType != MealType.BREAKFAST }
         plan.groupBy { it.recipeId }.values.forEach { uses ->
             val days = uses.map { it.epochDay }.sorted()
             days.zipWithNext().forEach { (a, b) -> assertTrue("repeat within 3 days", b - a > MealPlanner.ANTI_REPEAT_DAYS) }
         }
+    }
+
+    @Test fun neverTheSameDishOnConsecutiveDays() {
+        listOf(LocalDate.of(2026, 11, 2), LocalDate.of(2027, 3, 1), LocalDate.of(2027, 7, 5)).forEach { start ->
+            listOf(emptyList(), listOf("pork", "fish", "mushrooms")).forEach { dislikes ->
+                val plan = MealPlanner.plan(week(start.toEpochDay()), request(today = start.toEpochDay(), dislikes = dislikes))
+                val byDay = plan.groupBy { it.epochDay }.mapValues { (_, v) -> v.map { it.recipeId }.toSet() }
+                byDay.forEach { (d, ids) ->
+                    val overlap = ids intersect byDay[d + 1].orEmpty()
+                    assertTrue("$start $dislikes day $d repeats $overlap the next day", overlap.isEmpty())
+                }
+            }
+        }
+    }
+
+    @Test fun breakfastsComeFromThePicks() {
+        val picks = recipes.filter { it.mealType == MealType.BREAKFAST }.take(3).map { it.id }.toSet()
+        val req = request().copy(breakfastPicks = picks)
+        val ids = MealPlanner.plan(week(req.today), req).filter { it.mealType == MealType.BREAKFAST }.map { it.recipeId }.toSet()
+        assertTrue(picks.containsAll(ids))
+        assertEquals(2, ids.size)
+    }
+
+    @Test fun carbAndProteinPreferencesAdaptRecipes() {
+        val carbOff = FoodPreferences.CARB_TYPES - setOf("rice", "pasta")
+        val bolognese = recipes.first { it.name == "Lean Beef Bolognese" }
+        val tagine = recipes.first { it.name == "Moroccan Chicken & Chickpea Tagine" } // quinoa
+        val swaps = FoodPreferences.swaps(tagine, carbOff, emptyList(), emptyMap(), emptyList(), foodsByName)!!
+        assertEquals("brown rice", swaps["quinoa"])
+        // Equal energy: 120 g dry quinoa (368 kcal/100 g) -> ~120.3 g brown rice (367 kcal/100 g).
+        val rice = MealPlanner.effectiveIngredients(tagine, swaps, foodsByName).first { it.food == "brown rice" }
+        assertEquals(120 * 368.0 / 367.0, rice.grams, 0.01)
+        val potatoToRice = FoodPreferences.swaps(recipes.first { it.name == "Baked Cod with Tomatoes & Olives" }, carbOff, emptyList(), emptyMap(), emptyList(), foodsByName)!!
+        assertEquals("brown rice", potatoToRice["potato"])
+        assertTrue(FoodPreferences.swaps(bolognese, carbOff, emptyList(), emptyMap(), emptyList(), foodsByName)!!.isEmpty())
+        // Bread can't be swapped: recipes built around it are skipped.
+        assertEquals(null, FoodPreferences.swaps(recipes.first { it.name == "Sardines on Toast" }, carbOff, emptyList(), emptyMap(), emptyList(), foodsByName))
+        // No pork this week: pork becomes chicken; no fish or seafood: shrimp falls back to chicken, salmon dishes are skipped.
+        val pork = recipes.first { it.name == "Pork Tenderloin with Apples & Brussels Sprouts" }
+        assertEquals("chicken breast", FoodPreferences.swaps(pork, emptyList(), listOf("pork"), emptyMap(), emptyList(), foodsByName)!!["pork tenderloin"])
+        val shrimp = recipes.first { it.name == "Shrimp & Sweetcorn Summer Skillet" }
+        assertEquals("chicken breast", FoodPreferences.swaps(shrimp, emptyList(), listOf("fish", "seafood"), emptyMap(), emptyList(), foodsByName)!!["shrimp"])
+        assertEquals(null, FoodPreferences.swaps(recipes.first { it.name == "Baked Salmon with Sweet Potato & Broccoli" }, emptyList(), listOf("fish", "seafood"), emptyMap(), emptyList(), foodsByName))
+        // Replacements never land on a disliked food.
+        assertEquals("chicken thigh", FoodPreferences.swaps(pork, emptyList(), listOf("pork"), emptyMap(), listOf("chicken breast"), foodsByName)!!["pork tenderloin"])
+    }
+
+    @Test fun adaptedWeekOnlyUsesAllowedCarbs() {
+        val carbOff = FoodPreferences.CARB_TYPES - setOf("rice", "pasta")
+        val adapted = recipes.mapNotNull { r ->
+            val sw = FoodPreferences.swaps(r, carbOff, listOf("pork"), emptyMap(), emptyList(), foodsByName) ?: return@mapNotNull null
+            NutritionEngine.withNutrients(r.copy(ingredients = MealPlanner.effectiveIngredients(r, sw, foodsByName)), foodsByName)
+        }
+        val req = request().copy(recipes = adapted)
+        val plan = MealPlanner.plan(week(req.today), req)
+        assertEquals(28, plan.size)
+        val byId = adapted.associateBy { it.id }
+        plan.flatMap { byId.getValue(it.recipeId).ingredients }.map { foodsByName.getValue(it.food) }.forEach { f ->
+            assertTrue(f.name, f.carbType == null || f.carbType in setOf("rice", "pasta"))
+            assertTrue(f.name, f.proteinType != "pork")
+        }
+    }
+
+    @Test fun cantFindItOffersSimilarProduce() {
+        val names = FoodPreferences.replacementsFor(foodsByName.getValue("spinach"), foods).map { it.name }
+        assertTrue(names.containsAll(listOf("kale", "arugula", "romaine lettuce")) && "spinach" !in names)
+        assertTrue(FoodPreferences.replacementsFor(foodsByName.getValue("zucchini"), foods).any { it.name == "eggplant" })
+    }
+
+    @Test fun breakfastsRotateBetweenTwoRecipes() {
+        val req = request()
+        val breakfasts = MealPlanner.plan(week(req.today), req).filter { it.mealType == MealType.BREAKFAST }.sortedBy { it.epochDay }
+        assertEquals(7, breakfasts.size)
+        assertEquals(2, breakfasts.map { it.recipeId }.toSet().size)
+        breakfasts.zipWithNext().forEach { (a, b) -> assertTrue("alternates", a.recipeId != b.recipeId) }
+        assertEquals(3, MealPlanner.plan(week(req.today), req.copy(breakfastVariety = 3)).filter { it.mealType == MealType.BREAKFAST }.map { it.recipeId }.toSet().size)
+    }
+
+    @Test fun longRecipesAreBatchCookedForUpToThreeMeals() {
+        val req = request()
+        val byId = recipes.associateBy { it.id }
+        val plan = MealPlanner.plan(week(req.today), req)
+        val batches = plan.filter { it.batchId != 0L }.groupBy { it.batchId }
+        assertTrue("at least two batch sessions a week", batches.size >= 2)
+        batches.values.forEach { b ->
+            val cook = b.single { !it.isLeftover }
+            val recipe = byId.getValue(cook.recipeId)
+            assertTrue(b.all { it.recipeId == cook.recipeId && it.mealType != MealType.BREAKFAST && it.mealType != MealType.SNACK })
+            assertTrue(b.size in 2..recipe.batchMeals)
+            b.filter { it.isLeftover }.forEach {
+                val gap = it.epochDay - cook.epochDay
+                // Fridge leftovers 2 days later; a third, frozen portion only for freezable 3-meal recipes.
+                assertTrue("gap $gap", gap == MealPlanner.FRIDGE_LEFTOVER_DAY.toLong() || (recipe.batchMeals >= 3 && gap in MealPlanner.FREEZER_DAYS))
+            }
+        }
+        // Batch cooking means fewer cooking sessions than meals.
+        val sessions = plan.count { it.mealType in setOf(MealType.LUNCH, MealType.DINNER) && !it.isLeftover }
+        val noBatch = MealPlanner.plan(week(req.today), req.copy(batchCooking = false)).count { it.mealType in setOf(MealType.LUNCH, MealType.DINNER) }
+        assertTrue("$sessions vs $noBatch", sessions <= noBatch - 3)
+    }
+
+    @Test fun shoppingListSkipsCookedBatchesAndTheSpiceRack() {
+        val today = LocalDate.of(2026, 11, 2).toEpochDay()
+        val curry = recipes.first { it.name == "Butternut Squash & Red Lentil Curry" }
+        val byId = mapOf(curry.id to curry)
+        val cook = MealSlot(today, MealType.DINNER, curry.id, 1.0, batchId = 7)
+        val leftover = MealSlot(today + 1, MealType.LUNCH, curry.id, 1.0, batchId = 7, isLeftover = true)
+        val before = MealPlanner.shoppingList(listOf(cook, leftover), byId, foodsByName, emptyList(), today)
+        assertEquals(140.0, before.first { it.food.name == "red lentils" }.grams, 0.0) // recipe: 140 g for 2 servings = cook + leftover
+        // Once the batch is cooked, its leftovers need nothing more.
+        assertTrue(MealPlanner.shoppingList(listOf(cook.copy(status = MealStatus.COOKED), leftover), byId, foodsByName, emptyList(), today).isEmpty())
+        // Spice-rack staples are never on the list.
+        val staples = foods.filter { it.isStaple }.map { it.name }.toSet()
+        val withRack = MealPlanner.shoppingList(listOf(cook, leftover), byId, foodsByName, emptyList(), today, staples)
+        assertTrue(withRack.none { it.food.isStaple } && before.any { it.food.isStaple })
     }
 
     @Test fun cookedHistoryBlocksRecentRecipes() {
@@ -285,6 +421,58 @@ class EnginesTest {
         )
         val slot = MealPlanner.plan(listOf(today to MealType.DINNER), request(pantry = pantry, today = today)).single()
         assertEquals("Baked Salmon with Sweet Potato & Broccoli", recipes.first { it.id == slot.recipeId }.name)
+    }
+
+    private fun consolidatedWeek(req: PlanRequest, pantry: List<StockItem> = emptyList(), dislikes: List<String> = emptyList()): List<MealSlot> {
+        val raw = MealPlanner.plan(week(req.today), req)
+        val changed = MealPlanner.consolidate(raw, recipes.associateBy { it.id }, foodsByName, pantry, dislikes)
+            .associateBy { it.epochDay to it.mealType }
+        return raw.map { changed[it.epochDay to it.mealType] ?: it }
+    }
+
+    private fun distinctItems(plan: List<MealSlot>): Set<String> {
+        val byId = recipes.associateBy { it.id }
+        return plan.flatMap { s -> MealPlanner.effectiveIngredients(byId.getValue(s.recipeId), s.swaps).map { it.food } }
+            .filter { foodsByName.getValue(it).category != FoodCategory.SPICE }.toSet()
+    }
+
+    @Test fun weekUsesOneMemberPerInterchangeableGroup() {
+        listOf(LocalDate.of(2026, 11, 2), LocalDate.of(2027, 3, 1), LocalDate.of(2027, 7, 5)).forEach { start ->
+            val items = distinctItems(consolidatedWeek(request(today = start.toEpochDay())))
+            items.mapNotNull { foodsByName.getValue(it).swapGroup }.groupingBy { it }.eachCount()
+                .forEach { (group, n) -> assertEquals("$start $group", 1, n) }
+        }
+    }
+
+    @Test fun basketReuseShortensTheShoppingList() {
+        listOf(LocalDate.of(2026, 11, 2), LocalDate.of(2027, 3, 1), LocalDate.of(2027, 7, 5)).forEach { start ->
+            val req = request(today = start.toEpochDay())
+            // Reference: the original planner (no basket reuse, no batch cooking, a different breakfast every day).
+            val before = distinctItems(MealPlanner.plan(week(req.today), req.copy(reuseWeight = 0.0, batchCooking = false, breakfastVariety = 7))).size
+            val after = distinctItems(consolidatedWeek(req)).size
+            println("$start distinct items: $before -> $after")
+            assertTrue("$start: $before -> $after", after <= before * 0.75)
+        }
+    }
+
+    @Test fun consolidationPrefersPantryAndNeverPicksDislikes() {
+        val today = LocalDate.of(2026, 11, 2).toEpochDay()
+        val withChickpeas = recipes.first { it.name == "Chickpea Spinach Curry" }
+        val withBlackBeans = recipes.first { it.name == "Black Bean Tacos with Mango Salsa" }
+        val slots = listOf(
+            MealSlot(today, MealType.DINNER, withChickpeas.id, 1.0),
+            MealSlot(today + 1, MealType.DINNER, withBlackBeans.id, 1.0),
+        )
+        val byId = recipes.associateBy { it.id }
+        val pantry = listOf(StockItem("black beans", 400.0, today + 300, false))
+        val changed = MealPlanner.consolidate(slots, byId, foodsByName, pantry, emptyList())
+        assertEquals(mapOf("chickpeas" to "black beans"), changed.single { it.recipeId == withChickpeas.id }.swaps)
+        // A disliked member is never imposed, even if it is in the pantry.
+        val respectful = MealPlanner.consolidate(slots, byId, foodsByName, pantry, listOf("black beans"))
+        assertEquals(mapOf("black beans" to "chickpeas"), respectful.single { it.recipeId == withBlackBeans.id }.swaps)
+        // The shopping list and pantry deduction follow the substitution.
+        val list = MealPlanner.shoppingList(slots.map { s -> changed.firstOrNull { it.recipeId == s.recipeId } ?: s }, byId, foodsByName, emptyList(), today)
+        assertTrue(list.none { it.food.name == "chickpeas" })
     }
 
     @Test fun portionsScaleToMealEnergyTarget() {

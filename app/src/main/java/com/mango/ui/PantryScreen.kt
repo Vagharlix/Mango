@@ -29,11 +29,19 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Switch
+import androidx.compose.ui.unit.sp
+import com.mango.data.FoodCategory
+import com.mango.domain.MealPlanner
+import kotlinx.coroutines.flow.combine
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.mango.data.Food
@@ -96,11 +104,18 @@ class PantryViewModel(repo: Repository) : MangoViewModel(repo) {
     }
 
     fun update(item: PantryItem) = launchSafe { repo.updatePantry(item) }
+
+    /** Fridge ↔ freezer: the date follows (months frozen, a day or two once thawed). */
+    fun setFrozen(item: PantryItem, frozen: Boolean) = launchSafe {
+        repo.updatePantry(item.copy(frozen = !frozen))
+        if (frozen) repo.freeze(item.id) else repo.thaw(item.id)
+        toast(if (frozen) "Moved to the freezer" else "Moved to the fridge to thaw")
+    }
     fun delete(id: Long) = launchSafe { repo.deletePantry(id) }
 }
 
 @Composable
-fun PantryScreen(onScan: () -> Unit) {
+fun PantryScreen(onScan: () -> Unit, onOpenStaples: () -> Unit) {
     val vm = mangoViewModel { PantryViewModel(it) }
     val entries by vm.entries.collectAsStateWithLifecycle()
     val foods by vm.foods.collectAsStateWithLifecycle()
@@ -118,11 +133,12 @@ fun PantryScreen(onScan: () -> Unit) {
     Box(Modifier.fillMaxSize()) {
         LazyColumn(contentPadding = PaddingValues(16.dp, 16.dp, 16.dp, 96.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             item {
-                val expiring = entries.count { it.item.expiresOnEpochDay - vm.today <= 3 }
+                val expiring = entries.count { !it.item.frozen && it.item.expiresOnEpochDay - vm.today <= 3 }
                 ScreenHeader("Pantry", eyebrow = "${entries.size} items" + if (expiring > 0) " · $expiring expiring soon" else "") {
                     RoundIconButton(Icons.Filled.Add, "Add item", onClick = { adding = true })
                 }
             }
+            item { StaplesCard(onOpenStaples) }
             item {
                 Text(
                     "Sorted by expiry. Items expiring soon are prioritised by the meal planner.",
@@ -154,7 +170,10 @@ fun PantryScreen(onScan: () -> Unit) {
             e,
             vm.today,
             onDismiss = { editing = null },
-            onSave = { vm.update(it); editing = null },
+            onSave = { item ->
+                if (item.frozen != e.item.frozen) vm.setFrozen(item, item.frozen) else vm.update(item)
+                editing = null
+            },
             onDelete = { vm.delete(e.item.id); editing = null },
         )
     }
@@ -164,6 +183,7 @@ fun PantryScreen(onScan: () -> Unit) {
 private fun PantryRow(e: PantryEntry, today: Long, onClick: () -> Unit) {
     val days = e.item.expiresOnEpochDay - today
     val (label, color) = when {
+        e.item.frozen -> "❄ Frozen · ${maxOf(1L, days / 30)} mo" to Sky
         days < 0 -> "Expired" to Danger
         days == 0L -> "Expires today" to Danger
         days <= 3 -> "$days d left" to Warn
@@ -183,7 +203,7 @@ private fun PantryRow(e: PantryEntry, today: Long, onClick: () -> Unit) {
 /** Searchable list over the local food catalog. */
 @Composable
 fun FoodSearch(foods: List<Food>, onPick: (Food) -> Unit, selected: Food? = null) {
-    var query by remember { mutableStateOf("") }
+    var query by rememberSaveable { mutableStateOf("") }
     val matches = remember(query, foods) {
         val q = query.trim().lowercase()
         foods.filter { q.isEmpty() || q in it.name }.sortedBy { !it.name.startsWith(q) }.take(40)
@@ -236,6 +256,7 @@ fun AddFoodDialog(foods: List<Food>, onDismiss: () -> Unit, onAdd: (Food, Double
 private fun EditPantryDialog(e: PantryEntry, today: Long, onDismiss: () -> Unit, onSave: (PantryItem) -> Unit, onDelete: () -> Unit) {
     var grams by remember { mutableStateOf(e.item.grams) }
     var days by remember { mutableStateOf((e.item.expiresOnEpochDay - today).toDouble()) }
+    var frozen by remember { mutableStateOf(e.item.frozen) }
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(e.food.name.replaceFirstChar { it.uppercase() }) },
@@ -243,10 +264,17 @@ private fun EditPantryDialog(e: PantryEntry, today: Long, onDismiss: () -> Unit,
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 NumberField("Quantity", grams, { grams = it }, suffix = "g")
                 NumberField("Expires in", days, { days = it }, allowNegative = true, suffix = "days")
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Column(Modifier.weight(1f)) {
+                        Text("In the freezer", fontWeight = FontWeight.SemiBold)
+                        Text(if (frozen) "Thaw it in the fridge the night before" else "Keeps months frozen", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                    Switch(checked = frozen, onCheckedChange = { frozen = it })
+                }
             }
         },
         confirmButton = {
-            TextButton(onClick = { onSave(e.item.copy(grams = grams, expiresOnEpochDay = today + days.toLong())) }) { Text("Save") }
+            TextButton(onClick = { onSave(e.item.copy(grams = grams, expiresOnEpochDay = today + days.toLong(), frozen = frozen)) }) { Text("Save") }
         },
         dismissButton = {
             Row {
@@ -255,4 +283,77 @@ private fun EditPantryDialog(e: PantryEntry, today: Long, onDismiss: () -> Unit,
             }
         },
     )
+}
+
+// ============================ Spice rack & staples ============================
+
+data class StapleRow(val food: Food, val recipes: Int, val kept: Boolean)
+
+class StaplesViewModel(repo: Repository) : MangoViewModel(repo) {
+    val rows = combine(repo.profile, repo.foods, repo.recipes) { p, foods, recipes ->
+        val byName = foods.associateBy { it.name }
+        val usable = recipes.filter { !it.isHidden && (p == null || MealPlanner.isAllowed(it, p.dislikedIngredients, byName)) }
+        val counts = usable.flatMap { r -> r.ingredients.map { it.food }.distinct() }.groupingBy { it }.eachCount()
+        foods.filter { it.isStaple && (counts[it.name] ?: 0) > 0 }
+            .map { StapleRow(it, counts.getValue(it.name), p == null || it.name !in p.stapleOptOut) }
+            .sortedByDescending { it.recipes }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
+    fun setKept(row: StapleRow, kept: Boolean) = launchSafe { repo.setStapleKept(row.food.name, kept) }
+}
+
+@Composable
+fun StaplesCard(onClick: () -> Unit) {
+    SectionCard(Modifier.clickable(onClick = onClick)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Column(Modifier.weight(1f)) {
+                Text("Spice rack & staples", fontWeight = FontWeight.Bold)
+                Text(
+                    "Spices, oils and sauces you keep stocked yourself – left off shopping lists.",
+                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null, tint = Faint)
+        }
+    }
+}
+
+@Composable
+fun StaplesScreen(onBack: () -> Unit) {
+    val vm = mangoViewModel { StaplesViewModel(it) }
+    val rows by vm.rows.collectAsStateWithLifecycle()
+    val (spices, basics) = rows.partition { it.food.category == FoodCategory.SPICE }
+    LazyColumn(contentPadding = PaddingValues(16.dp, 4.dp, 16.dp, 24.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        item { BackHeader("Spice rack", onBack) }
+        item {
+            Text(
+                "Keep these at home and refill them when they run low. Ticked items never appear on your shopping list; " +
+                    "untick anything you'd rather buy with the weekly shop.",
+                fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        listOf("Spices & dried herbs" to spices, "Oils, sauces & basics" to basics).forEach { (title, list) ->
+            if (list.isNotEmpty()) {
+                item { SectionLabel(title, Modifier.padding(top = 8.dp)) }
+                item {
+                    GroupedCard {
+                        list.forEachIndexed { i, row ->
+                            if (i > 0) HorizontalDivider(color = Hairline)
+                            Row(Modifier.fillMaxWidth().padding(14.dp, 8.dp), verticalAlignment = Alignment.CenterVertically) {
+                                Column(Modifier.weight(1f)) {
+                                    Text(row.food.name.replaceFirstChar { it.uppercase() }, fontSize = 15.sp)
+                                    Text(
+                                        "Used in ${row.recipes} recipe${if (row.recipes == 1) "" else "s"}" +
+                                            if (row.food.name.endsWith("broth")) " · stock cubes or concentrate keep for months" else "",
+                                        fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    )
+                                }
+                                Switch(checked = row.kept, onCheckedChange = { vm.setKept(row, it) })
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

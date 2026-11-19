@@ -1,88 +1,163 @@
-# Mango 🥭
+<p align="center">
+  <img src="docs/assets/logo.svg" width="128" alt="Mango logo: an orange mango with a green leaf on a dark rounded square">
+</p>
 
-Offline-first Android app for climbing training periodization, whole-food nutrition, barcode pantry tracking and zero-food-waste meal planning.
-Everything is computed on the device with deterministic Kotlin. There is no AI, no server and no API key. The only network call is an optional Open Food Facts lookup for barcodes the app doesn't know yet.
+<h1 align="center">Mango</h1>
 
-**Stack:** Kotlin 2.1 · Jetpack Compose + Material 3 (dark theme) · Room (KSP) · Navigation Compose · CameraX + ML Kit (bundled model) · kotlinx.serialization · minSdk 26 / targetSdk 35.
+<p align="center">
+  <b>Your climbing training, meals and groceries planned for you, on your phone, without internet.</b><br>
+  A periodized program that adapts to your tested maxes, a zero-waste meal planner with 163 portion-checked recipes, and one shopping list. No account, no server, no tracking.
+</p>
 
-## Project layout
+<p align="center">
+  <a href="https://github.com/Vagharlix/Mango/releases/latest"><img alt="Latest version" src="https://img.shields.io/github/v/release/Vagharlix/Mango?include_prereleases&label=version&color=FFA62B"></a>
+  <a href="https://github.com/Vagharlix/Mango/actions/workflows/android.yml"><img alt="Build" src="https://img.shields.io/github/actions/workflow/status/Vagharlix/Mango/android.yml?label=build"></a>
+  <a href="#install-in-30-seconds"><img alt="Android 8.0 and newer" src="https://img.shields.io/badge/Android-8.0%2B-3DDC84"></a>
+  <a href="#works-offline"><img alt="100% offline" src="https://img.shields.io/badge/100%25-offline-2ea44f"></a>
+  <a href="#works-offline"><img alt="No account" src="https://img.shields.io/badge/account-none-222637"></a>
+  <a href="docs/training.md"><img alt="Every rule sourced" src="https://img.shields.io/badge/rules-research%20sourced-FFA62B"></a>
+</p>
 
-```
-app/src/main/
-├── assets/                foods.json (128 foods, USDA values) · recipes.json (112 recipes) · exercises.json (48 protocols)
-├── res/raw/               beep_short.wav · beep_long.wav (SoundPool)
-└── java/com/mango/
-    ├── MangoApp.kt        Application: creates the DB and repository, seeds assets
-    ├── MainActivity.kt
-    ├── data/              Room entities, DAOs, database, Repository, Open Food Facts client
-    ├── domain/            Pure Kotlin engines, no Android imports, unit-tested
-    │   ├── Nutrition.kt       Mifflin-St Jeor, TDEE, ISSN/ACSM macro and micronutrient targets
-    │   ├── Periodization.kt   Phase allocation, deloads, benchmark days, load calculation, timer intervals
-    │   └── MealPlanner.kt     Dislike filter, recipe scoring, anti-repetition, shopping list, FEFO deduction
-    ├── timer/             WorkoutTimerService (foreground service, wake lock, SoundPool, haptics)
-    └── ui/                Compose screens, each with its ViewModel in the same file
-```
+<p align="center">
+  <a href="#install-in-30-seconds">Install</a> ·
+  <a href="#features">Features</a> ·
+  <a href="#your-first-week">First week</a> ·
+  <a href="#faq">FAQ</a> ·
+  <a href="docs/training.md">Training science</a> ·
+  <a href="docs/meals.md">Meal planner</a> ·
+  <a href="https://github.com/Vagharlix/Mango/issues">Report a bug</a>
+</p>
 
-## Engines and their sources
+<p align="center">
+  <img src="docs/assets/train.png" width="250" alt="The Train tab: the plan strip, your latest maxes with their progress, and today's session">
+  <img src="docs/assets/meals.png" width="250" alt="The Meals tab on grocery day, with the kitchen prep card for a whole chicken">
+  <img src="docs/assets/grocery.png" width="250" alt="The shopping list with a whole chicken and what it breaks down into">
+</p>
 
-| Area | Rule | Source |
-|---|---|---|
-| BMR | Male 10W + 6.25H − 5A + 5 · Female … − 161 | Mifflin et al., *Am J Clin Nutr* 1990 |
-| TDEE | BMR × activity factor (1.2 – 1.9) | McArdle, Katch & Katch |
-| Protein | 1.6 (Base) → 1.8 (Taper) → 2.0 (Power) → 2.2 (Max Strength) g/kg | ISSN Position Stand (Jäger 2017); Morton 2018 meta-analysis |
-| Fat / carbs | Fat 25 % of energy (falls to 20 % if carbs would drop below 3 g/kg), carbs make up the rest | ACSM/AND/DC Joint Position (Thomas 2016) |
-| Micronutrients | Fibre 30 g (men) / 25 g (women), vitamin C 90 / 75 mg, ALA omega-3 1.6 / 1.1 g | IOM Dietary Reference Intakes |
-| Tendon health | Whole-food protein (glycine, proline) plus vitamin C from seasonal produce, no supplements | — |
-| Phases (fixed mode) | 35 % Base · 35 % Max Strength · 20 % Power/Endurance · 10 % Taper, rounded by largest remainder, at least 1 week each | — |
-| Evergreen mode | Endless 16-week cycle of four 4-week blocks | — |
-| Deload | Every 4th week: −40 % sets, intensity held at week-3 level | Pritchard 2015; Magnusson 2010 |
-| Taper | −50 % volume, intensity maintained | Bosquet 2007 meta-analysis |
-| Benchmark | Week 4, Day 7 of every block: 5 s max hang and weighted pull-up 1RM; results set the loads for the next block | Lattice Training |
-| Loads | added kg = %1RM × (bodyweight + 1RM added) − bodyweight, rounded to 0.5 kg; negative means pulley assistance | Lattice / Hörst |
+## Install in 30 seconds
 
-### Training equipment
+1. Download **Mango-vX.Y.Z.apk** from the [latest release](https://github.com/Vagharlix/Mango/releases/latest).
+2. Open it on your phone (Android 8.0 or newer). Allow installing unknown apps if your phone asks.
+3. Create your profile: age, height, weight, goal. The program and the week's menu are ready right away.
 
-Pick the equipment you can use right now in **Profile**, or tap **Change** on the Training screen. Changes save straight away and the whole schedule is rebuilt from them. Pick different equipment when you train at home or travel.
+To update, install the new version over the old one: your data stays.
 
-* Every exercise in `exercises.json` lists the equipment it `requires`, as groups of alternatives. For example, pull-ups need *pull-up bar or rings*, and weighted pull-ups also need *weights*.
-* When something is missing, `Periodization.SUBSTITUTES` swaps in the closest alternative that trains the same thing:
-  * max hangs → no-hang edge lifts → limit bouldering
-  * weighted pull-ups → tempo pull-ups → band rows → inverted rows
-  * overhead press → pike push-ups
-  * front lever → dragon flag → hollow body
-  * …and so on.
-* The app shows which exercise each substitute replaces. Day titles are built from what the session actually contains.
-* Hangs that call for added weight when you have no weights say to use a smaller edge instead.
-* Benchmark day only asks for the tests you can do. With no equipment at all you still get a full bodyweight and mobility plan.
+## Features
 
-The protocols (7:3 repeaters, 10 s max hangs, weighted pulls, antagonist push, front-lever and compression core work, loaded mobility, shoulder prehab) and their citations are in `exercises.json`.
+### Training that follows your real strength
 
-## Meal planning
+<p align="center">
+  <img src="docs/assets/test-day.png" width="320" alt="A test day: tuck front lever hold, max pull-ups, dips and overhead press rep-max, max push-ups, with the Enter test results button">
+</p>
 
-* **Score** = PantryMatch·40 + ExpiringUsed·30 + InSeason·20 + MacroProximity·10. Each term is normalised to 0–1. A small deterministic tie-breaker under 1 point rotates recipes that score the same.
-* **Dislikes and allergies** use whole-word matching on ingredient names and allergen groups: `pork`, `nuts`, `dairy`, `gluten` and `shellfish` all work, and `peas` does not match `peanut butter`.
-* **Anti-repetition:** a recipe is not repeated within ±3 days of a cooked or planned use.
-* **Portions** scale each recipe to the meal's share of the day's energy (25 / 30 / 30 / 15 %).
-* **Grocery-day review:** the Grocery tab shows the 7-day menu with three actions: *Swap*, *Don't like* (hides the recipe) and *Dislike an ingredient*. Each one re-plans the affected meals, and the shopping list updates live. Ticking a shopping-list item adds it to the pantry.
-* **Cooked:** deducts the ingredients from the pantry, first-expiry-first-out.
-* **Skip / dining out:** no macro compensation and no pantry deduction. The next 3 days are re-planned with a produce boost: the expiry window grows from 3 to 5 days, expiring produce counts double and the expiry weight doubles. The unused food stays in the pantry, so the next shopping list gets shorter on its own.
-* **Recipe editor:** a 4-step flow (Basics → Ingredients → Method → Review) with live macro totals. You can swap or remove ingredients. Edited recipes are marked `isUserModified`, new ones `isCustom`.
+- **Periodized program**: Base, Max Strength, Power or Endurance, then Taper, in fixed-length programs or an endless 16-week cycle. Every 4th week is a deload.
+- **Test days built in**: the end of every deload week measures your max hang, weighted pull-up, pull-ups, dips, overhead press, push-ups and front lever. The first week calibrates anything you have never tested.
+- **Loads that adapt**: from the day after a test, hangboard and pull-up loads are a % of your 1RM, push-ups and pull-ups a share of your max reps, front lever holds a share of your best hold.
+- **Antagonists every week**: presses, dips, push-ups, wrist and finger extensors, shoulder health work.
+- **Your equipment**: tick what you have (hangboard, wall, rings, weights, dumbbells…). Anything missing is replaced by the closest alternative.
+- **Guided timer**: a whole session runs hands-free, with beeps and vibrations, even with the screen off.
 
-## Barcodes
+### Meals that match your training
 
-ML Kit (bundled model, works offline) reads EAN-13/8 and UPC-A/E barcodes. The lookup order is:
+<p align="center">
+  <img src="docs/assets/recipes.png" width="320" alt="The Boeuf Bourguignon recipe page: quantities for one serving, energy and macros, ingredients">
+</p>
 
-1. The local barcode cache.
-2. If online, Open Food Facts.
-3. If neither finds it, you pick the matching food from the local catalog.
+- **Daily targets from your phase**: calories, protein (1.6 to 2.2 g/kg), carbs, fat, fibre, vitamin C and omega-3 follow the training block.
+- **Zero waste**: recipes are chosen for what's in your pantry and what expires first. Skip a meal and the next days use up its ingredients.
+- **Simple weeks**: long recipes are batch cooked for 2 to 4 meals, 2 breakfasts rotate, and interchangeable foods are merged, so a typical week has about a third fewer different items to buy.
+- **Never the same dish two days in a row**, and your choices of carbs (rice, pasta, potatoes…) and meats are respected.
+- **163 recipes** sized for one person, including French, Italian, Japanese, Chinese and Southeast Asian classics with a link to the original. Remove any recipe in one tap, write your own.
 
-Each answer is cached, so a second scan of the same product works offline. The seed catalog holds generic foods rather than real UPCs, because UPCs are product-specific and can't be pre-populated honestly. The catalog grows as you scan.
+### A smarter shopping list
 
-## Build and test
+<p align="center">
+  <img src="docs/assets/chicken.gif" width="300" alt="Whole chicken in three steps: the bird on the shopping list, the kitchen prep card telling where each piece goes, and the pieces in the pantry, some frozen">
+  <img src="docs/assets/kitchen.png" width="300" alt="Options, Kitchen: whole chicken mode, bird size and the appliances you have">
+</p>
 
-```bash
-./gradlew assembleDebug
-./gradlew testDebugUnitTest   # domain engine tests (app/src/test)
-```
+- **Whole chicken**: Mango can buy whole birds and plan every piece: breasts, thighs, drumsticks and wings over the week or in one pot, the frame turned into stock, the rest frozen. Pieces are counted, not weighed.
+- **Kitchen prep card**: how to break down the bird, when to make stock, what to thaw tonight, what to freeze before it goes off.
+- **Barcode pantry**: scan products into the pantry. Unknown barcodes are looked up on Open Food Facts once, then work offline.
+- **Spice rack**: spices, sauces and stock you keep stocked never clutter the list.
+- **Can't find it?**: pick a replacement in the shop and the week's meals follow.
 
-Requires JDK 17+ and the Android SDK (platform 35).
+### Works offline
+
+Everything runs on the phone: the program, the nutrition targets and the meal planner are plain Kotlin code, not AI. No account, no ads, nothing sent anywhere. The only optional internet use is looking up an unknown barcode on Open Food Facts.
+
+Your data stays yours: **Options → Backup & restore** saves it to a file you choose, and can keep that file up to date after every change.
+
+## Your first week
+
+1. **Profile**: enter your body data and goal (bouldering, sport climbing or general strength).
+2. **Equipment**: tap the dumbbell button on the Train tab and tick what you can use.
+3. **Calibration**: the first week starts with test sessions. Enter your results and every load adapts from the next day.
+4. **Grocery day**: review the menu in the Grocery tab, swap what you don't fancy, then tick items as you shop. They go straight into the pantry.
+5. **Every day**: tap *Cooked* or *Skip / Dining out* on each meal, and *Start session* on the Train tab.
+
+## FAQ
+
+<details>
+<summary><b>My phone blocks the installation</b></summary>
+
+Android asks for permission the first time you install an app outside the Play Store. Allow it for the app you used to open the file (Files, Chrome…), then open the APK again.
+</details>
+
+<details>
+<summary><b>Android says the app can't be updated</b></summary>
+
+The installed app was signed with a different key (for example a test build). Save a backup in **Options → Backup & restore**, uninstall the old app, install the new one, then choose *Restore a backup* on the welcome screen. Releases are all signed with the same key, so later updates install over each other.
+</details>
+
+<details>
+<summary><b>Where is my data, and how do I move it to a new phone?</b></summary>
+
+Everything is stored inside the app on your phone. In **Options → Backup & restore**, save a backup file (or turn on auto-save) to a folder such as Downloads. On the new phone, install Mango and choose *Restore a backup* on the welcome screen.
+</details>
+
+<details>
+<summary><b>I don't have a hangboard / weights / a climbing wall</b></summary>
+
+Untick it in your equipment. Every exercise that needs it is replaced by the closest alternative, and test days only include the tests you can do. With no equipment at all you still get a full bodyweight and mobility plan.
+</details>
+
+<details>
+<summary><b>Where do the rules and numbers come from?</b></summary>
+
+From sports science and nutrition research: ISSN and ACSM position stands, Mifflin-St Jeor, Lattice Training, USDA FoodData Central and others. Every rule and its source is listed in [docs/training.md](docs/training.md) and [docs/meals.md](docs/meals.md).
+</details>
+
+<details>
+<summary><b>What about iPhone?</b></summary>
+
+Not available for now.
+</details>
+
+## Report a bug or suggest an idea
+
+Open an [issue](https://github.com/Vagharlix/Mango/issues) with a screenshot and your version (shown in **Options → About & sources**).
+
+## Documentation
+
+- [Training and nutrition](docs/training.md): periodization, test days, loads, equipment substitutions, and the source of every rule.
+- [Meals, grocery and pantry](docs/meals.md): how recipes are scored, batch cooking, the shopping list, whole chicken, barcodes.
+- [Development](docs/development.md): project layout, build and test, backup format.
+
+## Built with AI
+
+Mango was created with the help of AI.
+
+I reviewed every plan and set the direction for how the program works.
+
+The logo is AI-generated. If you are an artist and want to contribute to open source, feel free to make a real logo.
+
+## Credits
+
+- Food data: **[USDA FoodData Central](https://fdc.nal.usda.gov)** and **[Open Food Facts](https://world.openfoodfacts.org)** (ODbL).
+- Training methods: **[Lattice Training](https://latticetraining.com)**, Eric Hörst's *Training for Climbing*, Jared Vagy's *Climb Injury-Free*.
+- Recipes written after the classics of Felicity Cloake, GialloZafferano, Marmiton, Just One Cookbook, The Woks of Life, Fuchsia Dunlop, Hot Thai Kitchen, Andrea Nguyen, RecipeTin Eats and Andy Cooks.
+
+---
+
+<sub>For personal use. Mango gives general training and nutrition guidance, not medical advice.</sub>

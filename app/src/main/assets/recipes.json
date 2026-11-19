@@ -1160,7 +1160,8 @@
    "Dice cucumber, tomato and onion",
    "Toss everything with lemon juice and olive oil",
    "Top with crumbled feta, olives and parsley"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Chicken Burrito Bowl",
@@ -1216,7 +1217,8 @@
    "Saute pepper and corn",
    "Warm beans",
    "Assemble bowls and top with avocado, cilantro and lime"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Roasted Squash & Lentil Salad",
@@ -1259,7 +1261,8 @@
    "Simmer lentils 20 minutes and drain",
    "Toss lentils, squash and arugula with balsamic and remaining oil",
    "Top with feta and walnuts"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Tuna Nicoise Salad",
@@ -1511,7 +1514,8 @@
    "Spread on tortillas with beans, spinach and cheese",
    "Fold and toast in a dry pan 3 minutes per side",
    "Serve with chopped tomato"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Peanut Tofu Noodle Salad",
@@ -1567,7 +1571,8 @@
    "Whisk peanut butter, soy sauce, lime, grated ginger and a splash of water",
    "Toss noodles, shredded cabbage, carrot, edamame and tofu with the dressing",
    "Top with cilantro"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Egg & Avocado Grain Bowl",
@@ -1679,7 +1684,8 @@
    "Simmer 25 minutes",
    "Stir in spinach until wilted",
    "Serve with bread"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Chicken Kale Caesar (Yogurt Dressing)",
@@ -1839,7 +1845,8 @@
    "Add broccoli, garlic and ginger and stir-fry 4 minutes",
    "Add soy sauce and honey and toss",
    "Serve over rice with spring onion"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Baked Falafel-Style Chickpea Bowl",
@@ -1899,7 +1906,8 @@
    "Cook quinoa",
    "Whisk tahini, lemon and yogurt",
    "Serve with chopped cucumber, tomato and cabbage"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Sardine & White Bean Salad",
@@ -2014,7 +2022,8 @@
    "Add pasta, zucchini and beans and cook 10 minutes",
    "Stir in kale",
    "Serve with parmesan"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Chicken, Leek & Barley Soup",
@@ -2065,7 +2074,8 @@
    "Soften onion, leek, carrot and celery",
    "Add barley, broth and chicken and simmer 35 minutes",
    "Shred chicken back in and finish with parsley"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Tofu Banh Mi Bowl",
@@ -2163,7 +2173,8 @@
    "Warm beans with spinach, oil and paprika",
    "Split potatoes and fill with beans and cottage cheese",
    "Top with spring onion"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Tuna & White Bean Pasta Salad",
@@ -2273,7 +2284,8 @@
    "Whisk lemon, oil, cumin and cinnamon",
    "Toss quinoa, chickpeas, carrot, raisins and parsley with the dressing",
    "Top with toasted almonds and serve with yogurt"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Egg Fried Brown Rice with Peas",
@@ -2329,7 +2341,8 @@
    "Stir-fry garlic, ginger, carrot, peas and edamame 4 minutes",
    "Add rice, eggs and soy sauce and toss until hot",
    "Finish with spring onion"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Spicy Red Lentil Dal",
@@ -2394,7 +2407,8 @@
    "Add lentils, tomatoes and 600 ml water and simmer 20 minutes",
    "Stir in coconut milk and spinach",
    "Finish with lime"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Chicken Shawarma Salad",
@@ -2458,7 +2472,8 @@
    "Whisk tahini with lemon and water",
    "Toss lettuce, tomato, cucumber and onion",
    "Top with chicken and tahini and serve with bread"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Pumpkin & Feta Barley Risotto",
@@ -2514,7 +2529,8 @@
    "Add broth gradually and simmer 35 minutes, stirring",
    "Fold in spinach and white beans",
    "Top with feta and pumpkin seeds"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Mackerel, Beetroot & Potato Salad",
@@ -2817,7 +2833,8 @@
    "Add spices and toast 1 minute",
    "Add tomatoes and beans and simmer 25 minutes",
    "Serve over rice with a spoon of yogurt"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Chicken Stir-Fry with Brown Rice",
@@ -2873,7 +2890,8 @@
    "Add vegetables, garlic and ginger and cook 4 minutes",
    "Add soy sauce and toss",
    "Serve over rice"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Lean Beef Bolognese",
@@ -2933,7 +2951,8 @@
    "Add tomato paste and tomatoes and simmer 30 minutes",
    "Cook pasta",
    "Toss and serve with parmesan and basil"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Coconut Chicken Curry",
@@ -2997,7 +3016,8 @@
    "Add diced chicken and brown",
    "Add coconut milk and vegetables and simmer 15 minutes",
    "Finish with lime and cilantro"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Lemon Herb Cod with Quinoa & Asparagus",
@@ -3100,7 +3120,8 @@
    "Add curry powder, tomatoes and chickpeas and simmer 15 minutes",
    "Stir in coconut milk and spinach",
    "Serve with rice and yogurt"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Pork Tenderloin with Apples & Brussels Sprouts",
@@ -3139,7 +3160,8 @@
    "Add sprouts and apple wedges",
    "Brush pork with mustard, sear and add to the tray",
    "Roast 20 minutes until pork reaches 63 C and rest 5 minutes"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Shrimp & Zucchini Whole Wheat Linguine",
@@ -3307,7 +3329,8 @@
    "Stir in tomatoes, spinach and quinoa",
    "Fill halved peppers and top with mozzarella",
    "Bake at 190 C for 25 minutes"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Moroccan Chicken & Chickpea Tagine",
@@ -3375,7 +3398,8 @@
    "Add carrots, tomatoes, chickpeas, raisins, broth and chicken",
    "Simmer covered 30 minutes",
    "Serve over quinoa with parsley"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Beef & Barley Stew",
@@ -3431,7 +3455,8 @@
    "Add tomato paste, barley, broth, carrot, potato and beef",
    "Simmer covered 70 minutes until tender",
    "Finish with parsley"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Miso-Glazed Salmon with Greens",
@@ -3546,7 +3571,8 @@
    "Add chopped mushrooms and cook until browned",
    "Add lentils, tomato paste, tomatoes and 400 ml water and simmer 30 minutes",
    "Cook pasta and serve with parmesan"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Sheet-Pan Chicken Fajitas",
@@ -3605,7 +3631,8 @@
    "Roast at 220 C for 20 minutes",
    "Warm tortillas",
    "Fill with chicken and vegetables, avocado, yogurt, lime and cilantro"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Mushroom & White Bean Risotto",
@@ -3661,7 +3688,8 @@
    "Toast rice 1 minute",
    "Add hot broth a ladle at a time for 18 minutes, stirring",
    "Fold in beans, spinach, mushrooms, butter and parmesan"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Baked Cod with Tomatoes & Olives",
@@ -3824,7 +3852,8 @@
    "Grill chicken and slice",
    "Cook quinoa",
    "Serve topped with basil"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Butternut Squash & Red Lentil Curry",
@@ -3885,7 +3914,8 @@
    "Simmer 20 minutes",
    "Stir in coconut milk and spinach",
    "Garnish with cilantro and serve with yogurt"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Mustard Herb Pork with Root Vegetables",
@@ -3932,7 +3962,8 @@
    "Coat pork in mustard, garlic and parsley",
    "Add to the tray and roast 20 minutes",
    "Rest and slice"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Salmon & Kale Pesto Pasta",
@@ -4048,7 +4079,8 @@
    "Add soy sauce, honey and chili flakes and reduce",
    "Julienne carrot and cucumber",
    "Serve beef over rice with vegetables, lettuce, sesame oil and spring onion"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Cauliflower & Chickpea Tikka",
@@ -4103,62 +4135,78 @@
    "Simmer onion, garlic, ginger, remaining spice, tomatoes and chickpeas 15 minutes",
    "Stir in cauliflower and remaining yogurt off the heat",
    "Serve with rice and cilantro"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Chicken Cacciatore",
   "mealType": "DINNER",
   "cuisine": "Italian",
-  "servings": 2,
-  "prepMinutes": 50,
+  "servings": 4,
+  "prepMinutes": 60,
   "ingredients": [
    {
+    "food": "chicken breast",
+    "grams": 370.0
+   },
+   {
     "food": "chicken thigh",
-    "grams": 350.0
-   },
-   {
-    "food": "canned tomatoes",
-    "grams": 400.0
-   },
-   {
-    "food": "bell pepper",
     "grams": 200.0
    },
    {
-    "food": "onion",
-    "grams": 100.0
+    "food": "chicken drumstick",
+    "grams": 200.0
    },
    {
-    "food": "mushrooms",
-    "grams": 150.0
-   },
-   {
-    "food": "olives",
-    "grams": 40.0
-   },
-   {
-    "food": "garlic",
-    "grams": 8.0
-   },
-   {
-    "food": "olive oil",
-    "grams": 10.0
-   },
-   {
-    "food": "whole wheat pasta",
+    "food": "chicken wings",
     "grams": 160.0
    },
    {
+    "food": "canned tomatoes",
+    "grams": 800.0
+   },
+   {
+    "food": "bell pepper",
+    "grams": 400.0
+   },
+   {
+    "food": "onion",
+    "grams": 200.0
+   },
+   {
+    "food": "mushrooms",
+    "grams": 300.0
+   },
+   {
+    "food": "olives",
+    "grams": 80.0
+   },
+   {
+    "food": "garlic",
+    "grams": 16.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 20.0
+   },
+   {
+    "food": "whole wheat pasta",
+    "grams": 320.0
+   },
+   {
     "food": "basil",
-    "grams": 10.0
+    "grams": 20.0
    }
   ],
   "steps": [
-   "Brown chicken in oil",
+   "Joint the chicken into 8-10 pieces",
+   "Brown the pieces in oil, skin side first, and set aside",
    "Saute onion, pepper, mushrooms and garlic",
-   "Add tomatoes, olives and chicken and simmer 30 minutes",
-   "Serve over pasta with basil"
-  ]
+   "Add tomatoes, olives and the legs, wings and thighs and simmer 20 minutes, then add the breast pieces for 15 more",
+   "Serve over pasta with basil",
+   "Keep or freeze the rest in portions"
+  ],
+  "batchMeals": 4
  },
  {
   "name": "Grilled Mackerel with Lentils & Leeks",
@@ -4261,7 +4309,8 @@
    "Layer eggplant, sauce and mozzarella",
    "Top with parmesan and bake 25 minutes",
    "Finish with basil"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Turkey Meatballs with Zucchini & Rice",
@@ -4321,7 +4370,8 @@
    "Brown in oil",
    "Add onion, remaining garlic, tomatoes and diced zucchini and simmer 20 minutes",
    "Serve over rice with basil"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Shrimp & Sweetcorn Summer Skillet",
@@ -4427,7 +4477,8 @@
    "Rub chicken with mustard and lemon",
    "Roast everything at 210 C for 35 minutes",
    "Finish with parsley"
-  ]
+  ],
+  "batchMeals": 2
  },
  {
   "name": "Japanese Tofu Curry",
@@ -4483,7 +4534,8 @@
    "Add curry powder, potato, carrot, grated apple and broth and simmer 20 minutes",
    "Add cubed tofu, peas and soy sauce for 5 minutes",
    "Serve with rice"
-  ]
+  ],
+  "batchMeals": 3
  },
  {
   "name": "Greek Yogurt with Walnuts & Honey",
@@ -5133,5 +5185,3119 @@
    "Off the heat whisk in miso",
    "Top with spring onion"
   ]
+ },
+ {
+  "name": "Quiche Lorraine",
+  "mealType": "LUNCH",
+  "cuisine": "French",
+  "servings": 4,
+  "prepMinutes": 70,
+  "ingredients": [
+   {
+    "food": "shortcrust pastry",
+    "grams": 230.0
+   },
+   {
+    "food": "eggs",
+    "grams": 300.0
+   },
+   {
+    "food": "milk",
+    "grams": 250.0
+   },
+   {
+    "food": "creme fraiche (15%)",
+    "grams": 150.0
+   },
+   {
+    "food": "lardons",
+    "grams": 150.0
+   },
+   {
+    "food": "emmental",
+    "grams": 60.0
+   },
+   {
+    "food": "nutmeg",
+    "grams": 1.0
+   },
+   {
+    "food": "romaine lettuce",
+    "grams": 200.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 10.0
+   },
+   {
+    "food": "dijon mustard",
+    "grams": 10.0
+   },
+   {
+    "food": "lemon",
+    "grams": 15.0
+   }
+  ],
+  "steps": [
+   "Heat the oven to 200 C. Line a deep 24 cm tart tin with the pastry, prick the base and chill 20 minutes",
+   "Blind bake 15 minutes with baking beans, then 5 minutes without",
+   "Fry the lardons until golden and drain on kitchen paper",
+   "Whisk eggs, milk, creme fraiche, nutmeg and black pepper",
+   "Scatter lardons and grated emmental in the case and pour in the custard",
+   "Bake at 170 C for 30-35 minutes until just set with a slight wobble, then rest 10 minutes",
+   "Serve warm with the lettuce dressed in olive oil, mustard and lemon"
+  ],
+  "batchMeals": 2,
+  "source": "Felicity Cloake, The Guardian - \"How to cook the perfect...\" quiche lorraine"
+ },
+ {
+  "name": "Hachis Parmentier",
+  "mealType": "DINNER",
+  "cuisine": "French",
+  "servings": 4,
+  "prepMinutes": 60,
+  "ingredients": [
+   {
+    "food": "lean beef mince",
+    "grams": 500.0
+   },
+   {
+    "food": "potato",
+    "grams": 900.0
+   },
+   {
+    "food": "milk",
+    "grams": 150.0
+   },
+   {
+    "food": "butter",
+    "grams": 15.0
+   },
+   {
+    "food": "onion",
+    "grams": 150.0
+   },
+   {
+    "food": "carrot",
+    "grams": 150.0
+   },
+   {
+    "food": "garlic",
+    "grams": 8.0
+   },
+   {
+    "food": "tomato paste",
+    "grams": 30.0
+   },
+   {
+    "food": "vegetable broth",
+    "grams": 150.0
+   },
+   {
+    "food": "emmental",
+    "grams": 50.0
+   },
+   {
+    "food": "nutmeg",
+    "grams": 1.0
+   },
+   {
+    "food": "dried thyme",
+    "grams": 1.0
+   },
+   {
+    "food": "green beans",
+    "grams": 400.0
+   }
+  ],
+  "steps": [
+   "Boil the peeled potatoes 20 minutes and mash with warm milk, butter and nutmeg",
+   "Brown the beef with finely chopped onion, carrot and garlic",
+   "Stir in tomato paste and thyme, add the broth and simmer 10 minutes",
+   "Spread the meat in a baking dish, cover with the mash and grated emmental",
+   "Bake at 200 C for 25 minutes until golden",
+   "Serve with steamed green beans"
+  ],
+  "batchMeals": 3,
+  "source": "Marmiton - top-rated hachis parmentier"
+ },
+ {
+  "name": "Poulet Basquaise",
+  "mealType": "DINNER",
+  "cuisine": "French",
+  "servings": 4,
+  "prepMinutes": 60,
+  "ingredients": [
+   {
+    "food": "chicken breast",
+    "grams": 370.0
+   },
+   {
+    "food": "chicken thigh",
+    "grams": 200.0
+   },
+   {
+    "food": "chicken drumstick",
+    "grams": 200.0
+   },
+   {
+    "food": "chicken wings",
+    "grams": 160.0
+   },
+   {
+    "food": "bell pepper",
+    "grams": 450.0
+   },
+   {
+    "food": "tomato",
+    "grams": 400.0
+   },
+   {
+    "food": "onion",
+    "grams": 150.0
+   },
+   {
+    "food": "garlic",
+    "grams": 10.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 20.0
+   },
+   {
+    "food": "white wine",
+    "grams": 100.0
+   },
+   {
+    "food": "chili flakes",
+    "grams": 2.0
+   },
+   {
+    "food": "dried thyme",
+    "grams": 1.0
+   },
+   {
+    "food": "white rice",
+    "grams": 280.0
+   }
+  ],
+  "steps": [
+   "Joint the chicken into 8-10 pieces (or use the pieces from your broken-down bird)",
+   "Brown the pieces in olive oil, skin side first, and set aside",
+   "Soften sliced onion and peppers 10 minutes, add garlic",
+   "Add chopped tomatoes, wine, chili (Espelette pepper if you have it) and thyme",
+   "Return the chicken, cover and simmer 35 minutes - the breast pieces for the last 15 only",
+   "Cook the rice and serve together",
+   "Cool the rest quickly and keep or freeze in portions"
+  ],
+  "batchMeals": 4,
+  "source": "Marmiton - top-rated poulet basquaise"
+ },
+ {
+  "name": "Boeuf Bourguignon",
+  "mealType": "DINNER",
+  "cuisine": "French",
+  "servings": 4,
+  "prepMinutes": 180,
+  "ingredients": [
+   {
+    "food": "stewing beef",
+    "grams": 700.0
+   },
+   {
+    "food": "lardons",
+    "grams": 100.0
+   },
+   {
+    "food": "red wine",
+    "grams": 500.0
+   },
+   {
+    "food": "onion",
+    "grams": 200.0
+   },
+   {
+    "food": "carrot",
+    "grams": 300.0
+   },
+   {
+    "food": "mushrooms",
+    "grams": 250.0
+   },
+   {
+    "food": "garlic",
+    "grams": 10.0
+   },
+   {
+    "food": "tomato paste",
+    "grams": 20.0
+   },
+   {
+    "food": "all-purpose flour",
+    "grams": 20.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 15.0
+   },
+   {
+    "food": "dried thyme",
+    "grams": 1.0
+   },
+   {
+    "food": "vegetable broth",
+    "grams": 200.0
+   },
+   {
+    "food": "potato",
+    "grams": 800.0
+   }
+  ],
+  "steps": [
+   "Heat the oven to 150 C. Brown the beef cubes in batches in oil and set aside",
+   "Fry the lardons, then soften onion and carrot in the fat",
+   "Sprinkle over the flour, stir in tomato paste and garlic",
+   "Pour in the wine and broth, add thyme and the beef, bring to a simmer",
+   "Cover and braise in the oven 2.5 hours",
+   "Brown the mushrooms and add them for the last 30 minutes",
+   "Serve with boiled potatoes"
+  ],
+  "batchMeals": 3,
+  "source": "Felicity Cloake, The Guardian - \"How to cook the perfect...\" boeuf bourguignon"
+ },
+ {
+  "name": "Blanquette de Veau",
+  "mealType": "DINNER",
+  "cuisine": "French",
+  "servings": 4,
+  "prepMinutes": 120,
+  "ingredients": [
+   {
+    "food": "veal",
+    "grams": 700.0
+   },
+   {
+    "food": "carrot",
+    "grams": 300.0
+   },
+   {
+    "food": "onion",
+    "grams": 150.0
+   },
+   {
+    "food": "leek",
+    "grams": 150.0
+   },
+   {
+    "food": "mushrooms",
+    "grams": 250.0
+   },
+   {
+    "food": "chicken broth",
+    "grams": 800.0
+   },
+   {
+    "food": "butter",
+    "grams": 20.0
+   },
+   {
+    "food": "all-purpose flour",
+    "grams": 25.0
+   },
+   {
+    "food": "creme fraiche (15%)",
+    "grams": 120.0
+   },
+   {
+    "food": "eggs",
+    "grams": 50.0
+   },
+   {
+    "food": "lemon",
+    "grams": 20.0
+   },
+   {
+    "food": "white rice",
+    "grams": 280.0
+   },
+   {
+    "food": "parsley",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Simmer the veal in the broth with carrot, onion and leek for 1.5 hours, skimming",
+   "Melt butter, stir in flour 1 minute, then whisk in 500 ml of strained cooking liquid until smooth",
+   "Add the mushrooms and cook 10 minutes",
+   "Off the heat, whisk creme fraiche, egg yolk and lemon juice and stir into the sauce",
+   "Return veal and vegetables to the sauce",
+   "Serve with rice and parsley"
+  ],
+  "batchMeals": 3,
+  "source": "Marmiton - top-rated blanquette de veau"
+ },
+ {
+  "name": "Petit Sale aux Lentilles",
+  "mealType": "DINNER",
+  "cuisine": "French",
+  "servings": 4,
+  "prepMinutes": 70,
+  "ingredients": [
+   {
+    "food": "pork tenderloin",
+    "grams": 500.0
+   },
+   {
+    "food": "lardons",
+    "grams": 100.0
+   },
+   {
+    "food": "lentils",
+    "grams": 280.0
+   },
+   {
+    "food": "carrot",
+    "grams": 250.0
+   },
+   {
+    "food": "onion",
+    "grams": 150.0
+   },
+   {
+    "food": "garlic",
+    "grams": 8.0
+   },
+   {
+    "food": "dijon mustard",
+    "grams": 15.0
+   },
+   {
+    "food": "dried thyme",
+    "grams": 1.0
+   },
+   {
+    "food": "chicken broth",
+    "grams": 900.0
+   },
+   {
+    "food": "parsley",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Brown the lardons, then the sliced pork, and set aside",
+   "Soften onion, carrot and garlic",
+   "Add rinsed green lentils, thyme and broth and simmer 25 minutes",
+   "Return the pork and lardons for the last 10 minutes",
+   "Stir in the mustard and finish with parsley"
+  ],
+  "batchMeals": 3,
+  "source": "Marmiton - top-rated petit sale aux lentilles"
+ },
+ {
+  "name": "Soupe au Pistou",
+  "mealType": "LUNCH",
+  "cuisine": "French",
+  "servings": 4,
+  "prepMinutes": 50,
+  "ingredients": [
+   {
+    "food": "white beans",
+    "grams": 400.0
+   },
+   {
+    "food": "green beans",
+    "grams": 200.0
+   },
+   {
+    "food": "zucchini",
+    "grams": 300.0
+   },
+   {
+    "food": "potato",
+    "grams": 300.0
+   },
+   {
+    "food": "carrot",
+    "grams": 200.0
+   },
+   {
+    "food": "leek",
+    "grams": 150.0
+   },
+   {
+    "food": "tomato",
+    "grams": 300.0
+   },
+   {
+    "food": "whole wheat pasta",
+    "grams": 120.0
+   },
+   {
+    "food": "vegetable broth",
+    "grams": 1400.0
+   },
+   {
+    "food": "basil",
+    "grams": 30.0
+   },
+   {
+    "food": "garlic",
+    "grams": 10.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 30.0
+   },
+   {
+    "food": "parmesan",
+    "grams": 50.0
+   }
+  ],
+  "steps": [
+   "Simmer diced potato, carrot and leek in the broth 15 minutes",
+   "Add zucchini, green beans, tomato, white beans and pasta and cook 10 minutes",
+   "Pound or blend basil, garlic, olive oil and parmesan into a pistou",
+   "Serve the soup with a spoonful of pistou stirred into each bowl"
+  ],
+  "batchMeals": 3,
+  "source": "Marmiton - top-rated soupe au pistou"
+ },
+ {
+  "name": "Poulet a la Moutarde",
+  "mealType": "DINNER",
+  "cuisine": "French",
+  "servings": 2,
+  "prepMinutes": 35,
+  "ingredients": [
+   {
+    "food": "chicken breast",
+    "grams": 320.0
+   },
+   {
+    "food": "dijon mustard",
+    "grams": 30.0
+   },
+   {
+    "food": "creme fraiche (15%)",
+    "grams": 100.0
+   },
+   {
+    "food": "onion",
+    "grams": 80.0
+   },
+   {
+    "food": "white wine",
+    "grams": 60.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 10.0
+   },
+   {
+    "food": "green beans",
+    "grams": 300.0
+   },
+   {
+    "food": "potato",
+    "grams": 400.0
+   },
+   {
+    "food": "dried thyme",
+    "grams": 1.0
+   }
+  ],
+  "steps": [
+   "Boil the potatoes 15 minutes",
+   "Brown the chicken in oil 5 minutes per side and set aside",
+   "Soften the onion, deglaze with wine",
+   "Stir in mustard, creme fraiche and thyme, return the chicken and simmer 8 minutes",
+   "Serve with potatoes and steamed green beans"
+  ],
+  "batchMeals": 2,
+  "source": "Marmiton - top-rated poulet a la moutarde"
+ },
+ {
+  "name": "Galettes Completes",
+  "mealType": "LUNCH",
+  "cuisine": "French",
+  "servings": 2,
+  "prepMinutes": 25,
+  "ingredients": [
+   {
+    "food": "buckwheat flour",
+    "grams": 120.0
+   },
+   {
+    "food": "eggs",
+    "grams": 150.0
+   },
+   {
+    "food": "cooked ham",
+    "grams": 120.0
+   },
+   {
+    "food": "emmental",
+    "grams": 50.0
+   },
+   {
+    "food": "butter",
+    "grams": 10.0
+   },
+   {
+    "food": "arugula",
+    "grams": 60.0
+   },
+   {
+    "food": "tomato",
+    "grams": 150.0
+   }
+  ],
+  "steps": [
+   "Whisk the buckwheat flour with 300 ml water and a pinch of salt and rest 30 minutes (or overnight)",
+   "Cook a thin galette in a hot buttered pan",
+   "Crack an egg in the centre, add ham and grated emmental",
+   "When the white sets, fold the edges in to make a square",
+   "Serve with arugula and sliced tomato"
+  ],
+  "source": "Marmiton - top-rated galette complete"
+ },
+ {
+  "name": "Croque-Monsieur",
+  "mealType": "LUNCH",
+  "cuisine": "French",
+  "servings": 1,
+  "prepMinutes": 20,
+  "ingredients": [
+   {
+    "food": "whole wheat bread",
+    "grams": 100.0
+   },
+   {
+    "food": "cooked ham",
+    "grams": 60.0
+   },
+   {
+    "food": "emmental",
+    "grams": 30.0
+   },
+   {
+    "food": "milk",
+    "grams": 80.0
+   },
+   {
+    "food": "all-purpose flour",
+    "grams": 8.0
+   },
+   {
+    "food": "butter",
+    "grams": 5.0
+   },
+   {
+    "food": "nutmeg",
+    "grams": 0.5
+   },
+   {
+    "food": "romaine lettuce",
+    "grams": 80.0
+   },
+   {
+    "food": "tomato",
+    "grams": 100.0
+   }
+  ],
+  "steps": [
+   "Make a quick bechamel: melt butter, stir in flour, whisk in milk and nutmeg until thick",
+   "Spread a little bechamel on the bread, add ham and half the emmental, close the sandwich",
+   "Top with the rest of the bechamel and emmental",
+   "Bake at 220 C or grill 8-10 minutes until bubbling",
+   "Serve with a lettuce and tomato salad"
+  ],
+  "source": "Marmiton - top-rated croque-monsieur"
+ },
+ {
+  "name": "Lasagne alla Bolognese",
+  "mealType": "DINNER",
+  "cuisine": "Italian",
+  "servings": 4,
+  "prepMinutes": 150,
+  "ingredients": [
+   {
+    "food": "lasagna sheets",
+    "grams": 250.0
+   },
+   {
+    "food": "lean beef mince",
+    "grams": 500.0
+   },
+   {
+    "food": "onion",
+    "grams": 100.0
+   },
+   {
+    "food": "carrot",
+    "grams": 100.0
+   },
+   {
+    "food": "celery",
+    "grams": 80.0
+   },
+   {
+    "food": "canned tomatoes",
+    "grams": 400.0
+   },
+   {
+    "food": "tomato paste",
+    "grams": 30.0
+   },
+   {
+    "food": "red wine",
+    "grams": 100.0
+   },
+   {
+    "food": "milk",
+    "grams": 500.0
+   },
+   {
+    "food": "butter",
+    "grams": 25.0
+   },
+   {
+    "food": "all-purpose flour",
+    "grams": 30.0
+   },
+   {
+    "food": "nutmeg",
+    "grams": 1.0
+   },
+   {
+    "food": "parmesan",
+    "grams": 60.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 10.0
+   },
+   {
+    "food": "arugula",
+    "grams": 120.0
+   }
+  ],
+  "steps": [
+   "Ragu: soften finely chopped onion, carrot and celery in oil, then brown the beef",
+   "Add the wine and let it evaporate, then tomato paste, tomatoes and 100 ml of the milk",
+   "Simmer very gently 2 hours (best made the day before)",
+   "Bechamel: melt butter, stir in flour 1 minute, whisk in 400 ml milk until thick, season with nutmeg",
+   "Layer ragu, sheets, bechamel and parmesan 5-6 times, ending with bechamel and parmesan",
+   "Bake at 180 C for 40 minutes and rest 15 minutes",
+   "Serve with dressed arugula"
+  ],
+  "batchMeals": 3,
+  "source": "Accademia Italiana della Cucina (registered Bologna recipe) via GialloZafferano; Felicity Cloake, The Guardian - \"How to cook the perfect...\" lasagne"
+ },
+ {
+  "name": "Ossobuco alla Milanese with Saffron Risotto",
+  "mealType": "DINNER",
+  "cuisine": "Italian",
+  "servings": 2,
+  "prepMinutes": 120,
+  "ingredients": [
+   {
+    "food": "veal",
+    "grams": 340.0
+   },
+   {
+    "food": "all-purpose flour",
+    "grams": 15.0
+   },
+   {
+    "food": "onion",
+    "grams": 80.0
+   },
+   {
+    "food": "carrot",
+    "grams": 80.0
+   },
+   {
+    "food": "celery",
+    "grams": 60.0
+   },
+   {
+    "food": "white wine",
+    "grams": 100.0
+   },
+   {
+    "food": "canned tomatoes",
+    "grams": 150.0
+   },
+   {
+    "food": "chicken broth",
+    "grams": 600.0
+   },
+   {
+    "food": "lemon",
+    "grams": 15.0
+   },
+   {
+    "food": "parsley",
+    "grams": 10.0
+   },
+   {
+    "food": "garlic",
+    "grams": 5.0
+   },
+   {
+    "food": "white rice",
+    "grams": 140.0
+   },
+   {
+    "food": "parmesan",
+    "grams": 30.0
+   },
+   {
+    "food": "butter",
+    "grams": 15.0
+   },
+   {
+    "food": "saffron",
+    "grams": 0.2
+   },
+   {
+    "food": "olive oil",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Dust the veal in flour and brown in oil",
+   "Soften onion, carrot and celery, add wine and tomatoes, return the veal",
+   "Cover and simmer 1.5 hours with a little broth, adding more if needed",
+   "Risotto: toast rice in half the butter, add hot broth a ladle at a time for 18 minutes, then saffron, parmesan and the rest of the butter",
+   "Gremolata: chop lemon zest, garlic and parsley and scatter over the veal",
+   "Serve the ossobuco on the risotto"
+  ],
+  "source": "GialloZafferano - classic version ossobuco alla milanese"
+ },
+ {
+  "name": "Pasta e Fagioli",
+  "mealType": "LUNCH",
+  "cuisine": "Italian",
+  "servings": 4,
+  "prepMinutes": 45,
+  "ingredients": [
+   {
+    "food": "white beans",
+    "grams": 500.0
+   },
+   {
+    "food": "whole wheat pasta",
+    "grams": 200.0
+   },
+   {
+    "food": "canned tomatoes",
+    "grams": 400.0
+   },
+   {
+    "food": "onion",
+    "grams": 120.0
+   },
+   {
+    "food": "carrot",
+    "grams": 120.0
+   },
+   {
+    "food": "celery",
+    "grams": 100.0
+   },
+   {
+    "food": "garlic",
+    "grams": 10.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 20.0
+   },
+   {
+    "food": "vegetable broth",
+    "grams": 1000.0
+   },
+   {
+    "food": "parmesan",
+    "grams": 40.0
+   },
+   {
+    "food": "dried oregano",
+    "grams": 1.0
+   },
+   {
+    "food": "chili flakes",
+    "grams": 1.0
+   }
+  ],
+  "steps": [
+   "Soften onion, carrot, celery and garlic in olive oil",
+   "Add tomatoes, oregano, chili, broth and half the beans",
+   "mash the rest and stir in for creaminess",
+   "Simmer 15 minutes, add the pasta and cook until tender",
+   "Rest 5 minutes and serve with parmesan"
+  ],
+  "batchMeals": 3,
+  "source": "GialloZafferano - classic version pasta e fagioli"
+ },
+ {
+  "name": "Pesto Genovese Pasta with Chicken",
+  "mealType": "LUNCH",
+  "cuisine": "Italian",
+  "servings": 2,
+  "prepMinutes": 25,
+  "ingredients": [
+   {
+    "food": "whole wheat pasta",
+    "grams": 140.0
+   },
+   {
+    "food": "chicken breast",
+    "grams": 260.0
+   },
+   {
+    "food": "green beans",
+    "grams": 200.0
+   },
+   {
+    "food": "potato",
+    "grams": 150.0
+   },
+   {
+    "food": "basil",
+    "grams": 40.0
+   },
+   {
+    "food": "pine nuts",
+    "grams": 20.0
+   },
+   {
+    "food": "parmesan",
+    "grams": 30.0
+   },
+   {
+    "food": "garlic",
+    "grams": 4.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 20.0
+   },
+   {
+    "food": "lemon",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Blend basil, toasted pine nuts, garlic, parmesan, olive oil and lemon into pesto",
+   "Grill the chicken and slice",
+   "Boil diced potato 8 minutes, add pasta and green beans and cook until the pasta is done",
+   "Drain, keeping a splash of water, and toss with pesto and chicken"
+  ],
+  "source": "GialloZafferano - classic version pesto alla genovese"
+ },
+ {
+  "name": "Saltimbocca alla Romana",
+  "mealType": "DINNER",
+  "cuisine": "Italian",
+  "servings": 2,
+  "prepMinutes": 25,
+  "ingredients": [
+   {
+    "food": "veal",
+    "grams": 300.0
+   },
+   {
+    "food": "prosciutto",
+    "grams": 50.0
+   },
+   {
+    "food": "dried sage",
+    "grams": 2.0
+   },
+   {
+    "food": "all-purpose flour",
+    "grams": 15.0
+   },
+   {
+    "food": "butter",
+    "grams": 10.0
+   },
+   {
+    "food": "white wine",
+    "grams": 80.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 10.0
+   },
+   {
+    "food": "potato",
+    "grams": 400.0
+   },
+   {
+    "food": "spinach",
+    "grams": 300.0
+   },
+   {
+    "food": "garlic",
+    "grams": 4.0
+   },
+   {
+    "food": "lemon",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Boil or roast the potatoes",
+   "Flatten the veal escalopes, top each with prosciutto and sage and secure with a toothpick",
+   "Dust lightly in flour and fry in oil and butter 2 minutes per side",
+   "Deglaze the pan with wine to make a quick sauce",
+   "Wilt the spinach with garlic and lemon and serve"
+  ],
+  "source": "GialloZafferano - classic version saltimbocca alla romana"
+ },
+ {
+  "name": "Polenta con Ragu",
+  "mealType": "DINNER",
+  "cuisine": "Italian",
+  "servings": 4,
+  "prepMinutes": 70,
+  "ingredients": [
+   {
+    "food": "polenta",
+    "grams": 280.0
+   },
+   {
+    "food": "lean beef mince",
+    "grams": 450.0
+   },
+   {
+    "food": "canned tomatoes",
+    "grams": 600.0
+   },
+   {
+    "food": "onion",
+    "grams": 120.0
+   },
+   {
+    "food": "carrot",
+    "grams": 120.0
+   },
+   {
+    "food": "celery",
+    "grams": 80.0
+   },
+   {
+    "food": "garlic",
+    "grams": 8.0
+   },
+   {
+    "food": "red wine",
+    "grams": 100.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 15.0
+   },
+   {
+    "food": "parmesan",
+    "grams": 50.0
+   },
+   {
+    "food": "butter",
+    "grams": 15.0
+   },
+   {
+    "food": "broccoli",
+    "grams": 400.0
+   }
+  ],
+  "steps": [
+   "Soften onion, carrot, celery and garlic in oil and brown the beef",
+   "Add wine, then tomatoes, and simmer 45 minutes",
+   "Whisk polenta into 1.2 litres of boiling salted water and stir 30-40 minutes (or per packet)",
+   "Finish the polenta with butter and parmesan",
+   "Serve topped with ragu and steamed broccoli"
+  ],
+  "batchMeals": 3,
+  "source": "GialloZafferano - classic version polenta con ragu"
+ },
+ {
+  "name": "Frittata di Zucchine",
+  "mealType": "BREAKFAST",
+  "cuisine": "Italian",
+  "servings": 1,
+  "prepMinutes": 15,
+  "ingredients": [
+   {
+    "food": "eggs",
+    "grams": 150.0
+   },
+   {
+    "food": "zucchini",
+    "grams": 150.0
+   },
+   {
+    "food": "parmesan",
+    "grams": 15.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 5.0
+   },
+   {
+    "food": "onion",
+    "grams": 30.0
+   },
+   {
+    "food": "whole wheat bread",
+    "grams": 60.0
+   },
+   {
+    "food": "basil",
+    "grams": 3.0
+   }
+  ],
+  "steps": [
+   "Soften sliced onion and zucchini in oil 5 minutes",
+   "Whisk eggs with parmesan and torn basil and pour over",
+   "Cook gently until almost set, then finish under the grill",
+   "Serve with bread"
+  ],
+  "source": "GialloZafferano - classic version frittata di zucchine"
+ },
+ {
+  "name": "Gnocchi alla Sorrentina",
+  "mealType": "DINNER",
+  "cuisine": "Italian",
+  "servings": 2,
+  "prepMinutes": 35,
+  "ingredients": [
+   {
+    "food": "potato gnocchi",
+    "grams": 400.0
+   },
+   {
+    "food": "canned tomatoes",
+    "grams": 400.0
+   },
+   {
+    "food": "mozzarella",
+    "grams": 120.0
+   },
+   {
+    "food": "parmesan",
+    "grams": 20.0
+   },
+   {
+    "food": "basil",
+    "grams": 10.0
+   },
+   {
+    "food": "garlic",
+    "grams": 6.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 10.0
+   },
+   {
+    "food": "arugula",
+    "grams": 60.0
+   }
+  ],
+  "steps": [
+   "Simmer garlic, oil and tomatoes 15 minutes into a sauce",
+   "Cook the gnocchi until they float and stir into the sauce with torn basil",
+   "Tip into a baking dish, top with mozzarella and parmesan",
+   "Bake at 220 C for 10 minutes until bubbling",
+   "Serve with arugula"
+  ],
+  "source": "GialloZafferano - classic version gnocchi alla sorrentina"
+ },
+ {
+  "name": "Spaghetti alle Vongole",
+  "mealType": "DINNER",
+  "cuisine": "Italian",
+  "servings": 2,
+  "prepMinutes": 25,
+  "ingredients": [
+   {
+    "food": "whole wheat pasta",
+    "grams": 180.0
+   },
+   {
+    "food": "clams",
+    "grams": 200.0
+   },
+   {
+    "food": "garlic",
+    "grams": 10.0
+   },
+   {
+    "food": "chili flakes",
+    "grams": 1.0
+   },
+   {
+    "food": "white wine",
+    "grams": 60.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 20.0
+   },
+   {
+    "food": "parsley",
+    "grams": 15.0
+   },
+   {
+    "food": "lemon",
+    "grams": 10.0
+   },
+   {
+    "food": "tomato",
+    "grams": 200.0
+   }
+  ],
+  "steps": [
+   "Soak the clams (about 1 kg in shell for two) in salted water 30 minutes and discard any open ones",
+   "Cook the pasta",
+   "Fry garlic and chili in oil, add the clams and wine, cover until they open (3-4 minutes)",
+   "Add halved tomatoes, then the pasta with a splash of its water",
+   "Toss with parsley and a squeeze of lemon"
+  ],
+  "source": "GialloZafferano - classic version spaghetti alle vongole"
+ },
+ {
+  "name": "Pasta alla Norma",
+  "mealType": "DINNER",
+  "cuisine": "Italian",
+  "servings": 2,
+  "prepMinutes": 40,
+  "ingredients": [
+   {
+    "food": "whole wheat pasta",
+    "grams": 160.0
+   },
+   {
+    "food": "eggplant",
+    "grams": 400.0
+   },
+   {
+    "food": "canned tomatoes",
+    "grams": 400.0
+   },
+   {
+    "food": "ricotta",
+    "grams": 120.0
+   },
+   {
+    "food": "garlic",
+    "grams": 6.0
+   },
+   {
+    "food": "olive oil",
+    "grams": 20.0
+   },
+   {
+    "food": "basil",
+    "grams": 10.0
+   },
+   {
+    "food": "chili flakes",
+    "grams": 0.5
+   }
+  ],
+  "steps": [
+   "Cube the eggplant and roast with most of the oil at 220 C for 20 minutes",
+   "Simmer garlic and tomatoes with a little oil 15 minutes",
+   "Stir in the eggplant and basil",
+   "Toss with the cooked pasta and top with spoonfuls of ricotta"
+  ],
+  "source": "GialloZafferano - classic version pasta alla Norma"
+ },
+ {
+  "name": "Japanese Breakfast Set (Salmon, Rice & Miso Soup)",
+  "mealType": "BREAKFAST",
+  "cuisine": "Japanese",
+  "servings": 1,
+  "prepMinutes": 20,
+  "ingredients": [
+   {
+    "food": "salmon fillet",
+    "grams": 100.0
+   },
+   {
+    "food": "white rice",
+    "grams": 65.0
+   },
+   {
+    "food": "miso paste",
+    "grams": 15.0
+   },
+   {
+    "food": "firm tofu",
+    "grams": 60.0
+   },
+   {
+    "food": "spinach",
+    "grams": 40.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 10.0
+   },
+   {
+    "food": "dashi granules",
+    "grams": 2.0
+   },
+   {
+    "food": "nori",
+    "grams": 2.0
+   }
+  ],
+  "steps": [
+   "Rinse and cook the rice",
+   "Salt the salmon lightly and grill or pan-sear 3-4 minutes per side",
+   "Bring 250 ml water to a simmer with the dashi, add cubed tofu and spinach for 2 minutes",
+   "Off the heat, whisk in the miso (never boil it) and add spring onion",
+   "Serve rice, salmon and soup together with a strip of nori"
+  ],
+  "source": "Just One Cookbook (Namiko Chen) japanese breakfast"
+ },
+ {
+  "name": "Chicken & Ginger Congee",
+  "mealType": "BREAKFAST",
+  "cuisine": "Chinese",
+  "servings": 2,
+  "prepMinutes": 40,
+  "ingredients": [
+   {
+    "food": "white rice",
+    "grams": 120.0
+   },
+   {
+    "food": "chicken breast",
+    "grams": 220.0
+   },
+   {
+    "food": "ginger",
+    "grams": 15.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 20.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 15.0
+   },
+   {
+    "food": "sesame oil",
+    "grams": 6.0
+   },
+   {
+    "food": "eggs",
+    "grams": 100.0
+   },
+   {
+    "food": "chicken broth",
+    "grams": 500.0
+   }
+  ],
+  "steps": [
+   "Rinse the rice and simmer with the broth and 700 ml water, stirring now and then, 30 minutes until creamy",
+   "Poach the whole chicken breast in the congee for the last 15 minutes, then shred it",
+   "Soft-boil the eggs 7 minutes",
+   "Serve topped with shredded chicken, julienned ginger, spring onion, soy sauce, sesame oil and a halved egg",
+   "Keeps 2 days - loosen with water when reheating"
+  ],
+  "source": "The Woks of Life chicken congee"
+ },
+ {
+  "name": "Oyakodon (Chicken & Egg Rice Bowl)",
+  "mealType": "LUNCH",
+  "cuisine": "Japanese",
+  "servings": 2,
+  "prepMinutes": 25,
+  "ingredients": [
+   {
+    "food": "chicken thigh",
+    "grams": 280.0
+   },
+   {
+    "food": "eggs",
+    "grams": 200.0
+   },
+   {
+    "food": "onion",
+    "grams": 150.0
+   },
+   {
+    "food": "white rice",
+    "grams": 160.0
+   },
+   {
+    "food": "dashi granules",
+    "grams": 4.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 30.0
+   },
+   {
+    "food": "mirin",
+    "grams": 30.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 20.0
+   }
+  ],
+  "steps": [
+   "Cook the rice",
+   "In a small pan bring 150 ml water, dashi, soy sauce and mirin to a simmer",
+   "Add sliced onion and bite-size chicken and simmer 6-7 minutes until cooked",
+   "Pour in lightly beaten eggs in a circle, cover and cook 1 minute until just set but still soft",
+   "Slide over bowls of rice and top with spring onion"
+  ],
+  "source": "Just One Cookbook (Namiko Chen) oyakodon"
+ },
+ {
+  "name": "Gyudon (Beef & Onion Rice Bowl)",
+  "mealType": "LUNCH",
+  "cuisine": "Japanese",
+  "servings": 2,
+  "prepMinutes": 20,
+  "ingredients": [
+   {
+    "food": "beef sirloin",
+    "grams": 280.0
+   },
+   {
+    "food": "onion",
+    "grams": 200.0
+   },
+   {
+    "food": "white rice",
+    "grams": 160.0
+   },
+   {
+    "food": "dashi granules",
+    "grams": 4.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 30.0
+   },
+   {
+    "food": "mirin",
+    "grams": 30.0
+   },
+   {
+    "food": "brown sugar",
+    "grams": 8.0
+   },
+   {
+    "food": "ginger",
+    "grams": 10.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 20.0
+   }
+  ],
+  "steps": [
+   "Cook the rice",
+   "Slice the beef as thinly as possible (half-frozen is easiest)",
+   "Simmer 150 ml water with dashi, soy, mirin and sugar",
+   "Add sliced onion and simmer 5 minutes",
+   "Add the beef and grated ginger and cook 2 minutes, skimming",
+   "Serve over rice with spring onion"
+  ],
+  "source": "Just One Cookbook (Namiko Chen) gyudon"
+ },
+ {
+  "name": "Zaru Soba with Egg & Edamame",
+  "mealType": "LUNCH",
+  "cuisine": "Japanese",
+  "servings": 2,
+  "prepMinutes": 20,
+  "ingredients": [
+   {
+    "food": "soba noodles",
+    "grams": 180.0
+   },
+   {
+    "food": "eggs",
+    "grams": 200.0
+   },
+   {
+    "food": "edamame",
+    "grams": 200.0
+   },
+   {
+    "food": "cucumber",
+    "grams": 200.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 20.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 30.0
+   },
+   {
+    "food": "mirin",
+    "grams": 20.0
+   },
+   {
+    "food": "dashi granules",
+    "grams": 3.0
+   },
+   {
+    "food": "rice vinegar",
+    "grams": 10.0
+   },
+   {
+    "food": "nori",
+    "grams": 4.0
+   }
+  ],
+  "steps": [
+   "Make the dipping sauce: simmer 120 ml water, dashi, soy and mirin 1 minute, then chill",
+   "Boil the eggs 7 minutes and the edamame 4 minutes",
+   "Cook soba per the packet, then rinse well under cold water to remove starch",
+   "Toss cucumber matchsticks with rice vinegar",
+   "Serve cold noodles with eggs, edamame, cucumber, shredded nori and the sauce with spring onion for dipping"
+  ],
+  "source": "Just One Cookbook (Namiko Chen) zaru soba"
+ },
+ {
+  "name": "Yaki Udon with Pork & Bok Choy",
+  "mealType": "LUNCH",
+  "cuisine": "Japanese",
+  "servings": 2,
+  "prepMinutes": 20,
+  "ingredients": [
+   {
+    "food": "udon noodles",
+    "grams": 170.0
+   },
+   {
+    "food": "pork tenderloin",
+    "grams": 260.0
+   },
+   {
+    "food": "bok choy",
+    "grams": 300.0
+   },
+   {
+    "food": "mushrooms",
+    "grams": 150.0
+   },
+   {
+    "food": "carrot",
+    "grams": 100.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 20.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 25.0
+   },
+   {
+    "food": "mirin",
+    "grams": 15.0
+   },
+   {
+    "food": "oyster sauce",
+    "grams": 15.0
+   },
+   {
+    "food": "rapeseed oil",
+    "grams": 12.0
+   }
+  ],
+  "steps": [
+   "Cook the udon 1 minute less than the packet says and drain",
+   "Stir-fry thin strips of pork in hot oil 3 minutes",
+   "Add sliced carrot, mushrooms and bok choy stems for 2 minutes, then the leaves",
+   "Add udon with soy, mirin and oyster sauce and toss 2 minutes over high heat",
+   "Finish with spring onion"
+  ],
+  "source": "Just One Cookbook (Namiko Chen) yaki udon"
+ },
+ {
+  "name": "Okonomiyaki (Osaka Cabbage Pancakes)",
+  "mealType": "LUNCH",
+  "cuisine": "Japanese",
+  "servings": 2,
+  "prepMinutes": 25,
+  "ingredients": [
+   {
+    "food": "all-purpose flour",
+    "grams": 100.0
+   },
+   {
+    "food": "eggs",
+    "grams": 150.0
+   },
+   {
+    "food": "red cabbage",
+    "grams": 300.0
+   },
+   {
+    "food": "shrimp",
+    "grams": 180.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 30.0
+   },
+   {
+    "food": "dashi granules",
+    "grams": 3.0
+   },
+   {
+    "food": "rapeseed oil",
+    "grams": 12.0
+   },
+   {
+    "food": "oyster sauce",
+    "grams": 20.0
+   },
+   {
+    "food": "honey",
+    "grams": 10.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 10.0
+   },
+   {
+    "food": "nori",
+    "grams": 2.0
+   }
+  ],
+  "steps": [
+   "Whisk flour with 120 ml water, the dashi and eggs into a batter",
+   "Fold in finely shredded cabbage, spring onion and chopped shrimp",
+   "Cook 2 thick pancakes in oil over medium heat, 5 minutes per side with a lid",
+   "Stir oyster sauce, honey and soy into a quick okonomi sauce",
+   "Brush over and scatter with crumbled nori"
+  ],
+  "source": "Just One Cookbook (Namiko Chen) okonomiyaki"
+ },
+ {
+  "name": "Chicken Teriyaki with Broccoli",
+  "mealType": "DINNER",
+  "cuisine": "Japanese",
+  "servings": 2,
+  "prepMinutes": 25,
+  "ingredients": [
+   {
+    "food": "chicken thigh",
+    "grams": 320.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 30.0
+   },
+   {
+    "food": "mirin",
+    "grams": 30.0
+   },
+   {
+    "food": "honey",
+    "grams": 10.0
+   },
+   {
+    "food": "ginger",
+    "grams": 8.0
+   },
+   {
+    "food": "white rice",
+    "grams": 150.0
+   },
+   {
+    "food": "broccoli",
+    "grams": 300.0
+   },
+   {
+    "food": "rapeseed oil",
+    "grams": 8.0
+   },
+   {
+    "food": "sesame oil",
+    "grams": 4.0
+   }
+  ],
+  "steps": [
+   "Cook the rice",
+   "Sear the chicken thighs skin-side down in oil 6 minutes, flip and cook 5 more",
+   "Pour off fat, add soy, mirin, honey and grated ginger and reduce, turning, until glossy",
+   "Steam the broccoli and dress with sesame oil",
+   "Slice the chicken and spoon over the glaze"
+  ],
+  "source": "Just One Cookbook (Namiko Chen) chicken teriyaki"
+ },
+ {
+  "name": "Nikujaga (Beef & Potato Stew)",
+  "mealType": "DINNER",
+  "cuisine": "Japanese",
+  "servings": 3,
+  "prepMinutes": 40,
+  "ingredients": [
+   {
+    "food": "beef sirloin",
+    "grams": 360.0
+   },
+   {
+    "food": "potato",
+    "grams": 600.0
+   },
+   {
+    "food": "carrot",
+    "grams": 200.0
+   },
+   {
+    "food": "onion",
+    "grams": 250.0
+   },
+   {
+    "food": "peas",
+    "grams": 150.0
+   },
+   {
+    "food": "dashi granules",
+    "grams": 5.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 45.0
+   },
+   {
+    "food": "mirin",
+    "grams": 45.0
+   },
+   {
+    "food": "brown sugar",
+    "grams": 12.0
+   },
+   {
+    "food": "rapeseed oil",
+    "grams": 15.0
+   },
+   {
+    "food": "white rice",
+    "grams": 180.0
+   }
+  ],
+  "steps": [
+   "Brown thinly sliced beef and onion wedges in oil",
+   "Add potato chunks and carrot, then 400 ml water with the dashi",
+   "Simmer 10 minutes, skimming",
+   "Add sugar, mirin and soy, cover with a lid resting on the food and simmer 15 minutes",
+   "Add peas for the last 3 minutes",
+   "Serve with rice - it tastes even better the next day"
+  ],
+  "batchMeals": 3,
+  "source": "Just One Cookbook (Namiko Chen) nikujaga"
+ },
+ {
+  "name": "Mapo Tofu",
+  "mealType": "DINNER",
+  "cuisine": "Chinese",
+  "servings": 2,
+  "prepMinutes": 25,
+  "ingredients": [
+   {
+    "food": "firm tofu",
+    "grams": 350.0
+   },
+   {
+    "food": "pork mince",
+    "grams": 150.0
+   },
+   {
+    "food": "chili bean paste",
+    "grams": 30.0
+   },
+   {
+    "food": "garlic",
+    "grams": 8.0
+   },
+   {
+    "food": "ginger",
+    "grams": 8.0
+   },
+   {
+    "food": "sichuan pepper",
+    "grams": 2.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 20.0
+   },
+   {
+    "food": "cornstarch",
+    "grams": 8.0
+   },
+   {
+    "food": "chicken broth",
+    "grams": 250.0
+   },
+   {
+    "food": "rapeseed oil",
+    "grams": 12.0
+   },
+   {
+    "food": "white rice",
+    "grams": 150.0
+   }
+  ],
+  "steps": [
+   "Cook the rice",
+   "Cube the tofu and blanch 2 minutes in salted water",
+   "Fry the pork in oil until crisp, add chili bean paste and fry until the oil turns red",
+   "Add garlic and ginger, then broth and tofu, and simmer 5 minutes",
+   "Thicken with cornstarch slaked in water in two stages",
+   "Finish with ground toasted sichuan pepper and spring onion"
+  ],
+  "batchMeals": 2,
+  "source": "Fuchsia Dunlop - Every Grain of Rice / Land of Plenty mapo tofu"
+ },
+ {
+  "name": "Kung Pao Chicken",
+  "mealType": "DINNER",
+  "cuisine": "Chinese",
+  "servings": 2,
+  "prepMinutes": 25,
+  "ingredients": [
+   {
+    "food": "chicken breast",
+    "grams": 320.0
+   },
+   {
+    "food": "peanuts",
+    "grams": 40.0
+   },
+   {
+    "food": "bell pepper",
+    "grams": 150.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 30.0
+   },
+   {
+    "food": "garlic",
+    "grams": 8.0
+   },
+   {
+    "food": "ginger",
+    "grams": 8.0
+   },
+   {
+    "food": "chili flakes",
+    "grams": 2.0
+   },
+   {
+    "food": "sichuan pepper",
+    "grams": 1.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 25.0
+   },
+   {
+    "food": "rice vinegar",
+    "grams": 15.0
+   },
+   {
+    "food": "brown sugar",
+    "grams": 8.0
+   },
+   {
+    "food": "cornstarch",
+    "grams": 10.0
+   },
+   {
+    "food": "rapeseed oil",
+    "grams": 15.0
+   },
+   {
+    "food": "white rice",
+    "grams": 160.0
+   }
+  ],
+  "steps": [
+   "Cook the rice",
+   "Dice the chicken and toss with half the soy and the cornstarch",
+   "Mix the sauce: remaining soy, vinegar, sugar and 2 tbsp water",
+   "Fry chilies and sichuan pepper in oil a few seconds, add chicken and stir-fry until white",
+   "Add garlic, ginger, pepper and spring onion for 1 minute",
+   "Pour in the sauce, toss until glossy and add the peanuts"
+  ],
+  "source": "Fuchsia Dunlop - Every Grain of Rice / Land of Plenty gong bao chicken"
+ },
+ {
+  "name": "Tomato & Egg Stir-Fry",
+  "mealType": "LUNCH",
+  "cuisine": "Chinese",
+  "servings": 1,
+  "prepMinutes": 15,
+  "ingredients": [
+   {
+    "food": "eggs",
+    "grams": 150.0
+   },
+   {
+    "food": "tomato",
+    "grams": 250.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 10.0
+   },
+   {
+    "food": "brown sugar",
+    "grams": 4.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 5.0
+   },
+   {
+    "food": "rapeseed oil",
+    "grams": 8.0
+   },
+   {
+    "food": "white rice",
+    "grams": 80.0
+   }
+  ],
+  "steps": [
+   "Cook the rice",
+   "Scramble the beaten eggs in half the oil until just set and set aside",
+   "Fry tomato wedges in the remaining oil 3 minutes until juicy",
+   "Add sugar, soy and a splash of water",
+   "Return the eggs, fold through and top with spring onion",
+   "Serve over rice"
+  ],
+  "source": "The Woks of Life tomato egg stir-fry"
+ },
+ {
+  "name": "Char Siu Pork with Bok Choy",
+  "mealType": "DINNER",
+  "cuisine": "Chinese",
+  "servings": 2,
+  "prepMinutes": 35,
+  "ingredients": [
+   {
+    "food": "pork tenderloin",
+    "grams": 340.0
+   },
+   {
+    "food": "hoisin sauce",
+    "grams": 30.0
+   },
+   {
+    "food": "honey",
+    "grams": 15.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 15.0
+   },
+   {
+    "food": "chinese five-spice",
+    "grams": 2.0
+   },
+   {
+    "food": "garlic",
+    "grams": 6.0
+   },
+   {
+    "food": "bok choy",
+    "grams": 300.0
+   },
+   {
+    "food": "white rice",
+    "grams": 160.0
+   },
+   {
+    "food": "sesame oil",
+    "grams": 5.0
+   }
+  ],
+  "steps": [
+   "Mix hoisin, half the honey, soy, five-spice and grated garlic and marinate the pork at least 1 hour",
+   "Roast at 220 C for 20-25 minutes, basting halfway",
+   "Brush with the remaining honey and grill 2 minutes to caramelise",
+   "Rest 5 minutes and slice",
+   "Steam the bok choy and dress with sesame oil",
+   "Serve with rice"
+  ],
+  "batchMeals": 2,
+  "source": "The Woks of Life char siu"
+ },
+ {
+  "name": "Chicken Chow Mein",
+  "mealType": "LUNCH",
+  "cuisine": "Chinese",
+  "servings": 2,
+  "prepMinutes": 25,
+  "ingredients": [
+   {
+    "food": "egg noodles",
+    "grams": 160.0
+   },
+   {
+    "food": "chicken breast",
+    "grams": 260.0
+   },
+   {
+    "food": "bean sprouts",
+    "grams": 150.0
+   },
+   {
+    "food": "carrot",
+    "grams": 100.0
+   },
+   {
+    "food": "bok choy",
+    "grams": 200.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 20.0
+   },
+   {
+    "food": "garlic",
+    "grams": 6.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 25.0
+   },
+   {
+    "food": "oyster sauce",
+    "grams": 20.0
+   },
+   {
+    "food": "sesame oil",
+    "grams": 6.0
+   },
+   {
+    "food": "rapeseed oil",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Cook the noodles, rinse and drain well",
+   "Stir-fry sliced chicken in hot oil 3 minutes",
+   "Add garlic, carrot and bok choy for 2 minutes",
+   "Add the noodles with soy and oyster sauce and toss over high heat until lightly charred",
+   "Add bean sprouts and spring onion for 30 seconds and finish with sesame oil"
+  ],
+  "source": "The Woks of Life chicken chow mein"
+ },
+ {
+  "name": "Red-Braised Beef with Carrots",
+  "mealType": "DINNER",
+  "cuisine": "Chinese",
+  "servings": 3,
+  "prepMinutes": 120,
+  "ingredients": [
+   {
+    "food": "stewing beef",
+    "grams": 450.0
+   },
+   {
+    "food": "carrot",
+    "grams": 300.0
+   },
+   {
+    "food": "ginger",
+    "grams": 15.0
+   },
+   {
+    "food": "garlic",
+    "grams": 10.0
+   },
+   {
+    "food": "star anise",
+    "grams": 2.0
+   },
+   {
+    "food": "cinnamon",
+    "grams": 1.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 45.0
+   },
+   {
+    "food": "brown sugar",
+    "grams": 15.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 30.0
+   },
+   {
+    "food": "rapeseed oil",
+    "grams": 10.0
+   },
+   {
+    "food": "white rice",
+    "grams": 210.0
+   },
+   {
+    "food": "bok choy",
+    "grams": 300.0
+   }
+  ],
+  "steps": [
+   "Blanch the beef chunks 3 minutes and rinse",
+   "Fry ginger, garlic, spring onion whites, star anise and cinnamon in oil",
+   "Add beef, sugar and soy and stir until coated",
+   "Cover with water and braise gently 1.5 hours",
+   "Add carrot chunks for the last 30 minutes and reduce the sauce",
+   "Serve with rice and steamed bok choy"
+  ],
+  "batchMeals": 3,
+  "source": "Red House Spice - hong shao niu rou"
+ },
+ {
+  "name": "Steamed Fish with Ginger & Spring Onion",
+  "mealType": "DINNER",
+  "cuisine": "Chinese",
+  "servings": 2,
+  "prepMinutes": 20,
+  "ingredients": [
+   {
+    "food": "cod fillet",
+    "grams": 340.0
+   },
+   {
+    "food": "ginger",
+    "grams": 15.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 40.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 25.0
+   },
+   {
+    "food": "sesame oil",
+    "grams": 5.0
+   },
+   {
+    "food": "rapeseed oil",
+    "grams": 10.0
+   },
+   {
+    "food": "white rice",
+    "grams": 160.0
+   },
+   {
+    "food": "bok choy",
+    "grams": 300.0
+   }
+  ],
+  "steps": [
+   "Cook the rice",
+   "Lay the fish on a plate over half the ginger and steam 8-10 minutes until it flakes",
+   "Pour off the liquid and top with the remaining ginger and spring onion in fine shreds",
+   "Heat the oil until smoking and pour over to sizzle",
+   "Spoon soy and sesame oil around",
+   "Serve with rice and steamed bok choy"
+  ],
+  "source": "The Woks of Life steamed fish ginger scallion"
+ },
+ {
+  "name": "Dan Dan Noodles",
+  "mealType": "LUNCH",
+  "cuisine": "Chinese",
+  "servings": 2,
+  "prepMinutes": 25,
+  "ingredients": [
+   {
+    "food": "egg noodles",
+    "grams": 160.0
+   },
+   {
+    "food": "pork mince",
+    "grams": 200.0
+   },
+   {
+    "food": "bok choy",
+    "grams": 200.0
+   },
+   {
+    "food": "tahini",
+    "grams": 20.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 25.0
+   },
+   {
+    "food": "rice vinegar",
+    "grams": 10.0
+   },
+   {
+    "food": "chili flakes",
+    "grams": 2.0
+   },
+   {
+    "food": "sichuan pepper",
+    "grams": 1.0
+   },
+   {
+    "food": "garlic",
+    "grams": 6.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 20.0
+   },
+   {
+    "food": "peanuts",
+    "grams": 20.0
+   },
+   {
+    "food": "rapeseed oil",
+    "grams": 8.0
+   }
+  ],
+  "steps": [
+   "Fry the pork in oil until crisp and brown, seasoning with a little soy",
+   "Whisk tahini, remaining soy, vinegar, garlic, chili and ground sichuan pepper with 3 tbsp hot water into the sauce",
+   "Cook noodles and blanch bok choy in the same pot",
+   "Divide sauce into bowls, add noodles and greens",
+   "Top with pork, crushed peanuts and spring onion and toss before eating"
+  ],
+  "source": "Fuchsia Dunlop - Every Grain of Rice / Land of Plenty dan dan noodles"
+ },
+ {
+  "name": "Pad Thai with Shrimp",
+  "mealType": "LUNCH",
+  "cuisine": "Thai",
+  "servings": 2,
+  "prepMinutes": 30,
+  "ingredients": [
+   {
+    "food": "rice noodles",
+    "grams": 160.0
+   },
+   {
+    "food": "shrimp",
+    "grams": 250.0
+   },
+   {
+    "food": "eggs",
+    "grams": 100.0
+   },
+   {
+    "food": "bean sprouts",
+    "grams": 150.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 30.0
+   },
+   {
+    "food": "peanuts",
+    "grams": 30.0
+   },
+   {
+    "food": "tamarind paste",
+    "grams": 30.0
+   },
+   {
+    "food": "fish sauce",
+    "grams": 25.0
+   },
+   {
+    "food": "brown sugar",
+    "grams": 15.0
+   },
+   {
+    "food": "lime",
+    "grams": 30.0
+   },
+   {
+    "food": "rapeseed oil",
+    "grams": 15.0
+   },
+   {
+    "food": "chili flakes",
+    "grams": 1.0
+   }
+  ],
+  "steps": [
+   "Soak the noodles in warm water 20-30 minutes until pliable",
+   "Simmer tamarind, fish sauce and sugar until dissolved",
+   "Stir-fry shrimp in hot oil and push aside",
+   "Scramble the eggs, then add noodles and the sauce and toss until absorbed",
+   "Add bean sprouts and spring onion for 30 seconds",
+   "Serve with crushed peanuts, chili and lime"
+  ],
+  "source": "Hot Thai Kitchen (Pailin Chongchitnant) pad thai"
+ },
+ {
+  "name": "Thai Green Curry with Chicken",
+  "mealType": "DINNER",
+  "cuisine": "Thai",
+  "servings": 3,
+  "prepMinutes": 35,
+  "ingredients": [
+   {
+    "food": "chicken thigh",
+    "grams": 450.0
+   },
+   {
+    "food": "coconut milk",
+    "grams": 300.0
+   },
+   {
+    "food": "thai curry paste",
+    "grams": 50.0
+   },
+   {
+    "food": "eggplant",
+    "grams": 300.0
+   },
+   {
+    "food": "green beans",
+    "grams": 200.0
+   },
+   {
+    "food": "basil",
+    "grams": 10.0
+   },
+   {
+    "food": "fish sauce",
+    "grams": 25.0
+   },
+   {
+    "food": "brown sugar",
+    "grams": 8.0
+   },
+   {
+    "food": "lime",
+    "grams": 20.0
+   },
+   {
+    "food": "white rice",
+    "grams": 240.0
+   }
+  ],
+  "steps": [
+   "Cook the rice",
+   "Fry the curry paste in a few spoons of the thickest coconut cream until fragrant",
+   "Add sliced chicken and stir 2 minutes",
+   "Add the rest of the coconut milk, 150 ml water, eggplant and beans and simmer 12 minutes",
+   "Season with fish sauce, sugar and lime",
+   "Stir in basil and serve with rice"
+  ],
+  "batchMeals": 3,
+  "source": "Hot Thai Kitchen (Pailin Chongchitnant) green curry chicken"
+ },
+ {
+  "name": "Pad Kra Pao (Basil Chicken with Fried Egg)",
+  "mealType": "LUNCH",
+  "cuisine": "Thai",
+  "servings": 1,
+  "prepMinutes": 15,
+  "ingredients": [
+   {
+    "food": "chicken thigh",
+    "grams": 150.0
+   },
+   {
+    "food": "eggs",
+    "grams": 50.0
+   },
+   {
+    "food": "basil",
+    "grams": 10.0
+   },
+   {
+    "food": "garlic",
+    "grams": 6.0
+   },
+   {
+    "food": "chili pepper",
+    "grams": 5.0
+   },
+   {
+    "food": "oyster sauce",
+    "grams": 10.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 8.0
+   },
+   {
+    "food": "fish sauce",
+    "grams": 5.0
+   },
+   {
+    "food": "brown sugar",
+    "grams": 4.0
+   },
+   {
+    "food": "green beans",
+    "grams": 80.0
+   },
+   {
+    "food": "rapeseed oil",
+    "grams": 10.0
+   },
+   {
+    "food": "white rice",
+    "grams": 80.0
+   }
+  ],
+  "steps": [
+   "Cook the rice",
+   "Pound garlic and chili into a rough paste",
+   "Fry the egg in hot oil until crisp at the edges and set aside",
+   "Stir-fry the paste a few seconds, add chopped chicken and cook until done",
+   "Add beans and the sauces and sugar and toss 1 minute",
+   "Fold in basil until wilted",
+   "Serve over rice with the egg"
+  ],
+  "source": "Hot Thai Kitchen (Pailin Chongchitnant) pad kra pao"
+ },
+ {
+  "name": "Larb Gai (Thai Chicken Herb Salad)",
+  "mealType": "LUNCH",
+  "cuisine": "Thai",
+  "servings": 2,
+  "prepMinutes": 20,
+  "ingredients": [
+   {
+    "food": "chicken breast",
+    "grams": 320.0
+   },
+   {
+    "food": "lime",
+    "grams": 40.0
+   },
+   {
+    "food": "fish sauce",
+    "grams": 25.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 30.0
+   },
+   {
+    "food": "mint",
+    "grams": 15.0
+   },
+   {
+    "food": "cilantro",
+    "grams": 15.0
+   },
+   {
+    "food": "chili flakes",
+    "grams": 2.0
+   },
+   {
+    "food": "white rice",
+    "grams": 140.0
+   },
+   {
+    "food": "romaine lettuce",
+    "grams": 200.0
+   },
+   {
+    "food": "cucumber",
+    "grams": 200.0
+   }
+  ],
+  "steps": [
+   "Toast 15 g of the raw rice in a dry pan until golden and grind coarsely",
+   "Cook the rest of the rice",
+   "Simmer the minced chicken in 3 tbsp water until just cooked",
+   "Off the heat season with lime, fish sauce and chili",
+   "Toss in spring onion, mint, cilantro and the toasted rice powder",
+   "Serve in lettuce leaves with cucumber and rice"
+  ],
+  "source": "Hot Thai Kitchen (Pailin Chongchitnant) larb gai"
+ },
+ {
+  "name": "Pho Ga (Vietnamese Chicken Noodle Soup)",
+  "mealType": "LUNCH",
+  "cuisine": "Vietnamese",
+  "servings": 2,
+  "prepMinutes": 40,
+  "ingredients": [
+   {
+    "food": "chicken breast",
+    "grams": 300.0
+   },
+   {
+    "food": "rice noodles",
+    "grams": 140.0
+   },
+   {
+    "food": "chicken broth",
+    "grams": 800.0
+   },
+   {
+    "food": "onion",
+    "grams": 100.0
+   },
+   {
+    "food": "ginger",
+    "grams": 20.0
+   },
+   {
+    "food": "star anise",
+    "grams": 2.0
+   },
+   {
+    "food": "cinnamon",
+    "grams": 1.0
+   },
+   {
+    "food": "fish sauce",
+    "grams": 20.0
+   },
+   {
+    "food": "bean sprouts",
+    "grams": 150.0
+   },
+   {
+    "food": "basil",
+    "grams": 10.0
+   },
+   {
+    "food": "cilantro",
+    "grams": 15.0
+   },
+   {
+    "food": "lime",
+    "grams": 20.0
+   },
+   {
+    "food": "chili pepper",
+    "grams": 5.0
+   }
+  ],
+  "steps": [
+   "Char halved onion and ginger in a dry pan until blackened in spots",
+   "Toast star anise and cinnamon, then simmer with the onion, ginger and broth 25 minutes",
+   "Poach the chicken in the broth 12 minutes, then slice",
+   "Strain and season with fish sauce",
+   "Soak or boil the noodles and divide into bowls",
+   "Add chicken and hot broth and serve with sprouts, herbs, lime and chili"
+  ],
+  "source": "Andrea Nguyen - Viet World Kitchen pho ga"
+ },
+ {
+  "name": "Bun Cha (Hanoi Pork Patties with Noodles)",
+  "mealType": "LUNCH",
+  "cuisine": "Vietnamese",
+  "servings": 2,
+  "prepMinutes": 30,
+  "ingredients": [
+   {
+    "food": "pork mince",
+    "grams": 300.0
+   },
+   {
+    "food": "rice noodles",
+    "grams": 140.0
+   },
+   {
+    "food": "romaine lettuce",
+    "grams": 150.0
+   },
+   {
+    "food": "cucumber",
+    "grams": 150.0
+   },
+   {
+    "food": "carrot",
+    "grams": 100.0
+   },
+   {
+    "food": "mint",
+    "grams": 10.0
+   },
+   {
+    "food": "cilantro",
+    "grams": 10.0
+   },
+   {
+    "food": "fish sauce",
+    "grams": 30.0
+   },
+   {
+    "food": "lime",
+    "grams": 30.0
+   },
+   {
+    "food": "brown sugar",
+    "grams": 15.0
+   },
+   {
+    "food": "garlic",
+    "grams": 6.0
+   },
+   {
+    "food": "chili pepper",
+    "grams": 5.0
+   },
+   {
+    "food": "rice vinegar",
+    "grams": 15.0
+   }
+  ],
+  "steps": [
+   "Mix the pork with half the fish sauce, a little sugar and garlic and shape small patties",
+   "Grill or pan-fry 3-4 minutes per side until charred",
+   "Make the dipping broth: remaining fish sauce, sugar, lime, vinegar and 150 ml warm water with chili and thin carrot slices",
+   "Cook and rinse the noodles",
+   "Serve patties in the broth with noodles, lettuce, cucumber and herbs alongside"
+  ],
+  "source": "Andrea Nguyen - Viet World Kitchen bun cha"
+ },
+ {
+  "name": "Nasi Goreng",
+  "mealType": "LUNCH",
+  "cuisine": "Indonesian",
+  "servings": 2,
+  "prepMinutes": 25,
+  "ingredients": [
+   {
+    "food": "white rice",
+    "grams": 160.0
+   },
+   {
+    "food": "chicken breast",
+    "grams": 200.0
+   },
+   {
+    "food": "eggs",
+    "grams": 100.0
+   },
+   {
+    "food": "onion",
+    "grams": 80.0
+   },
+   {
+    "food": "garlic",
+    "grams": 8.0
+   },
+   {
+    "food": "chili pepper",
+    "grams": 5.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 25.0
+   },
+   {
+    "food": "brown sugar",
+    "grams": 10.0
+   },
+   {
+    "food": "cucumber",
+    "grams": 150.0
+   },
+   {
+    "food": "tomato",
+    "grams": 150.0
+   },
+   {
+    "food": "rapeseed oil",
+    "grams": 15.0
+   }
+  ],
+  "steps": [
+   "Cook the rice ahead and chill it (day-old rice fries best)",
+   "Stir soy and sugar together as quick kecap manis",
+   "Fry onion, garlic and chili in oil, add diced chicken and cook through",
+   "Add the rice and sauce and fry until hot and slightly crisp",
+   "Fry the eggs sunny-side up",
+   "Serve topped with the eggs, with cucumber and tomato"
+  ],
+  "batchMeals": 2,
+  "source": "RecipeTin Eats (Nagi Maehashi) nasi goreng"
+ },
+ {
+  "name": "Chicken Satay with Peanut Sauce",
+  "mealType": "DINNER",
+  "cuisine": "Malaysian",
+  "servings": 2,
+  "prepMinutes": 35,
+  "ingredients": [
+   {
+    "food": "chicken thigh",
+    "grams": 340.0
+   },
+   {
+    "food": "peanut butter",
+    "grams": 40.0
+   },
+   {
+    "food": "coconut milk",
+    "grams": 80.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 15.0
+   },
+   {
+    "food": "brown sugar",
+    "grams": 10.0
+   },
+   {
+    "food": "lime",
+    "grams": 20.0
+   },
+   {
+    "food": "turmeric",
+    "grams": 2.0
+   },
+   {
+    "food": "ground cumin",
+    "grams": 2.0
+   },
+   {
+    "food": "garlic",
+    "grams": 6.0
+   },
+   {
+    "food": "white rice",
+    "grams": 150.0
+   },
+   {
+    "food": "cucumber",
+    "grams": 200.0
+   }
+  ],
+  "steps": [
+   "Marinate chicken strips with turmeric, cumin, garlic, half the soy and sugar for 30 minutes",
+   "Thread onto skewers and grill or pan-fry 3-4 minutes per side",
+   "Simmer peanut butter, coconut milk, remaining soy and sugar and lime into a sauce, loosening with water",
+   "Serve with rice, cucumber and the peanut sauce"
+  ],
+  "batchMeals": 2,
+  "source": "RecipeTin Eats (Nagi Maehashi) chicken satay peanut sauce"
+ },
+ {
+  "name": "Beef Rendang",
+  "mealType": "DINNER",
+  "cuisine": "Malaysian",
+  "servings": 3,
+  "prepMinutes": 180,
+  "ingredients": [
+   {
+    "food": "stewing beef",
+    "grams": 450.0
+   },
+   {
+    "food": "coconut milk",
+    "grams": 200.0
+   },
+   {
+    "food": "lemongrass",
+    "grams": 50.0
+   },
+   {
+    "food": "ginger",
+    "grams": 15.0
+   },
+   {
+    "food": "garlic",
+    "grams": 10.0
+   },
+   {
+    "food": "chili pepper",
+    "grams": 10.0
+   },
+   {
+    "food": "turmeric",
+    "grams": 3.0
+   },
+   {
+    "food": "onion",
+    "grams": 150.0
+   },
+   {
+    "food": "brown sugar",
+    "grams": 10.0
+   },
+   {
+    "food": "tamarind paste",
+    "grams": 15.0
+   },
+   {
+    "food": "white rice",
+    "grams": 240.0
+   },
+   {
+    "food": "green beans",
+    "grams": 300.0
+   }
+  ],
+  "steps": [
+   "Blend onion, garlic, ginger, chili and turmeric into a paste",
+   "Fry the paste until fragrant, add bruised lemongrass and the beef",
+   "Add coconut milk and 200 ml water and simmer uncovered 2-2.5 hours, stirring more as it dries",
+   "Add tamarind and sugar and cook until the sauce clings and darkens",
+   "Serve with rice and steamed green beans - it is better reheated"
+  ],
+  "batchMeals": 3,
+  "source": "RecipeTin Eats (Nagi Maehashi) beef rendang"
+ },
+ {
+  "name": "Filipino Chicken Adobo",
+  "mealType": "DINNER",
+  "cuisine": "Filipino",
+  "servings": 4,
+  "prepMinutes": 50,
+  "ingredients": [
+   {
+    "food": "chicken breast",
+    "grams": 370.0
+   },
+   {
+    "food": "chicken thigh",
+    "grams": 200.0
+   },
+   {
+    "food": "chicken drumstick",
+    "grams": 200.0
+   },
+   {
+    "food": "chicken wings",
+    "grams": 160.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 80.0
+   },
+   {
+    "food": "rice vinegar",
+    "grams": 80.0
+   },
+   {
+    "food": "garlic",
+    "grams": 25.0
+   },
+   {
+    "food": "brown sugar",
+    "grams": 8.0
+   },
+   {
+    "food": "rapeseed oil",
+    "grams": 10.0
+   },
+   {
+    "food": "white rice",
+    "grams": 320.0
+   },
+   {
+    "food": "green beans",
+    "grams": 400.0
+   }
+  ],
+  "steps": [
+   "Joint the chicken into 8-10 pieces and marinate with soy and crushed garlic 30 minutes",
+   "Brown the pieces in oil",
+   "Add the marinade, vinegar and 150 ml water and do not stir until it boils",
+   "Simmer covered 25 minutes (breast pieces for the last 12), then uncovered until the sauce reduces and the chicken is glossy",
+   "Serve with rice and steamed green beans",
+   "Adobo keeps and reheats very well"
+  ],
+  "batchMeals": 4,
+  "source": "Kawaling Pinoy - chicken adobo"
+ },
+ {
+  "name": "Spicy Peanut Chicken Noodle Soup",
+  "mealType": "LUNCH",
+  "cuisine": "Thai",
+  "servings": 2,
+  "prepMinutes": 70,
+  "ingredients": [
+   {
+    "food": "chicken frame",
+    "grams": 400.0
+   },
+   {
+    "food": "chicken wings",
+    "grams": 160.0
+   },
+   {
+    "food": "peanut butter",
+    "grams": 40.0
+   },
+   {
+    "food": "onion",
+    "grams": 60.0
+   },
+   {
+    "food": "garlic",
+    "grams": 6.0
+   },
+   {
+    "food": "ginger",
+    "grams": 10.0
+   },
+   {
+    "food": "chili pepper",
+    "grams": 5.0
+   },
+   {
+    "food": "fish sauce",
+    "grams": 15.0
+   },
+   {
+    "food": "brown sugar",
+    "grams": 8.0
+   },
+   {
+    "food": "lime",
+    "grams": 20.0
+   },
+   {
+    "food": "egg noodles",
+    "grams": 140.0
+   },
+   {
+    "food": "bok choy",
+    "grams": 250.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 20.0
+   }
+  ],
+  "steps": [
+   "Put the chicken frame and wings in a saucepan with just enough water to cover, bring to the boil and simmer 25 minutes",
+   "Lift out the bones, pick off all the meat from the frame and wings and set aside",
+   "Return the bones and simmer 30 minutes more, then strain - you should have about 800 ml of stock",
+   "Soften sliced onion, garlic, ginger and chili in a little oil, stir in the peanut butter with a ladle of stock, then the fish sauce, sugar and the rest of the stock",
+   "Simmer 10 minutes, stir in the picked meat and lime juice",
+   "Blanch the noodles and bok choy and pour the hot soup over, topped with spring onion"
+  ],
+  "source": "Andy Cooks (andy-cooks.com) - chicken noodle soup"
+ },
+ {
+  "name": "Soy-Braised Chicken Drumsticks",
+  "mealType": "DINNER",
+  "cuisine": "Chinese",
+  "servings": 1,
+  "prepMinutes": 40,
+  "ingredients": [
+   {
+    "food": "chicken drumstick",
+    "grams": 200.0
+   },
+   {
+    "food": "soy sauce",
+    "grams": 20.0
+   },
+   {
+    "food": "honey",
+    "grams": 8.0
+   },
+   {
+    "food": "ginger",
+    "grams": 6.0
+   },
+   {
+    "food": "garlic",
+    "grams": 4.0
+   },
+   {
+    "food": "star anise",
+    "grams": 1.0
+   },
+   {
+    "food": "white rice",
+    "grams": 75.0
+   },
+   {
+    "food": "bok choy",
+    "grams": 200.0
+   },
+   {
+    "food": "sesame oil",
+    "grams": 3.0
+   }
+  ],
+  "steps": [
+   "Cook the rice",
+   "Brown the drumsticks in a small pan",
+   "Add soy, honey, sliced ginger, garlic, star anise and 150 ml water",
+   "Cover and braise gently 25 minutes, turning twice, until the meat pulls from the bone (74 C at the bone)",
+   "Uncover and reduce the sauce until sticky",
+   "Steam the bok choy, dress with sesame oil and serve with the rice"
+  ],
+  "source": "The Woks of Life soy sauce chicken"
+ },
+ {
+  "name": "Salt & Pepper Chicken Wings",
+  "mealType": "SNACK",
+  "cuisine": "Chinese",
+  "servings": 1,
+  "prepMinutes": 40,
+  "ingredients": [
+   {
+    "food": "chicken wings",
+    "grams": 160.0
+   },
+   {
+    "food": "cornstarch",
+    "grams": 10.0
+   },
+   {
+    "food": "rapeseed oil",
+    "grams": 5.0
+   },
+   {
+    "food": "chili flakes",
+    "grams": 0.5
+   },
+   {
+    "food": "garlic",
+    "grams": 3.0
+   },
+   {
+    "food": "spring onion",
+    "grams": 10.0
+   },
+   {
+    "food": "lime",
+    "grams": 10.0
+   }
+  ],
+  "steps": [
+   "Pat the wings dry, cut into flats and drumettes (wing tips go in the stock bag) and toss with cornstarch, salt and pepper",
+   "Oven: roast on a rack at 220 C for 35-40 minutes, turning once",
+   "Air fryer: 200 C for 20-22 minutes, shaking halfway",
+   "Toss with the oil fried briefly with garlic, chili and spring onion",
+   "Serve with lime"
+  ]
+ },
+ {
+  "name": "Ayam Goreng (Indonesian Fried Chicken)",
+  "mealType": "DINNER",
+  "cuisine": "Indonesian",
+  "servings": 4,
+  "prepMinutes": 100,
+  "ingredients": [
+   {
+    "food": "chicken breast",
+    "grams": 370.0
+   },
+   {
+    "food": "chicken thigh",
+    "grams": 200.0
+   },
+   {
+    "food": "chicken drumstick",
+    "grams": 200.0
+   },
+   {
+    "food": "chicken wings",
+    "grams": 160.0
+   },
+   {
+    "food": "onion",
+    "grams": 100.0
+   },
+   {
+    "food": "garlic",
+    "grams": 15.0
+   },
+   {
+    "food": "ginger",
+    "grams": 15.0
+   },
+   {
+    "food": "lemongrass",
+    "grams": 25.0
+   },
+   {
+    "food": "turmeric",
+    "grams": 4.0
+   },
+   {
+    "food": "ground cumin",
+    "grams": 3.0
+   },
+   {
+    "food": "chili pepper",
+    "grams": 10.0
+   },
+   {
+    "food": "cornstarch",
+    "grams": 60.0
+   },
+   {
+    "food": "eggs",
+    "grams": 50.0
+   },
+   {
+    "food": "rapeseed oil",
+    "grams": 40.0
+   },
+   {
+    "food": "white rice",
+    "grams": 280.0
+   },
+   {
+    "food": "cucumber",
+    "grams": 300.0
+   },
+   {
+    "food": "tomato",
+    "grams": 200.0
+   },
+   {
+    "food": "lime",
+    "grams": 30.0
+   }
+  ],
+  "steps": [
+   "Break the chicken into 10 pieces: legs off and split into thighs and drumsticks, wings off, breasts off and halved",
+   "Blend onion, garlic, ginger, lemongrass, turmeric, cumin and chili with a splash of water into a paste",
+   "Rub the paste all over the chicken with salt and marinate at least 1 hour",
+   "Mix the egg through, then toss each piece in cornstarch",
+   "Deep fryer: fry at 180 C in batches 10-12 minutes until golden and 74 C inside",
+   "Air fryer: spray with the oil and cook at 200 C for 20-25 minutes, turning halfway",
+   "Serve with rice, cucumber, tomato and lime",
+   "Reheat leftovers in the air fryer or oven to keep them crisp"
+  ],
+  "batchMeals": 4,
+  "needsAny": [
+   "DEEP_FRYER",
+   "AIR_FRYER"
+  ],
+  "source": "Andy Cooks (andy-cooks.com) - Indonesian fried chicken (ayam goreng)"
  }
 ]

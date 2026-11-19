@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material.icons.filled.ThumbDown
 import androidx.compose.material3.AlertDialog
@@ -42,19 +43,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mango.data.Food
 import com.mango.data.MealStatus
+import com.mango.domain.FoodPreferences
 import com.mango.data.Recipe
 import com.mango.domain.ShoppingItem
 import kotlin.math.ceil
 
 /** Pre-grocery loop: review the 7-day menu, swap/dislike, and watch the shopping list update live. */
 @Composable
-fun GroceryScreen(onOpenRecipe: (id: Long, portions: Double) -> Unit) {
+fun GroceryScreen(onOpenRecipe: (id: Long, portions: Double, swaps: Map<String, String>) -> Unit, onOpenFoodPrefs: () -> Unit) {
     val vm = mangoViewModel { MealPlanViewModel(it) }
     val s by vm.state.collectAsStateWithLifecycle()
     val message by vm.message.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
     var dislikeFor by remember { mutableStateOf<Recipe?>(null) }
+    var replacing by remember { mutableStateOf<Food?>(null) }
+    val allFoods by vm.allFoods.collectAsStateWithLifecycle()
     LaunchedEffect(message) {
         message?.let {
             snackbar.showSnackbar(it)
@@ -79,6 +84,7 @@ fun GroceryScreen(onOpenRecipe: (id: Long, portions: Double) -> Unit) {
                     "Next shop: " + java.time.DayOfWeek.of(profile.groceryDay).getDisplayName(java.time.format.TextStyle.FULL, java.util.Locale.getDefault())
                 }
                 ScreenHeader("Grocery", eyebrow = eyebrow) {
+                    RoundIconButton(Icons.Filled.Tune, "Food preferences", onClick = onOpenFoodPrefs)
                     RoundIconButton(Icons.Filled.Refresh, "Regenerate week", onClick = vm::regenerate)
                 }
             }
@@ -94,11 +100,15 @@ fun GroceryScreen(onOpenRecipe: (id: Long, portions: Double) -> Unit) {
                     SectionLabel(if (day == s.today) "Today" else day.asDate(), color = MangoOrange)
                     s.meals[day].orEmpty().forEach { m ->
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Column(Modifier.weight(1f).clickable { m.recipe?.let { onOpenRecipe(it.id, m.slot.portions) } }) {
+                            Column(Modifier.weight(1f).clickable { m.recipe?.let { onOpenRecipe(it.id, m.cookPortions, m.slot.swaps) } }) {
                                 Text(m.slot.mealType.label, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 Text(m.recipe?.name ?: "—", fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
                                 Text(
-                                    "${m.nutrients.kcal.fmt()} kcal · P ${m.nutrients.protein.fmt()} g" + when (m.slot.status) {
+                                    "${m.nutrients.kcal.fmt()} kcal · P ${m.nutrients.protein.fmt()} g" + when {
+                                        m.slot.isLeftover -> " · leftovers"
+                                        m.isBatchCook && m.leftovers.isNotEmpty() -> " · batch × ${m.leftovers.size + 1}"
+                                        else -> ""
+                                    } + when (m.slot.status) {
                                         MealStatus.COOKED -> " · cooked"
                                         MealStatus.SKIPPED -> " · dining out"
                                         MealStatus.PLANNED -> ""
@@ -112,7 +122,7 @@ fun GroceryScreen(onOpenRecipe: (id: Long, portions: Double) -> Unit) {
                                 Box {
                                     IconButton(onClick = { menu = true }) { Icon(Icons.Filled.ThumbDown, contentDescription = "Don't like") }
                                     DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
-                                        DropdownMenuItem(text = { Text("Don't like this recipe") }, onClick = {
+                                        DropdownMenuItem(text = { Text("Remove recipe from my book") }, onClick = {
                                             menu = false
                                             vm.hideRecipe(m.slot)
                                         })
@@ -137,7 +147,28 @@ fun GroceryScreen(onOpenRecipe: (id: Long, portions: Double) -> Unit) {
             if (s.shopping.isEmpty()) {
                 item { Text("Nothing to buy – your pantry covers the plan. Zero waste!", color = Leaf) }
             }
-            items(s.shopping, key = { it.food.id }) { item -> ShoppingRow(item) { vm.markBought(item) } }
+            val replacements = profile.manualSwaps.takeIf { s.today <= profile.manualSwapsUntil }.orEmpty()
+            if (replacements.isNotEmpty()) {
+                item {
+                    SectionCard {
+                        SectionLabel("Replaced this week", color = Sky)
+                        replacements.forEach { (from, to) ->
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text("$to instead of $from", fontSize = 14.sp, modifier = Modifier.weight(1f))
+                                TextButton(onClick = { vm.clearReplacement(from) }) { Text("Undo") }
+                            }
+                        }
+                    }
+                }
+            }
+            items(s.shopping, key = { it.food.id }) { item ->
+                ShoppingRow(
+                    item = item,
+                    canReplace = FoodPreferences.replacementsFor(item.food, allFoods).isNotEmpty(),
+                    onReplace = { replacing = item.food },
+                    onBought = { vm.markBought(item) },
+                )
+            }
         }
         SnackbarHost(snackbar, Modifier.align(Alignment.BottomCenter))
     }
@@ -146,23 +177,59 @@ fun GroceryScreen(onOpenRecipe: (id: Long, portions: Double) -> Unit) {
         vm.dislikeIngredient(term)
         dislikeFor = null
     } }
+
+    replacing?.let { food ->
+        AlertDialog(
+            onDismissRequest = { replacing = null },
+            title = { Text("Can't find ${food.name}?") },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text("Pick a replacement for this week's meals:", style = MaterialTheme.typography.bodySmall)
+                    FoodPreferences.replacementsFor(food, allFoods).forEach { alt ->
+                        Text(
+                            alt.name.replaceFirstChar { it.uppercase() },
+                            modifier = Modifier.fillMaxWidth().clickable {
+                                vm.replace(food.name, alt.name)
+                                replacing = null
+                            }.padding(vertical = 12.dp),
+                            fontSize = 16.sp,
+                        )
+                    }
+                }
+            },
+            confirmButton = {},
+            dismissButton = { TextButton(onClick = { replacing = null }) { Text("Cancel") } },
+        )
+    }
 }
 
 @Composable
-private fun ShoppingRow(item: ShoppingItem, onBought: () -> Unit) {
+private fun ShoppingRow(item: ShoppingItem, canReplace: Boolean, onReplace: () -> Unit, onBought: () -> Unit) {
     Row(Modifier.fillMaxWidth().clickable(onClick = onBought), verticalAlignment = Alignment.CenterVertically) {
         Checkbox(checked = false, onCheckedChange = { onBought() })
         Column(Modifier.weight(1f)) {
             Text(item.food.name.replaceFirstChar { it.uppercase() })
-            Text(item.food.category.name.lowercase().replace('_', ' '), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(quantityText(item.grams, item.food.unitGrams, item.food.unitName), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            item.note?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = Leaf) }
         }
-        Text(quantityText(item.grams, item.food.unitGrams, item.food.unitName), style = MaterialTheme.typography.bodyMedium)
+        if (canReplace) TextButton(onClick = onReplace) { Text("Can't find it?", fontSize = 12.sp) }
     }
 }
 
 fun quantityText(grams: Double, unitGrams: Double?, unitName: String?): String {
     val base = if (grams >= 1000) "${(grams / 1000).fmt(2)} kg" else "${grams.fmt()} g"
-    return if (unitGrams != null && unitName != null) "$base (≈ ${ceil(grams / unitGrams).toInt()} $unitName)" else base
+    if (unitGrams == null || unitName == null) return base
+    // A little over a whole unit still counts as one (370 g of fillets is 2 breasts, not 3).
+    val n = maxOf(1, ceil(grams / unitGrams - 0.15).toInt())
+    return "$base (≈ $n ${if (n == 1) unitName else plural(unitName)})"
+}
+
+/** "2 thighs", "3 tomatoes", "2 boxes"; units that are already a measure ("kg in shell") stay as they are. */
+fun plural(unit: String): String = when {
+    " in " in unit -> unit
+    unit == "avocado" -> "avocados"
+    unit.endsWith("o") || unit.endsWith("x") || unit.endsWith("s") || unit.endsWith("ch") || unit.endsWith("sh") -> unit + "es"
+    else -> unit + "s"
 }
 
 @OptIn(ExperimentalLayoutApi::class)

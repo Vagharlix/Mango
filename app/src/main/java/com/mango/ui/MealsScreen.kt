@@ -30,6 +30,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,6 +46,8 @@ import com.mango.data.Recipe
 import com.mango.data.Repository
 import com.mango.data.UserProfile
 import com.mango.domain.DailyTargets
+import com.mango.domain.KitchenPrep
+import com.mango.domain.MealPlanner
 import com.mango.domain.ShoppingItem
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
@@ -53,10 +56,30 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 
-data class PlannedMeal(val slot: MealSlot, val recipe: Recipe?) {
+data class PlannedMeal(val slot: MealSlot, val recipe: Recipe?, val batch: List<MealSlot> = emptyList()) {
     /** Nutrients actually eaten for this slot (portion-scaled). */
     val nutrients: Nutrients
         get() = recipe?.perServing?.times(slot.portions) ?: Nutrients()
+
+    val isBatchCook: Boolean get() = slot.batchId != 0L && !slot.isLeftover
+
+    /** Planned leftover meals this cooking session also covers. */
+    val leftovers: List<MealSlot> get() = batch.filter { it.isLeftover && it.status == MealStatus.PLANNED }
+
+    /** Portions to cook now: the whole batch for a batch-cooking meal. */
+    val cookPortions: Double get() = if (isBatchCook) slot.portions + leftovers.sumOf { it.portions } else slot.portions
+
+    val cookSlot: MealSlot? get() = batch.firstOrNull { !it.isLeftover }
+}
+
+fun mealLabel(slot: MealSlot, today: Long): String {
+    val day = when (slot.epochDay) {
+        today -> "today"
+        today - 1 -> "yesterday"
+        today + 1 -> "tomorrow"
+        else -> slot.epochDay.asDate("EEE")
+    }
+    return "$day ${slot.mealType.label.lowercase()}"
 }
 
 data class MealPlanState(
@@ -84,16 +107,17 @@ class MealPlanViewModel(repo: Repository) : MangoViewModel(repo) {
     val state = repo.profile.flatMapLatest { p ->
         if (p == null) return@flatMapLatest flowOf(MealPlanState(loading = false, today = today))
         val window = repo.shoppingWindow(p, today)
-        combine(repo.slots(today, today + 6), repo.recipes, repo.shoppingList(window)) { slots, recipes, shopping ->
+        combine(repo.slots(today - MealPlanner.BATCH_WINDOW_DAYS, today + 6), repo.recipes, repo.shoppingList(window, p)) { slots, recipes, shopping ->
             val byId = recipes.associateBy { it.id }
             val days = (today..today + 6).toList()
+            val batches = slots.filter { it.batchId != 0L }.groupBy { it.batchId }
             MealPlanState(
                 loading = false,
                 profile = p,
                 today = today,
                 days = days,
-                meals = slots.groupBy { it.epochDay }.mapValues { (_, v) ->
-                    v.sortedBy { it.mealType.ordinal }.map { PlannedMeal(it, byId[it.recipeId]) }
+                meals = slots.filter { it.epochDay >= today }.groupBy { it.epochDay }.mapValues { (_, v) ->
+                    v.sortedBy { it.mealType.ordinal }.map { PlannedMeal(it, byId[it.recipeId], batches[it.batchId].orEmpty()) }
                 },
                 targets = days.associateWith { repo.targetsFor(p, it) },
                 shopping = shopping,
@@ -122,7 +146,7 @@ class MealPlanViewModel(repo: Repository) : MangoViewModel(repo) {
 
     fun hideRecipe(slot: MealSlot) = launchSafe {
         repo.hideRecipe(slot.recipeId)
-        toast("Recipe hidden – you can restore it from the recipe list.")
+        toast("Removed from your book – put it back any time in Recipes › Removed.")
     }
 
     fun dislikeIngredient(term: String) = launchSafe {
@@ -135,12 +159,47 @@ class MealPlanViewModel(repo: Repository) : MangoViewModel(repo) {
         repo.regenerateWeek()
     }
 
-    fun markBought(item: ShoppingItem) = launchSafe { repo.markBought(item) }
+    fun markBought(item: ShoppingItem) = launchSafe {
+        repo.markBought(item)
+        if (item.food.name == com.mango.domain.WholeChicken.WHOLE) toast("Bird added – see Kitchen prep in Meals for where each piece goes")
+    }
+
+    /** Today's kitchen jobs (break down, stock, thaw, freeze). */
+    val prep = repo.profile.flatMapLatest { p -> if (p == null) flowOf(emptyList<KitchenPrep.Task>()) else repo.prepTasks(p) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
+    fun breakdownDone() = launchSafe { repo.breakdownDone() }
+
+    fun stockMade(task: KitchenPrep.MakeStock) = launchSafe {
+        repo.makeStock(task.lotIds, task.frameGrams, task.yieldMl.toDouble())
+        toast("${task.yieldMl} ml of homemade stock added – used before any carton")
+    }
+
+    fun freezeFrames(task: KitchenPrep.MakeStock) = launchSafe {
+        task.lotIds.forEach { repo.freeze(it) }
+        toast("Frame frozen – keeps 9 months; stock it with the next ones")
+    }
+
+    fun thawed(move: KitchenPrep.Move) = launchSafe { repo.thaw(move.lotId, move.grams) }
+
+    fun frozen(move: KitchenPrep.Move) = launchSafe {
+        repo.freeze(move.lotId, move.grams)
+        toast("${move.label.replaceFirstChar { it.uppercase() }} frozen")
+    }
+
+    fun replace(food: String, replacement: String) = launchSafe {
+        repo.replaceIngredient(food, replacement)
+        toast("Using $replacement instead of $food this week")
+    }
+
+    fun clearReplacement(food: String) = launchSafe { repo.clearReplacement(food) }
+
+    val allFoods = repo.foods.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 }
 
 @Composable
 fun MealsScreen(
-    onOpenRecipe: (id: Long, portions: Double) -> Unit,
+    onOpenRecipe: (id: Long, portions: Double, swaps: Map<String, String>) -> Unit,
     onOpenRecipes: () -> Unit,
     onOpenGrocery: () -> Unit,
     onSetupProfile: () -> Unit,
@@ -164,9 +223,10 @@ fun MealsScreen(
         return
     }
 
-    var selected by remember { mutableLongStateOf(s.today) }
+    var selected by rememberSaveable { mutableLongStateOf(s.today) }
     val meals = s.meals[selected].orEmpty()
     val target = s.targets[selected]
+    val prep by vm.prep.collectAsStateWithLifecycle()
 
     Box(Modifier.fillMaxSize()) {
         LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
@@ -201,11 +261,16 @@ fun MealsScreen(
                     }
                 }
             }
+            if (selected == s.today && prep.isNotEmpty()) {
+                item {
+                    KitchenPrepCard(prep, vm::breakdownDone, vm::stockMade, vm::freezeFrames, vm::thawed, vm::frozen)
+                }
+            }
             if (target != null) item { DayTotals(meals, target) }
             if (meals.isEmpty()) {
                 item {
                     Text(
-                        "No meals planned. If all recipes are excluded by your dislikes, edit them in your profile.",
+                        "No meals planned. If all recipes are excluded, check Options › Dislikes & allergies and Food preferences.",
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
@@ -213,7 +278,8 @@ fun MealsScreen(
             items(meals, key = { "${it.slot.epochDay}-${it.slot.mealType}" }) { m ->
                 MealCard(
                     meal = m,
-                    onOpen = { m.recipe?.let { onOpenRecipe(it.id, m.slot.portions) } },
+                    today = s.today,
+                    onOpen = { m.recipe?.let { onOpenRecipe(it.id, m.cookPortions, m.slot.swaps) } },
                     onCook = { vm.cook(m.slot) },
                     onSkip = { vm.skip(m.slot) },
                     onUnskip = { vm.unskip(m.slot) },
@@ -255,13 +321,19 @@ private fun DayTotals(meals: List<PlannedMeal>, t: DailyTargets) {
 }
 
 @Composable
-private fun MealCard(meal: PlannedMeal, onOpen: () -> Unit, onCook: () -> Unit, onSkip: () -> Unit, onUnskip: () -> Unit) {
+private fun MealCard(meal: PlannedMeal, today: Long, onOpen: () -> Unit, onCook: () -> Unit, onSkip: () -> Unit, onUnskip: () -> Unit) {
     val r = meal.recipe
     SectionCard {
         Row(verticalAlignment = Alignment.CenterVertically) {
             SectionLabel(meal.slot.mealType.label, Modifier.weight(1f), color = MangoOrange)
+            if (meal.slot.status == MealStatus.PLANNED) {
+                when {
+                    meal.isBatchCook && meal.leftovers.isNotEmpty() -> Pill("Batch × ${meal.leftovers.size + 1}", Leaf)
+                    meal.slot.isLeftover -> Pill("Leftovers", Sky)
+                }
+            }
             when (meal.slot.status) {
-                MealStatus.COOKED -> Pill("Cooked", Leaf)
+                MealStatus.COOKED -> Pill(if (meal.slot.isLeftover) "Eaten" else "Cooked", Leaf)
                 MealStatus.SKIPPED -> Pill("Dining out", Sky)
                 MealStatus.PLANNED -> {}
             }
@@ -272,13 +344,33 @@ private fun MealCard(meal: PlannedMeal, onOpen: () -> Unit, onCook: () -> Unit, 
                 if (r != null) {
                     Text("${servingsText(meal.slot.portions)} · ${r.prepMinutes} min · ${r.cuisine}", fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     MacroLine(r.perServing, meal.slot.portions)
+                    swapsText(meal.slot.swaps)?.let { Text(it, fontSize = 12.sp, color = Sky) }
+                    if (meal.slot.status == MealStatus.PLANNED) {
+                        when {
+                            meal.isBatchCook && meal.leftovers.isNotEmpty() -> Text(
+                                "Cook ${servingsText(meal.cookPortions)} – also covers " + meal.leftovers.joinToString(", ") { mealLabel(it, today) } +
+                                    if (meal.leftovers.any { it.epochDay - meal.slot.epochDay > MealPlanner.FRIDGE_LEFTOVER_DAY }) ". Freeze 1 portion." else "",
+                                fontSize = 12.sp, color = Leaf,
+                            )
+                            meal.slot.isLeftover -> Text(
+                                meal.cookSlot?.let {
+                                    if (meal.slot.epochDay - it.epochDay > MealPlanner.FRIDGE_LEFTOVER_DAY) {
+                                        "Frozen portion from ${mealLabel(it, today)} – thaw in the fridge the night before"
+                                    } else {
+                                        "From ${mealLabel(it, today)} – just reheat"
+                                    }
+                                } ?: "Cook fresh (batch was re-planned)",
+                                fontSize = 12.sp, color = Sky,
+                            )
+                        }
+                    }
                 }
             }
             Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null, tint = Faint)
         }
         when (meal.slot.status) {
             MealStatus.PLANNED -> Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Button(onClick = onCook, modifier = Modifier.weight(1f)) { Text("Cooked") }
+                Button(onClick = onCook, modifier = Modifier.weight(1f)) { Text(if (meal.slot.isLeftover && meal.cookSlot != null) "Eaten" else "Cooked") }
                 OutlinedButton(onClick = onSkip, modifier = Modifier.weight(1f)) { Text("Skip / Dining out") }
             }
             MealStatus.SKIPPED -> TextButton(onClick = onUnskip) { Text("Undo skip") }
@@ -286,6 +378,10 @@ private fun MealCard(meal: PlannedMeal, onOpen: () -> Unit, onCook: () -> Unit, 
         }
     }
 }
+
+/** "Uses chickpeas instead of black beans" – substitutions that keep the week's shopping list short. */
+fun swapsText(swaps: Map<String, String>): String? =
+    if (swaps.isEmpty()) null else "Uses " + swaps.entries.joinToString(", ") { "${it.value} instead of ${it.key}" }
 
 fun servingsText(servings: Double): String {
     val n = if (servings % 1.0 == 0.0) servings.fmt() else servings.fmt(2).trimEnd('0').trimEnd('.')

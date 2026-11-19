@@ -36,6 +36,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -223,7 +224,7 @@ fun DayTile(dow: String, num: String, selected: Boolean, dot: Color, onClick: ()
 /** A row that reveals more detail on tap: keeps secondary information out of the way. */
 @Composable
 fun ExpandableRow(title: String, trailing: String? = null, initiallyOpen: Boolean = false, content: @Composable ColumnScope.() -> Unit) {
-    var open by remember { mutableStateOf(initiallyOpen) }
+    var open by rememberSaveable { mutableStateOf(initiallyOpen) }
     Column(Modifier.fillMaxWidth()) {
         Row(
             Modifier.fillMaxWidth().clickable { open = !open }.padding(14.dp),

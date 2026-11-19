@@ -133,6 +133,18 @@ fun RecipeEditorScreen(id: Long, onDone: () -> Unit) {
                         NumberField("Servings", r.servings.toDouble(), { v -> vm.edit { it.copy(servings = v.toInt().coerceIn(1, 12)) } }, Modifier.weight(1f))
                         NumberField("Prep time", r.prepMinutes.toDouble(), { v -> vm.edit { it.copy(prepMinutes = v.toInt()) } }, Modifier.weight(1f), suffix = "min")
                     }
+                    if (r.mealType == MealType.LUNCH || r.mealType == MealType.DINNER) {
+                        Text("Batch cooking: one cooking session covers", style = MaterialTheme.typography.bodyMedium)
+                        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                            listOf(1 to "1 meal", 2 to "2 meals", 3 to "3 meals", 4 to "4 meals").forEach { (n, label) ->
+                                FilterChip(selected = r.batchMeals == n, onClick = { vm.edit { it.copy(batchMeals = n) } }, label = { Text(label) })
+                            }
+                        }
+                        Text(
+                            "Leftovers are planned within the next 2 days (cooked food keeps 3-4 days in the fridge).",
+                            style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
                 }
                 1 -> {
                     r.ingredients.forEachIndexed { i, ing ->

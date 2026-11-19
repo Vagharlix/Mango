@@ -44,6 +44,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.ui.text.input.KeyboardType
+import kotlin.math.abs
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -60,6 +64,8 @@ import com.mango.data.Equipment
 import com.mango.data.ProgramMode
 import com.mango.data.Repository
 import com.mango.data.UserProfile
+import com.mango.domain.MaxTest
+import com.mango.domain.MaxTests
 import com.mango.domain.Periodization
 import com.mango.domain.Phase
 import com.mango.domain.Prescription
@@ -81,9 +87,13 @@ data class TrainingState(
     val currentWeek: Int = 0,
     val today: Long = 0,
     val baseline: StrengthBaseline? = null,
+    /** Latest result of each tested max, with the one before it (progress). */
+    val maxes: List<MaxRow> = emptyList(),
 ) {
     fun day(week: Int, day: Int): TrainingDay? = weeks.getOrNull(week)?.days?.getOrNull(day)
 }
+
+data class MaxRow(val test: MaxTest, val value: Double, val day: Long, val previous: Double?)
 
 /** Shared by the week, session, exercise and plan screens; the schedule is derived on the fly. */
 class TrainingViewModel(repo: Repository) : MangoViewModel(repo) {
@@ -93,14 +103,18 @@ class TrainingViewModel(repo: Repository) : MangoViewModel(repo) {
             TrainingState(loading = p != null, profile = p, today = today)
         } else {
             val current = Periodization.weekIndexOn(p, today)
-            val blockStart = p.programStartEpochDay + (current.coerceAtLeast(0) / Periodization.BLOCK_WEEKS) * Periodization.BLOCK_WEEKS * 7L
+            val maxes = MaxTest.entries.mapNotNull { t ->
+                val history = benchmarks.filter { t.key in it.results }.sortedBy { it.epochDay }
+                history.lastOrNull()?.let { MaxRow(t, it.results.getValue(t.key), it.epochDay, history.dropLast(1).lastOrNull()?.results?.get(t.key)) }
+            }
             TrainingState(
                 loading = false,
                 profile = p,
                 weeks = Periodization.build(p, exercises.associateBy { it.id }, benchmarks, today),
                 currentWeek = current,
                 today = today,
-                baseline = Periodization.baselineFor(p, benchmarks, blockStart),
+                baseline = MaxTests.baselineOn(p, benchmarks, today + 1),
+                maxes = maxes,
             )
         }
     }.flowOn(Dispatchers.Default).stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), TrainingState())
@@ -110,9 +124,9 @@ class TrainingViewModel(repo: Repository) : MangoViewModel(repo) {
         repo.updateEquipment(if (e in current) current - e else current + e)
     }
 
-    fun saveBenchmark(fingerAddedKg: Double, pullUpAddedKg: Double) = launchSafe {
-        repo.addBenchmark(fingerAddedKg, pullUpAddedKg)
-        toast("Benchmark saved – loads for the next block recalculated")
+    fun saveResults(results: Map<String, Double>) = launchSafe {
+        repo.addBenchmark(results)
+        toast("Results saved – loads, reps and holds adapt from tomorrow")
     }
 
     fun startExercise(context: Context, p: Prescription) {
@@ -131,6 +145,7 @@ fun TrainingScreen(
     onOpenSession: (week: Int, day: Int) -> Unit,
     onOpenPlan: () -> Unit,
     onSetupProfile: () -> Unit,
+    onOpenTrainingSettings: () -> Unit,
 ) {
     val vm = mangoViewModel { TrainingViewModel(it) }
     val s by vm.state.collectAsStateWithLifecycle()
@@ -158,16 +173,17 @@ fun TrainingScreen(
                     }
                 }
                 item { PlanStrip(s, onOpenPlan) }
+                if (s.maxes.isNotEmpty()) item { MaxesCard(s.maxes) }
                 item {
                     val today = week?.days?.getOrNull(todayIndex)
                     when {
                         s.currentWeek < 0 -> HeroCard("COMING UP", "Program starts ${profile.programStartEpochDay.asDate()}", "Your first week is listed below.")
-                        s.currentWeek >= s.weeks.size -> HeroCard("COMPLETE", "Program finished", "Restart or extend it from your profile.") {
-                            PrimaryButton("Open profile", onSetupProfile, icon = null)
+                        s.currentWeek >= s.weeks.size -> HeroCard("COMPLETE", "Program finished", "Restart it or switch to a new program.") {
+                            PrimaryButton("Training settings", onOpenTrainingSettings, icon = null)
                         }
                         today == null || today.isRest -> HeroCard("TODAY", "Rest day", "Sleep, eat well and let your tendons remodel.", labelColor = Leaf)
                         else -> HeroCard(
-                            label = if (today.isBenchmark) "TODAY · BENCHMARK" else "TODAY",
+                            label = if (today.isBenchmark) "TODAY · TEST DAY" else "TODAY",
                             title = today.title,
                             subtitle = sessionMeta(today),
                             labelColor = if (today.isBenchmark) Warn else MangoOrange,
@@ -198,8 +214,8 @@ private fun PlanStrip(s: TrainingState, onOpenPlan: () -> Unit) {
     val cycleStart = if (evergreen) (s.currentWeek.coerceAtLeast(0) / Periodization.EVERGREEN_WEEKS) * Periodization.EVERGREEN_WEEKS else 0
     val cycle = s.weeks.drop(cycleStart).take(if (evergreen) Periodization.EVERGREEN_WEEKS else s.weeks.size)
     val current = s.weeks.getOrNull(s.currentWeek)
-    val nextTest = s.weeks.drop(s.currentWeek.coerceAtLeast(0))
-        .firstOrNull { it.days[6].isBenchmark && it.days[6].epochDay >= s.today }?.days?.get(6)
+    val nextTest = s.weeks.drop(s.currentWeek.coerceAtLeast(0)).flatMap { it.days }
+        .firstOrNull { it.isBenchmark && it.epochDay >= s.today }
     SectionCard(Modifier.clickable(onClick = onOpenPlan)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
@@ -363,7 +379,11 @@ fun SessionScreen(
         if (d.isBenchmark || d.items.any { it.isTimed }) {
             BottomActionBar {
                 if (d.isBenchmark) {
-                    PrimaryButton("Enter benchmark results", { benchmarkOpen = true }, icon = Icons.Filled.EmojiEvents)
+                    PrimaryButton("Enter test results", { benchmarkOpen = true }, icon = Icons.Filled.EmojiEvents)
+                    Text(
+                        "Warm up well, rest fully between attempts and stop at the first rep that isn't clean. Skip any test that doesn't feel right today.",
+                        fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
                 } else {
                     PrimaryButton("Start guided session", {
                         vm.startSession(context, d)
@@ -379,12 +399,13 @@ fun SessionScreen(
         }
     }
     if (benchmarkOpen) {
-        BenchmarkDialog(
-            tests = d.items.map { it.exercise.id }.toSet(),
+        TestResultsDialog(
+            tests = d.items.mapNotNull { MaxTest.forTest(it.exercise.id) },
             initial = s.baseline,
+            bodyWeightKg = s.profile?.weightKg ?: 70.0,
             onDismiss = { benchmarkOpen = false },
-            onSave = { finger, pull ->
-                vm.saveBenchmark(finger, pull)
+            onSave = { results ->
+                vm.saveResults(results)
                 benchmarkOpen = false
             },
         )
@@ -643,7 +664,7 @@ private fun PlanWeekRow(w: TrainingWeek, s: TrainingState, open: Boolean, onTogg
             fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1f),
         )
         when {
-            w.days[6].isBenchmark -> Pill("Test day", Warn)
+            w.days.any { it.isBenchmark } -> Pill("Test days", Warn)
             now -> Pill("This week", MangoOrange)
             done -> Pill("Done", Leaf)
         }
@@ -665,24 +686,131 @@ private fun PlanWeekRow(w: TrainingWeek, s: TrainingState, open: Boolean, onTogg
     }
 }
 
-// ============================ Benchmark ============================
+// ============================ Test days ============================
 
+/**
+ * Results of a test day. Single-number tests take the value; rep-max tests take the load and the reps and
+ * show the estimated 1RM (Epley). Leave a test empty to skip it – its previous max stays.
+ */
 @Composable
-private fun BenchmarkDialog(tests: Set<String>, initial: StrengthBaseline?, onDismiss: () -> Unit, onSave: (Double, Double) -> Unit) {
-    var finger by remember { mutableStateOf(initial?.fingerAddedKg ?: 0.0) }
-    var pull by remember { mutableStateOf(initial?.pullAddedKg ?: 0.0) }
+private fun TestResultsDialog(
+    tests: List<MaxTest>,
+    initial: StrengthBaseline?,
+    bodyWeightKg: Double,
+    onDismiss: () -> Unit,
+    onSave: (Map<String, Double>) -> Unit,
+) {
+    val values = remember { mutableStateMapOf<MaxTest, Double>() }
+    val reps = remember { mutableStateMapOf<MaxTest, Double>() }
+    fun set(map: MutableMap<MaxTest, Double>, t: MaxTest, v: Double?) {
+        if (v == null) map.remove(t) else map[t] = v
+    }
+    fun result(t: MaxTest): Double? {
+        val v = values[t] ?: return null
+        return when (t.input) {
+            MaxTest.Input.BODYWEIGHT_RM -> reps[t]?.takeIf { it >= 1 }?.let { MaxTests.dipAdded1RM(v, it.toInt(), bodyWeightKg) }
+            MaxTest.Input.WEIGHT_RM -> reps[t]?.takeIf { it >= 1 && v > 0 }?.let { MaxTests.press1RM(v, it.toInt()) }
+            MaxTest.Input.REPS, MaxTest.Input.SECONDS -> v.takeIf { it > 0 }
+            MaxTest.Input.ADDED_KG -> v
+        }
+    }
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Benchmark results") },
+        title = { Text("Test results") },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("Added load (negative = assisted). Next block's targets are recalculated from these.", style = MaterialTheme.typography.bodySmall)
-                // Only tests possible with the current equipment are asked; the other value keeps its baseline.
-                if ("bench_max_hang_5s" in tests) NumberField("5 s max hang, 20 mm", finger, { finger = it }, allowNegative = true, suffix = "kg")
-                if ("bench_pullup_1rm" in tests) NumberField("Weighted pull-up 1RM", pull, { pull = it }, allowNegative = true, suffix = "kg")
+            Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Text("Fill in what you tested; leave the rest empty. Loads, reps and holds adapt from tomorrow.", style = MaterialTheme.typography.bodySmall)
+                tests.forEach { t ->
+                    val previous = initial?.max(t)
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Text(t.label, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+                        when (t.input) {
+                            MaxTest.Input.ADDED_KG -> OptionalNumberField("Added load (negative = assisted)", values[t], { set(values, t, it) }, "kg", allowNegative = true)
+                            MaxTest.Input.REPS -> OptionalNumberField("Reps", values[t], { set(values, t, it) }, "reps")
+                            MaxTest.Input.SECONDS -> OptionalNumberField("Hold", values[t], { set(values, t, it) }, "s")
+                            MaxTest.Input.BODYWEIGHT_RM, MaxTest.Input.WEIGHT_RM -> Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                OptionalNumberField(
+                                    if (t.input == MaxTest.Input.BODYWEIGHT_RM) "Added load" else "Weight",
+                                    values[t], { set(values, t, it) }, "kg", Modifier.weight(1f), allowNegative = t.input == MaxTest.Input.BODYWEIGHT_RM,
+                                )
+                                OptionalNumberField("Reps", reps[t], { set(reps, t, it) }, "reps", Modifier.weight(1f))
+                            }
+                        }
+                        val now = result(t)
+                        Text(
+                            buildString {
+                                if (now != null && t.input in setOf(MaxTest.Input.BODYWEIGHT_RM, MaxTest.Input.WEIGHT_RM)) append("≈ 1RM ${maxText(t, now)} · ")
+                                append(if (previous != null) "previous ${maxText(t, previous)}" else "not tested yet")
+                            },
+                            fontSize = 12.sp, color = if (now != null && previous != null && now > previous) Leaf else MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
             }
         },
-        confirmButton = { TextButton(onClick = { onSave(finger, pull) }) { Text("Save") } },
+        confirmButton = {
+            TextButton(onClick = { onSave(tests.mapNotNull { t -> result(t)?.let { t.key to it } }.toMap()) }) { Text("Save") }
+        },
         dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } },
     )
+}
+
+/** Number field that can stay empty (test skipped). */
+@Composable
+private fun OptionalNumberField(
+    label: String,
+    value: Double?,
+    onChange: (Double?) -> Unit,
+    suffix: String,
+    modifier: Modifier = Modifier.fillMaxWidth(),
+    allowNegative: Boolean = false,
+) {
+    var text by remember { mutableStateOf(value?.let { if (it % 1.0 == 0.0) it.toInt().toString() else it.toString() } ?: "") }
+    OutlinedTextField(
+        value = text,
+        onValueChange = { v ->
+            val clean = v.replace(',', '.').filter { it.isDigit() || it == '.' || (allowNegative && it == '-') }
+            text = clean
+            onChange(clean.toDoubleOrNull())
+        },
+        label = { Text(label) },
+        suffix = { Text(suffix) },
+        singleLine = true,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+        modifier = modifier,
+    )
+}
+
+fun maxText(t: MaxTest, v: Double): String {
+    val n = if (v % 1.0 == 0.0) v.toInt().toString() else "%.1f".format(v)
+    return when (t.input) {
+        MaxTest.Input.ADDED_KG, MaxTest.Input.BODYWEIGHT_RM -> (if (v >= 0) "+" else "") + "$n kg"
+        MaxTest.Input.WEIGHT_RM -> "$n kg"
+        MaxTest.Input.REPS -> if (v == 1.0) "1 rep" else "$n reps"
+        MaxTest.Input.SECONDS -> "$n s"
+    }
+}
+
+/** Latest max of every test, with the change since the previous test. */
+@Composable
+private fun MaxesCard(rows: List<MaxRow>) {
+    SectionCard {
+        SectionLabel("Your maxes", color = Warn)
+        rows.forEach { r ->
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(r.test.label, fontSize = 14.sp, modifier = Modifier.weight(1f))
+                r.previous?.let { prev ->
+                    val diff = r.value - prev
+                    if (abs(diff) >= 0.05) {
+                        Text(
+                            (if (diff > 0) "▲ " else "▼ ") + maxText(r.test, abs(diff)).removePrefix("+"),
+                            fontSize = 12.sp, color = if (diff > 0) Leaf else Danger, modifier = Modifier.padding(end = 8.dp),
+                        )
+                    }
+                }
+                Text(maxText(r.test, r.value), fontSize = 14.sp, fontWeight = FontWeight.Bold)
+            }
+        }
+        Text("Tested at the end of every deload week; the next block's loads, reps and holds follow.", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
 }

@@ -1,5 +1,6 @@
 package com.mango.ui
 
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +19,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material.icons.filled.RemoveCircleOutline
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalUriHandler
+import kotlinx.coroutines.launch
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FilterChip
@@ -33,6 +42,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,6 +54,7 @@ import androidx.lifecycle.viewModelScope
 import com.mango.data.MealType
 import com.mango.data.Recipe
 import com.mango.data.Repository
+import com.mango.domain.MealPlanner
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 
@@ -66,20 +77,38 @@ class RecipesViewModel(repo: Repository) : MangoViewModel(repo) {
 fun RecipesScreen(onOpen: (Long) -> Unit, onCreate: () -> Unit, onBack: () -> Unit) {
     val vm = mangoViewModel { RecipesViewModel(it) }
     val recipes by vm.recipes.collectAsStateWithLifecycle()
-    var query by remember { mutableStateOf("") }
-    var type by remember { mutableStateOf<MealType?>(null) }
-    var showHidden by remember { mutableStateOf(false) }
-    val shown = remember(recipes, query, type, showHidden) {
+    // Saveable so search and filters survive opening a recipe and coming back.
+    var query by rememberSaveable { mutableStateOf("") }
+    var type by rememberSaveable { mutableStateOf<MealType?>(null) }
+    var showRemoved by rememberSaveable { mutableStateOf(false) }
+    val snackbar = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val removedCount = recipes.count { it.isHidden }
+    val shown = remember(recipes, query, type, showRemoved) {
         val q = query.trim().lowercase()
         recipes.filter { r ->
-            (type == null || r.mealType == type) && r.isHidden == showHidden &&
+            (type == null || r.mealType == type) && r.isHidden == showRemoved &&
                 (q.isEmpty() || q in r.name.lowercase() || r.ingredients.any { q in it.food } || q in r.cuisine.lowercase())
+        }
+    }
+    fun remove(r: Recipe) {
+        vm.setHidden(r, true)
+        scope.launch {
+            val result = snackbar.showSnackbar("Removed “${r.name}” from your book", actionLabel = "Undo", duration = SnackbarDuration.Short)
+            if (result == SnackbarResult.ActionPerformed) vm.setHidden(r, false)
         }
     }
 
     Box(Modifier.fillMaxSize()) {
         LazyColumn(contentPadding = PaddingValues(16.dp, 8.dp, 16.dp, 96.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            item { BackHeader("Recipes (${recipes.size})", onBack) }
+            item { BackHeader(if (showRemoved) "Removed recipes ($removedCount)" else "Recipe book (${recipes.size - removedCount})", onBack) }
+            item {
+                Text(
+                    if (showRemoved) "These are never planned. Tap Put back to return one to your book."
+                    else "Tap ⊖ to remove a recipe you don't like – it's never planned again (undo any time under Removed).",
+                    fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
             item {
                 OutlinedTextField(query, { query = it }, label = { Text("Search name, ingredient or cuisine") }, singleLine = true, modifier = Modifier.fillMaxWidth())
             }
@@ -87,18 +116,40 @@ fun RecipesScreen(onOpen: (Long) -> Unit, onCreate: () -> Unit, onBack: () -> Un
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     item { FilterChip(selected = type == null, onClick = { type = null }, label = { Text("All") }) }
                     items(MealType.entries) { t -> FilterChip(selected = type == t, onClick = { type = t }, label = { Text(t.label) }) }
-                    item { FilterChip(selected = showHidden, onClick = { showHidden = !showHidden }, label = { Text("Hidden") }) }
+                    item { FilterChip(selected = showRemoved, onClick = { showRemoved = !showRemoved }, label = { Text("Removed ($removedCount)") }) }
                 }
             }
+            if (shown.isEmpty()) {
+                item { Text(if (showRemoved) "No removed recipes." else "No recipe matches.", color = MaterialTheme.colorScheme.onSurfaceVariant) }
+            }
             items(shown, key = { it.id }) { r ->
-                SectionCard(Modifier.clickable { onOpen(r.id) }) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(r.name, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
-                        if (r.isCustom) Pill("CUSTOM", Leaf)
-                        if (r.isUserModified) Pill("EDITED", Sky)
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(16.dp))
+                        .clickable { onOpen(r.id) }
+                        .padding(start = 16.dp, top = 12.dp, bottom = 12.dp, end = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(r.name, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f, fill = false))
+                            if (r.isCustom) Pill("CUSTOM", Leaf)
+                            if (r.isUserModified) Pill("EDITED", Sky)
+                        }
+                        Text(
+                            "${r.mealType.label} · ${r.cuisine} · ${r.prepMinutes} min" + if (r.batchMeals > 1) " · batch × ${r.batchMeals}" else "",
+                            style = MaterialTheme.typography.bodySmall,
+                        )
+                        MacroLine(r.perServing)
                     }
-                    Text("${r.mealType.label} · ${r.cuisine} · ${r.prepMinutes} min · per serving", style = MaterialTheme.typography.bodySmall)
-                    MacroLine(r.perServing)
+                    if (showRemoved) {
+                        TextButton(onClick = { vm.setHidden(r, false) }) { Text("Put back") }
+                    } else {
+                        IconButton(onClick = { remove(r) }) {
+                            Icon(Icons.Filled.RemoveCircleOutline, contentDescription = "Remove from my book", tint = Faint)
+                        }
+                    }
                 }
             }
         }
@@ -108,22 +159,24 @@ fun RecipesScreen(onOpen: (Long) -> Unit, onCreate: () -> Unit, onBack: () -> Un
             text = { Text("Create recipe") },
             modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp),
         )
+        SnackbarHost(snackbar, Modifier.align(Alignment.BottomCenter).padding(bottom = 72.dp))
     }
 }
 
 @Composable
-fun RecipeDetailScreen(id: Long, initialServings: Double, onEdit: (Long) -> Unit, onBack: () -> Unit) {
+fun RecipeDetailScreen(id: Long, initialServings: Double, swaps: Map<String, String>, onEdit: (Long) -> Unit, onBack: () -> Unit) {
     val vm = mangoViewModel { RecipesViewModel(it) }
     val recipes by vm.recipes.collectAsStateWithLifecycle()
     val foods by vm.foods.collectAsStateWithLifecycle()
     val r = recipes.firstOrNull { it.id == id }
     // Quantities are shown for what you cook: your planned portion from a meal, otherwise one person.
-    var servings by remember { mutableStateOf(initialServings.coerceIn(0.25, 12.0)) }
+    var servings by rememberSaveable { mutableStateOf(initialServings.coerceIn(0.25, 12.0)) }
     if (r == null) {
         Column(Modifier.padding(16.dp)) { BackBar(onBack) }
         return
     }
     val byName = remember(foods) { foods.associateBy { it.name } }
+    val uriHandler = LocalUriHandler.current
     val factor = servings / r.servings.coerceAtLeast(1)
     val n = r.perServing * servings
 
@@ -138,7 +191,8 @@ fun RecipeDetailScreen(id: Long, initialServings: Double, onEdit: (Long) -> Unit
                     Pill("${r.prepMinutes} min", Leaf)
                     if (r.isCustom) Pill("Custom", Leaf)
                     if (r.isUserModified) Pill("Edited", Sky)
-                    if (r.isHidden) Pill("Hidden", Danger)
+                    if (r.isHidden) Pill("Removed", Danger)
+                    if (r.needsAny.isNotEmpty()) Pill(r.needsAny.joinToString(" or ") { it.label.substringBefore(" /").lowercase() }, Warn)
                 }
             }
         }
@@ -174,17 +228,32 @@ fun RecipeDetailScreen(id: Long, initialServings: Double, onEdit: (Long) -> Unit
         item { SectionLabel("Ingredients", Modifier.padding(top = 4.dp)) }
         item {
             GroupedCard {
-                r.ingredients.forEachIndexed { i, ing ->
+                val replaced = swaps.entries.groupBy({ it.value }, { it.key })
+                MealPlanner.effectiveIngredients(r, swaps, byName).forEachIndexed { i, ing ->
                     if (i > 0) HorizontalDivider(color = Hairline)
                     val grams = ing.grams * factor
                     val food = byName[ing.food]
                     Row(Modifier.fillMaxWidth().padding(14.dp, 11.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Text(ing.food.replaceFirstChar { it.uppercase() }, fontSize = 15.sp, modifier = Modifier.weight(1f))
+                        Column(Modifier.weight(1f)) {
+                            Text(ing.food.replaceFirstChar { it.uppercase() }, fontSize = 15.sp)
+                            replaced[ing.food]?.let { Text("instead of ${it.joinToString()} this week", fontSize = 12.sp, color = Sky) }
+                        }
                         Text(
                             quantityText(roundGrams(grams), food?.unitGrams, food?.unitName),
                             fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
+                }
+            }
+        }
+        if (r.source.isNotEmpty()) {
+            item {
+                SectionCard {
+                    SectionLabel("Based on", color = Sky)
+                    Text(r.source, fontSize = 14.sp)
+                    TextButton(onClick = {
+                        uriHandler.openUri("https://duckduckgo.com/?q=" + Uri.encode("${r.source} ${r.name} recipe"))
+                    }) { Text("Look up the original (needs internet)") }
                 }
             }
         }
@@ -205,7 +274,7 @@ fun RecipeDetailScreen(id: Long, initialServings: Double, onEdit: (Long) -> Unit
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(top = 8.dp)) {
                 Button(onClick = { onEdit(r.id) }, modifier = Modifier.weight(1f)) { Text("Edit") }
                 OutlinedButton(onClick = { vm.setHidden(r, !r.isHidden) }, modifier = Modifier.weight(1f)) {
-                    Text(if (r.isHidden) "Restore" else "Hide")
+                    Text(if (r.isHidden) "Put back in my book" else "Remove from my book")
                 }
             }
             if (r.isCustom) {

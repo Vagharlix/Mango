@@ -44,7 +44,7 @@ enum class ExerciseCategory(val label: String) {
     CORE("Core"),
     MOBILITY_LOWER("Lower-Body Mobility"),
     MOBILITY_UPPER("Shoulder Health"),
-    BENCHMARK("Benchmark"),
+    BENCHMARK("Test"),
 }
 
 enum class Equipment(val label: String) {
@@ -56,7 +56,8 @@ enum class Equipment(val label: String) {
     PULL_UP_BAR("Pull-up bar / hangboard jugs"),
     RINGS("Gymnastic rings"),
     DIP_BARS("Dip bars / parallettes"),
-    WEIGHTS("Free weights / weight belt"),
+    WEIGHTS("Weight belt / plates (weighted pull-ups, dips, hangs)"),
+    DUMBBELLS("Dumbbells / barbell (overhead press, wrist curls)"),
     BENCH("Flat bench"),
     RESISTANCE_BAND("Resistance bands"),
     ;
@@ -67,9 +68,28 @@ enum class Equipment(val label: String) {
     }
 }
 
-/** How a prescription's load is derived. 1RM bases are percentages of total system load (bodyweight + added). */
-enum class LoadBasis { FINGER_1RM, PULL_1RM, BODYWEIGHT, RPE, NONE }
+/** Kitchen appliances some recipes or prep methods need (the user ticks what they have). */
+enum class KitchenTool(val label: String) {
+    PRESSURE_COOKER("Pressure cooker / Instant Pot"),
+    DEEP_FRYER("Deep fryer"),
+    AIR_FRYER("Air fryer"),
+}
 
+/** Whether the planner buys whole chickens and breaks them down instead of buying parts. */
+enum class WholeChickenMode(val label: String, val description: String) {
+    OFF("Off", "Buy chicken parts as needed"),
+    WHEN_IT_FITS("When it fits", "Buy a whole bird when the week uses at least half of it"),
+    ALWAYS("Always", "Buy a whole bird whenever chicken is on the menu – the rest goes in the freezer"),
+}
+
+/**
+ * How a prescription's load is derived from the athlete's tested maxes. FINGER/PULL/DIP 1RM are percentages of
+ * total system load (bodyweight + added); PRESS_1RM of the lifted weight; PULLUP_REPS / PUSHUP_REPS a share of
+ * the max reps; FL_HOLD a share of the max front lever hold.
+ */
+enum class LoadBasis { FINGER_1RM, PULL_1RM, DIP_1RM, PRESS_1RM, PULLUP_REPS, PUSHUP_REPS, FL_HOLD, BODYWEIGHT, RPE, NONE }
+
+@Serializable
 @Entity(tableName = "user_profile")
 data class UserProfile(
     @PrimaryKey val id: Int = 1,
@@ -92,6 +112,27 @@ data class UserProfile(
     val southernHemisphere: Boolean = false,
     /** Training equipment the athlete can access right now; the schedule adapts whenever it changes. */
     val equipment: List<Equipment> = Equipment.DEFAULT,
+    /** Number of different breakfasts rotated through a week. */
+    val breakfastVariety: Int = 2,
+    /** Spice-rack staples the user does NOT keep stocked (they then appear on shopping lists). */
+    val stapleOptOut: List<String> = emptyList(),
+    /** Breakfast recipes the rotation may use (empty = any breakfast). */
+    val breakfastPicks: List<Long> = emptyList(),
+    /** Carb types switched off (e.g. "quinoa"); recipes adapt to the remaining ones. */
+    val carbOff: List<String> = emptyList(),
+    /** Protein types switched off (e.g. "pork"); recipes adapt to the remaining ones. */
+    val proteinOff: List<String> = emptyList(),
+    /** Temporary replacements for items that can't be found (food → replacement) until [manualSwapsUntil]. */
+    val manualSwaps: Map<String, String> = emptyMap(),
+    val manualSwapsUntil: Long = 0,
+    /** Whole chickens instead of parts: off, when the week uses most of the bird, or always. */
+    val wholeChicken: WholeChickenMode = WholeChickenMode.WHEN_IT_FITS,
+    /** Usual size of the whole chicken bought (kg); parts are counted as pieces, weights are only estimates. */
+    val chickenKg: Double = 1.6,
+    /** Appliances the user has (recipes and stock methods adapt). */
+    val kitchen: List<KitchenTool> = emptyList(),
+    /** Day a whole chicken was bought and still needs breaking down (0 = nothing to do). */
+    val breakdownOn: Long = 0,
 )
 
 /** Nutrients per 100 g. Values from USDA FoodData Central. */
@@ -116,9 +157,20 @@ data class Food(
     val unitGrams: Double? = null,
     val unitName: String? = null,
     val isUserAdded: Boolean = false,
+    /** Interchangeable-ingredient group (e.g. "beans"): one member is used for the whole week. */
+    val swapGroup: String? = null,
+    /** Spice or long-life staple kept in the spice rack rather than bought per week. */
+    val isStaple: Boolean = false,
+    /** Carb type the user can switch off (rice, pasta, potatoes…). */
+    val carbType: String? = null,
+    /** Protein type the user can switch off (chicken, beef, pork, fish…). */
+    val proteinType: String? = null,
+    /** Family of similar produce offered as replacements when an item can't be found. */
+    val family: String? = null,
 )
 
 /** Local barcode cache: maps a scanned product to a food in the catalog (generic or created from Open Food Facts). */
+@Serializable
 @Entity(tableName = "barcode_products")
 data class BarcodeProduct(
     @PrimaryKey val barcode: String,
@@ -133,6 +185,8 @@ data class PantryItem(
     val grams: Double,
     val expiresOnEpochDay: Long,
     val addedOnEpochDay: Long,
+    /** In the freezer: keeps for months (quality), needs a night in the fridge before use. */
+    val frozen: Boolean = false,
 )
 
 @Serializable
@@ -174,9 +228,16 @@ data class Recipe(
     val isCustom: Boolean = false,
     val isUserModified: Boolean = false,
     val isHidden: Boolean = false,
+    /** How many main meals one cooking session can cover (1 = cook fresh each time). */
+    val batchMeals: Int = 1,
+    /** Reference the recipe was written from (e.g. a Guardian or GialloZafferano classic); empty = Mango original. */
+    val source: String = "",
+    /** Appliances this recipe needs – any one of them (e.g. deep fryer or air fryer); empty = none. */
+    val needsAny: List<KitchenTool> = emptyList(),
 )
 
 /** One planned meal. Composite key keeps exactly one slot per day and meal type. */
+@Serializable
 @Entity(tableName = "meal_slots", primaryKeys = ["epochDay", "mealType"])
 data class MealSlot(
     val epochDay: Long,
@@ -184,6 +245,12 @@ data class MealSlot(
     val recipeId: Long,
     val portions: Double,
     val status: MealStatus = MealStatus.PLANNED,
+    /** Ingredient substitutions for this meal (recipe food → food actually used), see MealPlanner.consolidate. */
+    val swaps: Map<String, String> = emptyMap(),
+    /** Shared by all meals of one batch-cooking session; 0 = not batch cooked. */
+    val batchId: Long = 0,
+    /** True for the meals eaten from a batch cooked earlier (no cooking, no extra pantry deduction). */
+    val isLeftover: Boolean = false,
 )
 
 @Serializable
@@ -209,11 +276,12 @@ data class Exercise(
     fun isAvailable(equipment: Collection<Equipment>): Boolean = requires.all { group -> group.any { it in equipment } }
 }
 
+@Serializable
 @Entity(tableName = "benchmarks")
 data class Benchmark(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val epochDay: Long,
-    val fingerMaxAddedKg: Double,
-    val pullUpMaxAddedKg: Double,
     val bodyWeightKg: Double,
+    /** Results of the tests done that day, by [com.mango.domain.MaxTest] key (kg added, kg, reps or seconds). */
+    val results: Map<String, Double> = emptyMap(),
 )
