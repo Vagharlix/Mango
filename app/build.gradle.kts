@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -8,7 +10,7 @@ plugins {
 
 // Release signing: keystore.properties (written by the Release workflow from GitHub secrets) points at the key.
 val releaseSigning = rootProject.file("keystore.properties").takeIf { it.exists() }?.let { file ->
-    java.util.Properties().apply { file.inputStream().use { load(it) } }
+    Properties().apply { file.inputStream().use { stream -> load(stream) } }
 }
 
 android {
