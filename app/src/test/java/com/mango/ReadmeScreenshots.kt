@@ -143,7 +143,7 @@ class ReadmeScreenshots {
         shot("grocery-menu")
         // The shopping list sits below the menu: lazy rows only exist once scrolled into view.
         compose.onAllNodes(hasScrollToNodeAction())[0].performScrollToNode(hasText("Whole chicken"))
-        compose.onAllNodes(hasScrollToNodeAction())[0].performTouchInput { swipeUp(startY = bottom * 0.8f, endY = bottom * 0.4f) }
+        compose.onAllNodes(hasScrollToNodeAction())[0].performTouchInput { swipeUp(startY = bottom * 0.75f, endY = bottom * 0.4f, durationMillis = 1_500) } // slow: no fling
         compose.waitForIdle()
         shot("grocery")
 
