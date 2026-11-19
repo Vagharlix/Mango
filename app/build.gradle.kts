@@ -34,6 +34,15 @@ android {
     buildFeatures {
         compose = true
     }
+    testOptions {
+        // Robolectric renders the real screens for the README screenshots.
+        unitTests.isIncludeAndroidResources = true
+    }
+}
+
+// README screenshots only run on demand: ./gradlew testDebugUnitTest --tests com.mango.ReadmeScreenshots -Pscreenshots
+tasks.withType<Test>().configureEach {
+    if (!project.hasProperty("screenshots")) exclude("**/ReadmeScreenshots*")
 }
 
 ksp {
@@ -69,4 +78,10 @@ dependencies {
     implementation("com.google.mlkit:barcode-scanning:17.3.0")
 
     testImplementation("junit:junit:4.13.2")
+    testImplementation("org.robolectric:robolectric:4.14.1")
+    testImplementation("androidx.test:core-ktx:1.6.1")
+    testImplementation("androidx.test.ext:junit:1.2.1")
+    testImplementation(composeBom)
+    testImplementation("androidx.compose.ui:ui-test-junit4")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
